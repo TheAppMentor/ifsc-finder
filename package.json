@@ -1,0 +1,36 @@
+{
+    "name": "ifsc-finder",
+    "version": "0.0.0",
+    "private": true,
+    "scripts": {
+        "start": "node ./bin/www"
+    },
+    "dependencies": {
+        "bluebird": "^3.5.1",
+        "cookie-parser": "~1.4.3",
+        "debug": "~2.6.9",
+        "express": "~4.16.0",
+        "fs-extra": "^7.0.0",
+        "fs-extra-promise": "^1.0.1",
+        "hbs": "~4.0.1",
+        "http-errors": "~1.6.2",
+        "i": "^0.3.6",
+        "loadash": "^1.0.0",
+        "lodash": "^4.17.10",
+        "mnemonist": "^0.23.0",
+        "mongodb": "^3.1.1",
+        "mongoose": "^5.2.6",
+        "morgan": "~1.9.0",
+        "npm": "^6.2.0",
+        "papaparse": "^4.6.0",
+        "semantic-ui": "^2.3.3",
+        "symbol-tree": "^3.2.2",
+        "tree-model": "^1.0.7",
+        "typescript": "^2.9.2"
+    },
+    "devDependencies": {
+        "@types/node": "^10.5.5",
+        "gulp": "^3.9.1",
+        "typescript": "^2.9.2"
+    }
+}

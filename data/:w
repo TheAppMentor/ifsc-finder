@@ -1,0 +1,139 @@
+import { BankBranchDetail,BankBranchDetailSchema } from '../model/BankBranchDetail'
+import { BankCollection } from '../model/BankCollection'
+import { Bank } from '../model/Bank'
+
+var Promise = require("bluebird");
+
+var mongoose = require('mongoose')
+mongoose.connect('mongodb://localhost/test')
+
+var db = mongoose.connection
+
+// Creating a Schema 
+var bankNamesSchema = new mongoose.Schema({
+    name: String
+});
+
+// Creating a Bank Model
+var bankNamesModel = mongoose.model("BankName", bankNamesSchema)
+var bankBranchDetailModel = mongoose.model("BankBranchDetail", BankBranchDetailSchema)
+
+// Creating a Schema 
+var bankNamesSchema = new mongoose.Schema({
+    name: String
+});
+
+var connectedToDB : boolean = false 
+
+
+
+db.on('error',console.error.bind(console, 'connection error:'));
+
+db.on('open',function(){
+
+    connectedToDB = true
+
+    //bankNamesModel.collection.drop()
+
+    let theBank = new BankCollection()
+    theBank.hydrateBankCollection("../data/ifsc_codes_all_clean.csv")
+        .then((isBankNamesDBLoaded : boolean) : Promise<boolean> => {
+                return loadDBWithBankBankCollection(theBank)
+        })
+        .then(() => {
+            bankBranchDetailModel.find(function(err,results){
+                console.log("Results.. " + results.length)
+            })
+        })
+        .then((isBankCollHydrated : boolean) : Promise<boolean>  =>  {
+            return new Promise((resolve : any, reject : any) => {
+                if (isBankCollHydrated = true) {
+                    loadBankNamesDB(theBank)
+                    resolve(true)
+                }
+            })
+        })
+        .then(() => {
+            console.log("We have finished all processing.... ")
+            bankNamesModel.find((err,values) => {
+                console.log("We have found tbanks.... : " + values.length)
+            })
+            bankBranchDetailModel.find((err,values) => {
+                console.log("We have found tbanks.... : " + values.length)
+            })
+
+        })
+});
+
+function loadBankNamesDB(bankCollection : BankCollection) : Promise<any> {
+
+    var numberOfDocumentsLoaded = 0
+
+    const promises = bankCollection.allBankNames.map(eachBankName => {
+        return new Promise((resolve : any, reject : any) => {
+            var bankName = new bankNamesModel({name : eachBankName})
+
+            bankName.save((err,bank) => {
+                if (err){
+                    reject(Error("We have an error saving Bank Name"))
+                }
+                numberOfDocumentsLoaded += 1
+                //console.log("Pushing a Promise... : " + numberOfDocumentsLoaded)
+                resolve()
+            })
+        })
+    }) 
+
+
+    const finalPromise =  new Promise(function(resolve, reject){
+        Promise.all(promises).then(function(values) {
+            resolve(values)
+        });
+    })
+
+    return finalPromise
+}
+
+function loadDBWithBankBankCollection(bankCollection : BankCollection) : Promise<boolean> {
+    return new Promise((resolve : any, reject : any) => {
+        console.log("loadDBWithBankBankCollection => Started")
+
+        const promises =  bankCollection.allBankNames.map(eachBankName => {
+            return new Promise((resolve:any,reject:any) => {
+                bankCollection.loadBranchDetailsForBank(eachBankName)
+                    .then((bankDetailsArr : Array<BankBranchDetail>) => {
+                        var bankDetailObj = bankDetailsArr.map(bankDetails => {
+
+                            var bankBranchDetial = new bankBranchDetailModel({
+                                name : bankDetails.name, 
+                                ifsc : bankDetails.ifsc,
+                                micr : bankDetails.micr,
+                                branch : bankDetails.branch,
+                                address : bankDetails.address,
+                                contact : bankDetails.contact,
+                                city : bankDetails.city,
+                                district : bankDetails.district,
+                                state : bankDetails.state
+                            })
+
+                            return bankBranchDetial
+                        })
+
+                        bankBranchDetailModel.collection.insert(bankDetailObj,(err,branchDetail) => {
+                            if (err){
+                                console.log("We have an error saving Bank Name")
+                                reject()
+                            }
+                            resolve(true)
+                        })
+
+                    })
+            })
+        })
+
+        Promise.all(promises).then(() => {
+            Promise.resolve(true)
+        })
+    })
+}
+
