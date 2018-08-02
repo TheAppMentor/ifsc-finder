@@ -13,6 +13,7 @@
         "fs-extra": "^7.0.0",
         "fs-extra-promise": "^1.0.1",
         "hbs": "~4.0.1",
+        "hoek": "^4.2.1",
         "http-errors": "~1.6.2",
         "i": "^0.3.6",
         "loadash": "^1.0.0",
