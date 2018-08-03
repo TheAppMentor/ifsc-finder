@@ -17,7 +17,8 @@ var bankBranchDetailModel = mongoose.model("BankBranchDetail", BankBranchDetail_
 var connectedToDB = false;
 var appConfigOptions = loadConfigFile();
 function loadConfigFile() {
-    var configFileName = "/Users/i328244/Desktop/NodeProjects/ifsc-finder/appConfig.json";
+    var configFileName = "../appConfig.json";
+    //let configFileName = "/Users/i328244/Desktop/NodeProjects/ifsc-finder/appConfig.json"
     var fileContents = fs.readJsonSync(configFileName);
     var reloadAllDB = fileContents['reloadAllDB'];
     return fileContents;
