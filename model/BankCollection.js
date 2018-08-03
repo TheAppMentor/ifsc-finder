@@ -1,52 +1,62 @@
-import { BankBranchDetail } from './BankBranchDetail';
-import { BankDB } from '../data/dbHandler';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var BankBranchDetail_1 = require("./BankBranchDetail");
+var dbHandler_1 = require("../data/dbHandler");
 var Papa = require('papaparse');
 var _ = require('lodash');
 var Promise = require("bluebird");
 var Trie = require('mnemonist/trie');
 //var fs = require('fs')
-const fs = require('fs-extra-promise');
-export class BankCollection {
-    constructor() {
+var fs = require('fs-extra-promise');
+var BankCollection = /** @class */ (function () {
+    function BankCollection() {
         this.bankNameStoreTrie = Trie.from([]);
         this.bankNameToFileMap = {};
-        this.dataStore = new BankDB();
+        this.dataStore = new dbHandler_1.BankDB();
         this._allBankNames = Array();
     }
-    findBankMatchingName(name) {
-        return new Promise((resolve, reject) => {
-            resolve(this.bankNameStoreTrie.find(name));
+    BankCollection.prototype.findBankMatchingName = function (name) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            resolve(_this.bankNameStoreTrie.find(name));
         });
-    }
-    addBank(bank) {
-        return new Promise((reslove, reject) => {
-            this.findBankMatchingName("IC")
-                .then(() => {
+    };
+    BankCollection.prototype.addBank = function (bank) {
+        var _this = this;
+        return new Promise(function (reslove, reject) {
+            _this.findBankMatchingName("IC")
+                .then(function () {
                 console.log("Do Something... ");
             });
         });
-    }
-    fetchFileNameForBank(bankName) {
-        return new Promise((resolve, reject) => {
-            resolve(this.bankNameToFileMap[bankName]);
-            if (this.bankNameToFileMap[bankName] != null) {
-                resolve(this.bankNameToFileMap[bankName]);
+    };
+    BankCollection.prototype.fetchFileNameForBank = function (bankName) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            resolve(_this.bankNameToFileMap[bankName]);
+            if (_this.bankNameToFileMap[bankName] != null) {
+                resolve(_this.bankNameToFileMap[bankName]);
             }
             reject(Error("Unable to find bank name : " + bankName));
         });
-    }
-    get allBankNames() {
-        return this._allBankNames;
-    }
-    loadDataBasesWithDataFromFile() {
+    };
+    Object.defineProperty(BankCollection.prototype, "allBankNames", {
+        get: function () {
+            return this._allBankNames;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    BankCollection.prototype.loadDataBasesWithDataFromFile = function () {
         console.log("loadDataBasesWithDataFromFile");
         return this.dataStore.connectoToDBAndLoadData(this);
-    }
+    };
     // Hydrate the Bank Collection
-    hydrateBankCollection(fromCSVFilePath) {
-        return new Promise((resolve, reject) => {
+    BankCollection.prototype.hydrateBankCollection = function (fromCSVFilePath) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
             var content = fs.readFileSync(fromCSVFilePath, "utf8");
-            let config = {
+            var config = {
                 delimiter: "|",
                 newline: "",
                 quoteChar: '"',
@@ -70,29 +80,30 @@ export class BankCollection {
                 transform: undefined
             };
             // Parse local CSV file
-            let results = Papa.parse(content, config);
+            var results = Papa.parse(content, config);
             //console.log("Finished:", results.data);
             console.log("Meta Data:", results.meta);
             console.log("Error:", results.errors);
             var allBankNames = Array();
             // Get list of all unqiue bank names.
-            for (var eachBank of results.data) {
+            for (var _i = 0, _a = results.data; _i < _a.length; _i++) {
+                var eachBank = _a[_i];
                 allBankNames.push(eachBank["BANK"]);
             }
-            let uniqueBankNames = _.uniq(allBankNames);
-            this._allBankNames = _.uniq(allBankNames);
+            var uniqueBankNames = _.uniq(allBankNames);
+            _this._allBankNames = _.uniq(allBankNames);
             //this.bankNameStoreTrie = Trie.from(uniqueBankNames);
-            let bankData = results.data;
+            var bankData = results.data;
             // Create a Map of Bank Name vs Bank Details
-            let theMap = {};
-            uniqueBankNames.forEach(eachBranch => {
+            var theMap = {};
+            uniqueBankNames.forEach(function (eachBranch) {
                 theMap[eachBranch] = Array();
             });
-            results.data.forEach(eachBranchInfo => {
-                let tempBranch = new BankBranchDetail(eachBranchInfo);
+            results.data.forEach(function (eachBranchInfo) {
+                var tempBranch = new BankBranchDetail_1.BankBranchDetail(eachBranchInfo);
                 theMap[eachBranchInfo.BANK].push(tempBranch);
             });
-            this.bankNameToFileMap = theMap;
+            _this.bankNameToFileMap = theMap;
             //            console.log("Starting to create the hash Map now With %j", theMap["DENA BANK"])
             //            var _tempbankNameToFileMap : IHash  = {}
             //            Object.keys(theMap).forEach(function(key,index) {
@@ -113,18 +124,20 @@ export class BankCollection {
             //            console.log("Func Hydrate : bankNameToFileMap is : %j",this.bankNameToFileMap)
             resolve(true);
         });
-    }
-    loadBranchDetailsForBank(bankName) {
-        return new Promise((resolve, reject) => {
+    };
+    BankCollection.prototype.loadBranchDetailsForBank = function (bankName) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
             //TODO : This is loading from File everytime.. Modify this to load from cache.
-            if (this.bankNameToFileMap.hasOwnProperty(bankName)) {
-                let bankFileName = this.bankNameToFileMap[bankName];
+            if (_this.bankNameToFileMap.hasOwnProperty(bankName)) {
+                var bankFileName = _this.bankNameToFileMap[bankName];
                 resolve(bankFileName);
             }
             reject(Error("Bank Name Not found in bankNameToFileMap"));
         });
-    }
-    getAllBranchesForBankNameInStateDistrictCity(bankName, stateName, cityName, districtName = null) {
+    };
+    BankCollection.prototype.getAllBranchesForBankNameInStateDistrictCity = function (bankName, stateName, cityName, districtName) {
+        if (districtName === void 0) { districtName = null; }
         return this.dataStore.getAllBranchesForBankNameInStateDistrictCity(bankName, stateName, cityName, districtName);
         /*
         return new Promise((resolve,reject) => {
@@ -165,20 +178,22 @@ export class BankCollection {
 
         })
         */
-    }
-    getAllBranchesForBankNameInState(bankName, stateName) {
+    };
+    BankCollection.prototype.getAllBranchesForBankNameInState = function (bankName, stateName) {
         return this.dataStore.getAllBranchesForBankNameInState(bankName, stateName);
-    }
-    getAllBranchesForBankNameInCity(bankName, cityName) {
+    };
+    BankCollection.prototype.getAllBranchesForBankNameInCity = function (bankName, cityName) {
         return this.dataStore.getAllBranchesForBankNameInCity(bankName, cityName);
-    }
-    getAllStateNamesForBank(bankName) {
+    };
+    BankCollection.prototype.getAllStateNamesForBank = function (bankName) {
         return this.dataStore.getAllStateNamesForBank(bankName);
-    }
-    getAllCityNamesForBank(bankName) {
+    };
+    BankCollection.prototype.getAllCityNamesForBank = function (bankName) {
         return this.dataStore.getAllCityNamesForBank(bankName);
-    }
-    getAllDistrictNamesForBank(bankName) {
+    };
+    BankCollection.prototype.getAllDistrictNamesForBank = function (bankName) {
         return this.dataStore.getAllDistrictNamesForBank(bankName);
-    }
-}
+    };
+    return BankCollection;
+}());
+exports.BankCollection = BankCollection;

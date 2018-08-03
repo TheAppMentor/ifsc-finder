@@ -1,80 +1,85 @@
-import { BankBranchDetailSchema } from '../model/BankBranchDetail';
-const fs = require('fs-extra-promise');
-const Promise = require("bluebird");
-const mongoose = require('mongoose');
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var BankBranchDetail_1 = require("../model/BankBranchDetail");
+var fs = require('fs-extra-promise');
+var Promise = require("bluebird");
+var mongoose = require('mongoose');
 var _ = require('lodash');
-const db = mongoose.connection;
+var db = mongoose.connection;
 mongoose.Promise = require('bluebird');
 // Creating a Schema 
-const bankNamesSchema = new mongoose.Schema({
+var bankNamesSchema = new mongoose.Schema({
     name: String
 });
 // Creating a Bank Model
-const bankNamesModel = mongoose.model("BankName", bankNamesSchema);
-const bankBranchDetailModel = mongoose.model("BankBranchDetail", BankBranchDetailSchema);
+var bankNamesModel = mongoose.model("BankName", bankNamesSchema);
+var bankBranchDetailModel = mongoose.model("BankBranchDetail", BankBranchDetail_1.BankBranchDetailSchema);
 var connectedToDB = false;
-const appConfigOptions = loadConfigFile();
+var appConfigOptions = loadConfigFile();
 function loadConfigFile() {
-    let configFileName = "../appConfig.json";
+    var configFileName = "../appConfig.json";
     //let configFileName = "/Users/i328244/Desktop/NodeProjects/ifsc-finder/appConfig.json"
-    let fileContents = fs.readJsonSync(configFileName);
-    let reloadAllDB = fileContents['reloadAllDB'];
+    var fileContents = fs.readJsonSync(configFileName);
+    var reloadAllDB = fileContents['reloadAllDB'];
     return fileContents;
 }
-export class BankDB {
-    connectoToDBAndLoadData(bankCollection) {
-        return new Promise((resolve, reject) => {
+var BankDB = /** @class */ (function () {
+    function BankDB() {
+    }
+    BankDB.prototype.connectoToDBAndLoadData = function (bankCollection) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
             //mongodb://heroku_ptln6dnj:vi22d3nuk65m1ktjqrtjalvnku@ds111492.mlab.com:11492/heroku_ptln6dnj
             //mongoose.connect('mongodb://localhost/bankDetailsColl')
             mongoose.connect('mongodb://heroku_ptln6dnj:vi22d3nuk65m1ktjqrtjalvnku@ds111492.mlab.com:11492/heroku_ptln6dnj')
-                .then(() => {
+                .then(function () {
                 console.log("We have logged in... to the DB..");
                 if (appConfigOptions["reloadBankDetailsDB"] == true) {
                     bankBranchDetailModel.collection.drop(); // Drop old data before writing
-                    return this.loadDBWithBankBankCollection(bankCollection);
+                    return _this.loadDBWithBankBankCollection(bankCollection);
                 }
                 console.log("User has chose not to load reloadBankDetailsDB");
                 Promise.resolve(true);
             })
-                .then(() => {
+                .then(function () {
                 if (appConfigOptions["reloadBankNamesDB"] == true) {
-                    return new Promise((resolve, reject) => {
+                    return new Promise(function (resolve, reject) {
                         bankNamesModel.collection.drop(); // Drop old data before writing
-                        this.loadBankNamesDB(bankCollection);
+                        _this.loadBankNamesDB(bankCollection);
                         resolve(true);
                     });
                 }
                 console.log("User has chose not to load bank Names DB");
                 Promise.resolve(true);
             })
-                .then(() => {
+                .then(function () {
                 console.log("We have Initializing the Databases..");
-                bankNamesModel.find((err, values) => {
+                bankNamesModel.find(function (err, values) {
                     console.log("We have found tbanks.... : " + values.length);
                 });
-                bankBranchDetailModel.find((err, values) => {
+                bankBranchDetailModel.find(function (err, values) {
                     console.log("We have found tbanks.... : " + values.length);
                 });
                 bankBranchDetailModel.find({ name: "DENA BANK" }, function (err, results) {
                     console.log("We Found " + results.length + " DENA BANK Branches");
                 });
             })
-                .then(() => {
+                .then(function () {
                 connectedToDB = true;
                 console.log("We have connected to the DB and loaded all the data ... ");
                 resolve();
             })
-                .catch((err) => {
+                .catch(function (err) {
                 console.log("We Have an Error connecting to Mongoose DB.");
             });
         });
-    }
-    loadBankNamesDB(bankCollection) {
+    };
+    BankDB.prototype.loadBankNamesDB = function (bankCollection) {
         var numberOfDocumentsLoaded = 0;
-        const promises = bankCollection.allBankNames.map(eachBankName => {
-            return new Promise((resolve, reject) => {
+        var promises = bankCollection.allBankNames.map(function (eachBankName) {
+            return new Promise(function (resolve, reject) {
                 var bankName = new bankNamesModel({ name: eachBankName });
-                bankName.save((err, bank) => {
+                bankName.save(function (err, bank) {
                     if (err) {
                         reject(Error("We have an error saving Bank Name"));
                     }
@@ -83,21 +88,21 @@ export class BankDB {
                 });
             });
         });
-        const finalPromise = new Promise(function (resolve, reject) {
+        var finalPromise = new Promise(function (resolve, reject) {
             Promise.all(promises).then(function (values) {
                 resolve(values);
             });
         });
         return finalPromise;
-    }
-    loadDBWithBankBankCollection(bankCollection) {
-        return new Promise((resolve, reject) => {
+    };
+    BankDB.prototype.loadDBWithBankBankCollection = function (bankCollection) {
+        return new Promise(function (resolve, reject) {
             console.log("loadDBWithBankBankCollection => Started");
-            const promises = bankCollection.allBankNames.map(eachBankName => {
-                return new Promise((resolve, reject) => {
+            var promises = bankCollection.allBankNames.map(function (eachBankName) {
+                return new Promise(function (resolve, reject) {
                     bankCollection.loadBranchDetailsForBank(eachBankName)
-                        .then((bankDetailsArr) => {
-                        var bankDetailObj = bankDetailsArr.map(bankDetails => {
+                        .then(function (bankDetailsArr) {
+                        var bankDetailObj = bankDetailsArr.map(function (bankDetails) {
                             var bankBranchDetial = new bankBranchDetailModel({
                                 name: bankDetails.name,
                                 ifsc: bankDetails.ifsc,
@@ -111,7 +116,7 @@ export class BankDB {
                             });
                             return bankBranchDetial;
                         });
-                        bankBranchDetailModel.collection.insert(bankDetailObj, (err, branchDetail) => {
+                        bankBranchDetailModel.collection.insert(bankDetailObj, function (err, branchDetail) {
                             if (err) {
                                 console.log("We have an error saving Bank Name");
                                 reject();
@@ -121,60 +126,60 @@ export class BankDB {
                     });
                 });
             });
-            Promise.all(promises).then(() => {
+            Promise.all(promises).then(function () {
                 resolve(true);
             });
         });
-    }
-    getAllStateNamesForBank(bankName) {
-        return new Promise((resolve, reject) => {
+    };
+    BankDB.prototype.getAllStateNamesForBank = function (bankName) {
+        return new Promise(function (resolve, reject) {
             //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb
             // I am using the in-efficinet regex method to make the find case-insensive.. check out the link above for a more optimizes soln.
             console.log("DB Handler : getAllStateNamesForBank ==> " + bankName);
             bankBranchDetailModel.find({ name: { $regex: new RegExp(bankName, "i") } }, function (err, results) {
                 //bankBranchDetailModel.find({name : bankName},function(err,results){
-                var stateNames = results.map(eachRec => {
+                var stateNames = results.map(function (eachRec) {
                     return eachRec.state;
                 });
                 var uniqStateNames = _.uniq(stateNames);
-                let sortedUniqueStateNames = _.sortBy(uniqStateNames);
+                var sortedUniqueStateNames = _.sortBy(uniqStateNames);
                 resolve(sortedUniqueStateNames);
             });
         });
-    }
-    getAllCityNamesForBank(bankName) {
-        return new Promise((resolve, reject) => {
+    };
+    BankDB.prototype.getAllCityNamesForBank = function (bankName) {
+        return new Promise(function (resolve, reject) {
             //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb
             // I am using the in-efficinet regex method to make the find case-insensive.. check out the link above for a more optimizes soln.
             // DRY vioation.... !!!! 
             bankBranchDetailModel.find({ name: { $regex: new RegExp(bankName, "i") } }, function (err, results) {
-                var cityNames = results.map(eachRec => {
+                var cityNames = results.map(function (eachRec) {
                     return eachRec.city;
                 });
                 var uniqCityNames = _.uniq(cityNames);
-                let sortedUniqueCityNames = _.sortBy(uniqCityNames);
+                var sortedUniqueCityNames = _.sortBy(uniqCityNames);
                 resolve(sortedUniqueCityNames);
             });
         });
-    }
-    getAllDistrictNamesForBank(bankName) {
-        return new Promise((resolve, reject) => {
+    };
+    BankDB.prototype.getAllDistrictNamesForBank = function (bankName) {
+        return new Promise(function (resolve, reject) {
             //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb
             // I am using the in-efficinet regex method to make the find case-insensive.. check out the link above for a more optimizes soln.
             // DRY vioation.... !!!! 
             bankBranchDetailModel.find({ name: { $regex: new RegExp(bankName, "i") } }, function (err, results) {
-                let allDistrictNames = results.map(eachBranch => {
+                var allDistrictNames = results.map(function (eachBranch) {
                     return eachBranch.district;
                 });
-                let uniqDistrictNames = _.uniq(allDistrictNames);
-                let sortedUniqueNames = _.sortBy(uniqDistrictNames);
+                var uniqDistrictNames = _.uniq(allDistrictNames);
+                var sortedUniqueNames = _.sortBy(uniqDistrictNames);
                 console.log("Resolving with : " + sortedUniqueNames);
                 resolve(sortedUniqueNames);
             });
         });
-    }
-    getAllBranchesForBankNameInCity(bankName, cityName) {
-        return new Promise((resolve, reject) => {
+    };
+    BankDB.prototype.getAllBranchesForBankNameInCity = function (bankName, cityName) {
+        return new Promise(function (resolve, reject) {
             //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb
             // I am using the in-efficinet regex method to make the find case-insensive.. check out the link above for a more optimizes soln.
             // DRY vioation.... !!!! 
@@ -182,9 +187,9 @@ export class BankDB {
                 resolve(results);
             });
         });
-    }
-    getAllBranchesForBankNameInState(bankName, stateName) {
-        return new Promise((resolve, reject) => {
+    };
+    BankDB.prototype.getAllBranchesForBankNameInState = function (bankName, stateName) {
+        return new Promise(function (resolve, reject) {
             //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb
             // I am using the in-efficinet regex method to make the find case-insensive.. check out the link above for a more optimizes soln.
             // DRY vioation.... !!!! 
@@ -192,9 +197,10 @@ export class BankDB {
                 resolve(results);
             });
         });
-    }
-    getAllBranchesForBankNameInStateDistrictCity(bankName, stateName, cityName, districtName = null) {
-        return new Promise((resolve, reject) => {
+    };
+    BankDB.prototype.getAllBranchesForBankNameInStateDistrictCity = function (bankName, stateName, cityName, districtName) {
+        if (districtName === void 0) { districtName = null; }
+        return new Promise(function (resolve, reject) {
             //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb
             // I am using the in-efficinet regex method to make the find case-insensive.. check out the link above for a more optimizes soln.
             // DRY vioation.... !!!! 
@@ -208,8 +214,10 @@ export class BankDB {
                 resolve(results);
             });
         });
-    }
-}
+    };
+    return BankDB;
+}());
+exports.BankDB = BankDB;
 /*
 db.on('error',console.error.bind(console, 'connection error:'));
 
