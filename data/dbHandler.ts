@@ -22,7 +22,8 @@ var connectedToDB : boolean = false
 const appConfigOptions = loadConfigFile()
 
 function loadConfigFile(){
-    let configFileName = "/Users/i328244/Desktop/NodeProjects/ifsc-finder/appConfig.json"
+    let configFileName = "../appConfig.json"
+    //let configFileName = "/Users/i328244/Desktop/NodeProjects/ifsc-finder/appConfig.json"
     let fileContents = fs.readJsonSync(configFileName)
     let reloadAllDB = fileContents['reloadAllDB'] 
     return fileContents 
