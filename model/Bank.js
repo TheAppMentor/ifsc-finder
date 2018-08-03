@@ -1,13 +1,9 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var BankBranchDetail_1 = require("./BankBranchDetail");
-var Bank = /** @class */ (function () {
-    function Bank(name, branchDetails) {
+import { BankBranchDetail } from './BankBranchDetail';
+export class Bank {
+    constructor(name, branchDetails) {
         this.name = name;
-        this._allBranches = branchDetails.map(function (eachBranch) {
-            return new BankBranchDetail_1.BankBranchDetail(eachBranch);
+        this._allBranches = branchDetails.map(eachBranch => {
+            return new BankBranchDetail(eachBranch);
         });
     }
-    return Bank;
-}());
-exports.Bank = Bank;
+}

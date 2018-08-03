@@ -1,7 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose = require('mongoose');
-exports.BankBranchDetailSchema = new mongoose.Schema({
+export let BankBranchDetailSchema = new mongoose.Schema({
     name: String,
     ifsc: String,
     micr: String,
@@ -12,9 +10,8 @@ exports.BankBranchDetailSchema = new mongoose.Schema({
     district: String,
     state: String
 });
-var BankBranchDetail = /** @class */ (function () {
-    function BankBranchDetail(bankObj, fromJSONFile) {
-        if (fromJSONFile === void 0) { fromJSONFile = false; }
+export class BankBranchDetail {
+    constructor(bankObj, fromJSONFile = false) {
         if (fromJSONFile == true) {
             this.name = bankObj["name"];
             this.ifsc = bankObj["ifsc"];
@@ -37,6 +34,4 @@ var BankBranchDetail = /** @class */ (function () {
         this.district = bankObj["DISTRICT"];
         this.state = bankObj["STATE"];
     }
-    return BankBranchDetail;
-}());
-exports.BankBranchDetail = BankBranchDetail;
+}
