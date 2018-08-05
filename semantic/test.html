@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Autocomplete Search With Semantic UI</title>
+	<link rel="stylesheet" href="./dist/semantic.css">
+</head>
+<body>
+
+
+<center style="padding: 30px 0;width: 227px;margin: 0 auto;">
+	<h1>Search for colors</h1>
+
+	<div class="ui search focus">
+		<div class="ui icon input">
+			<input class="search" type="text" placeholder="Colors..." autocomplete="off">
+			<i class="search icon"></i>
+		</div>
+		<div class="results"></div>
+	</div>
+</center>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="./dist/semantic.js"></script>
+
+
+<div class="ui search">
+  <div class="ui left icon input">
+    <input class="prompt" type="text" placeholder="Enter Bank Name">
+    <i class="rupee sign icon"></i>
+  </div>
+</div>
+
+
+<script>
+    // searches across any array/object of searchable objects
+    var content = [
+  { title: 'Andorra' },
+  { title: 'United Arab Emirates' },
+  { title: 'Afghanistan' },
+  { title: 'Antigua' },
+  { title: 'Anguilla' },
+  { title: 'Albania' },
+  { title: 'Armenia' },
+  { title: 'Netherlands Antilles' },
+  { title: 'Angola' },
+  { title: 'Argentina' },
+  { title: 'American Samoa' },
+  { title: 'Austria' },
+  { title: 'Australia' },
+  { title: 'Aruba' },
+  { title: 'Aland Islands' },
+  { title: 'Azerbaijan' },
+  { title: 'Bosnia' },
+  { title: 'Barbados' },
+  { title: 'Bangladesh' },
+  { title: 'Belgium' },
+  { title: 'Burkina Faso' },
+  { title: 'Bulgaria' },
+  { title: 'Bahrain' },
+  { title: 'Burundi' }
+  // etc
+];
+    
+    $('.ui.search')
+        .search({
+            source : content,
+            searchFields   : [
+                'title'
+            ],
+            //fullTextSearch: false
+        })
+    ;
+</script>
+
+<!--
+<script>
+    // Define API endpoints once globally
+
+    $('.search input')
+        .api({
+            debug: true,
+            action: 'search',
+            url: 'https://api.github.com/search/repositories?q=AchiGame',
+            searchFullText: false,
+            stateContext: '.ui.input',
+            fields: {
+                results : 'items',
+                title   : 'name',
+                url     : 'html_url'
+            },
+            minCharacters : 3
+        });
+</script>
+-->
+</body>
+</html>
