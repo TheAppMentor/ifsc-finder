@@ -64,7 +64,9 @@ router.get('/loadBranchDetailsEveryThing', function(req, res, next) {
 
 router.post('/DF', function(req, res, next) {
     console.log("Holy Cow.. DialogFlow said something.. ")
+    console.log("Request is : " + req)
     res.json({"status" : "A Bloody Resounding success : POST"})
 });
+
 module.exports = router;
     //getAllBranchesForBankNameInStateDistrictCity(bankName : string, stateName : string, cityName : string, districtName : string = null) : Promise<Array<BankBranchDetail>> {
