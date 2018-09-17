@@ -102,6 +102,7 @@ export class BankCollection {
             }
             let uniqueBankNames = _.uniq(allBankNames) 
             this._allBankNames = _.uniq(allBankNames)
+            console.log("All Bank Names are : " + this._allBankNames)
             //this.bankNameStoreTrie = Trie.from(uniqueBankNames);
 
             let bankData = results.data 
@@ -142,6 +143,11 @@ export class BankCollection {
     }
 
     constructor(){
+    }
+
+    getAllBankNames() : Promise<Array<string>> {
+        console.log("In the Coll... goint to talk to datastore")
+        return this.dataStore.getAllBankNames()
     }
 
     loadBranchDetailsForBank(bankName : string) : Promise<Array<BankBranchDetail>> {

@@ -1,97 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Autocomplete Search With Semantic UI</title>
-	<link rel="stylesheet" href="./dist/semantic.css">
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8">
+        <title>Autocomplete Search With Semantic UI</title>
+        <link rel="stylesheet" href="./dist/semantic.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.4/semantic.min.js"></script>        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script src="./dist/semantic.js"></script>
 
+        <script>
+            $(function(){
+                $('.button').click(function(){
+                    console.log("Button was presses")
+                });
+            });
+        </script> 
 
-<center style="padding: 30px 0;width: 227px;margin: 0 auto;">
-	<h1>Search for colors</h1>
-
-	<div class="ui search focus">
-		<div class="ui icon input">
-			<input class="search" type="text" placeholder="Colors..." autocomplete="off">
-			<i class="search icon"></i>
-		</div>
-		<div class="results"></div>
-	</div>
-</center>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script src="./dist/semantic.js"></script>
-
-
-<div class="ui search">
-  <div class="ui left icon input">
-    <input class="prompt" type="text" placeholder="Enter Bank Name">
-    <i class="rupee sign icon"></i>
-  </div>
+        <script>
+            // searches across any array/object of searchable objects
+            var content = [{ title: 'ABHYUDAYA COOPERATIVE BANK LIMITED'},{ title: 'ADITYA BIRLA IDEA PAYMENTS BANK'},{ title: 'ABU DHABI COMMERCIAL BANK'},{ title: 'THE AKOLA DISTRICT CENTRAL COOPERATIVE BANK'},{ title: 'AIRTEL PAYMENTS BANK LIMITED'},{ title: 'AKOLA JANATA COMMERCIAL COOPERATIVE BANK'},{ title: 'ALLAHABAD BANK'},{ title: 'AHMEDABAD MERCANTILE COOPERATIVE BANK'},{ title: 'ANDHRA BANK'},{ title: 'AUSTRALIA AND NEW ZEALAND BANKING GROUP LIMITED'},{ title: 'THE ANDHRA PRADESH STATE COOPERATIVE BANK LIMITED'},{ title: 'ANDHRA PRAGATHI GRAMEENA BANK'},{ title: 'THE A.P. MAHESH COOPERATIVE URBAN BANK LIMITED'},{ title: 'APNA SAHAKARI BANK LIMITED'},{ title: 'AU SMALL FINANCE BANK LIMITED'},{ title: 'ALMORA URBAN COOPERATIVE BANK LIMITED'},{ title: 'BASSEIN CATHOLIC COOPERATIVE BANK LIMITED'},{ title: 'THE BARAMATI SAHAKARI BANK LTD'},{ title: 'BANK OF BARODA'},{ title: 'BARCLAYS BANK'},{ title: 'BANK OF BAHARAIN AND KUWAIT BSC'},{ title: 'BHARAT COOPERATIVE BANK MUMBAI LIMITED'},{ title: 'BANK OF CEYLON'},{ title: 'BANDHAN BANK LIMITED'},{ title: 'DENA BANK'},{ title: 'BANK OF INDIA'},{ title: 'B N P PARIBAS'},{ title: 'BANK OF AMERICA'},{ title: 'BANK OF TOKYO MITSUBISHI LIMITED'},{ title: 'CENTRAL BANK OF INDIA'},{ title: 'CITIZEN CREDIT COOPERATIVE BANK LIMITED'},{ title: 'JP MORGAN BANK'},{ title: 'CITI BANK'},{ title: 'CITY UNION BANK LIMITED'},{ title: 'CAPITAL SMALL FINANCE BANK LIMITED'},{ title: 'CANARA BANK'},{ title: 'CORPORATION BANK'},{ title: 'THE COSMOS CO OPERATIVE BANK LIMITED'},{ title: 'CREDIT SUISEE AG'},{ title: 'CREDIT AGRICOLE CORPORATE AND INVESTMENT BANK CALYON BANK'},{ title: 'SHRI CHHATRAPATI RAJASHRI SHAHU URBAN COOPERATIVE BANK LIMITED'},{ title: 'CATHOLIC SYRIAN BANK LIMITED'},{ title: 'CHINATRUST COMMERCIAL BANK LIMITED'},{ title: 'DEVELOPMENT BANK OF SINGAPORE'},{ title: 'DCB BANK LIMITED'},{ title: 'DEOGIRI NAGARI SAHAKARI BANK LTD. AURANGABAD'},{ title: 'DEUSTCHE BANK'},{ title: 'DEPOSIT INSURANCE AND CREDIT GUARANTEE CORPORATION'},{ title: 'THE DELHI STATE COOPERATIVE BANK LIMITED'},{ title: 'DHANALAKSHMI BANK'},{ title: 'DMK JAOLI BANK'},{ title: 'DOMBIVLI NAGARI SAHAKARI BANK LIMITED'},{ title: 'DOHA BANK QSC'},{ title: 'DOHA BANK'},{ title: 'DURGAPUR STEEL PEOPLES CO-OPERATIVE BANK LTD'},{ title: 'EMIRATES NBD BANK P J S C'},{ title: 'EXPORT IMPORT BANK OF INDIA'},{ title: 'EQUITAS SMALL FINANCE BANK LIMITED'},{ title: 'ESAF SMALL FINANCE BANK LIMITED'},{ title: 'FEDERAL BANK'},{ title: 'FINO PAYMENTS BANK'},{ title: 'FIRSTRAND BANK LIMITED'},{ title: 'FINCARE SMALL FINANCE BANK LTD'},{ title: 'THE GREATER BOMBAY COOPERATIVE BANK LIMITED'},{ title: 'THE GADCHIROLI DISTRICT CENTRAL COOPERATIVE BANK LIMITED'},{ title: 'THE GUJARAT STATE COOPERATIVE BANK LIMITED'},{ title: 'HARYANA STATE COOPERATIVE BANK'},{ title: 'THE HASTI COOP BANK LTD'},{ title: 'HDFC BANK'},{ title: 'HIMACHAL PRADESH STATE COOPERATIVE BANK LTD'},{ title: 'HSBC BANK'},{ title: 'WOORI BANK'},{ title: 'PT BANK MAYBANK INDONESIA TBK'},{ title: 'IDBI BANK'},{ title: 'INDUSTRIAL BANK OF KOREA'},{ title: 'INDUSTRIAL AND COMMERCIAL BANK OF CHINA LIMITED'},{ title: 'ICICI BANK LIMITED'},{ title: 'IDFC BANK LIMITED'},{ title: 'INDIAN BANK'},{ title: 'IDUKKI DISTRICT CO OPERATIVE BANK LTD'},{ title: 'INDUSIND BANK'},{ title: 'INDIAN OVERSEAS BANK'},{ title: 'JAMMU AND KASHMIR BANK LIMITED'},{ title: 'JANASEVA SAHAKARI BANK LIMITED'},{ title: 'JANASEVA SAHAKARI BANK BORIVLI LIMITED'},{ title: 'JIO PAYMENTS BANK LIMITED'},{ title: 'JALGAON JANATA SAHAKARI BANK LIMITED'},{ title: 'THE JALGAON PEOPELS COOPERATIVE BANK LIMITED'},{ title: 'JANAKALYAN SAHAKARI BANK LIMITED'},{ title: 'JANATA SAHAKARI BANK LIMITED'},{ title: 'THE KANGRA CENTRAL COOPERATIVE BANK LIMITED'},{ title: 'KALLAPPANNA AWADE ICHALKARANJI JANATA SAHAKARI BANK LIMITED'},{ title: 'THE KANGRA COOPERATIVE BANK LIMITED'},{ title: 'KARNATAKA BANK LIMITED'},{ title: 'KALUPUR COMMERCIAL COOPERATIVE BANK'},{ title: 'KOZHIKODE DISTRICT COOPERATIAVE BANK LTD'},{ title: 'KALYAN JANATA SAHAKARI BANK'},{ title: 'KOTAK MAHINDRA BANK LIMITED'},{ title: 'KERALA GRAMIN BANK'},{ title: 'THE KURMANCHAL NAGAR SAHAKARI BANK LIMITED'},{ title: 'KEB Hana Bank'},{ title: 'KRUNG THAI BANK PCL'},{ title: 'THE KARANATAKA STATE COOPERATIVE APEX BANK LIMITED'},{ title: 'THE KARAD URBAN COOPERATIVE BANK LIMITED'},{ title: 'KARUR VYSYA BANK'},{ title: 'KARNATAKA VIKAS GRAMEENA BANK'},{ title: 'LAXMI VILAS BANK'},{ title: 'BANK OF MAHARASHTRA'},{ title: 'Maharashtra Gramin Bank'},{ title: 'MAHANAGAR COOPERATIVE BANK'},{ title: 'THE MUMBAI DISTRICT CENTRAL COOPERATIVE BANK LIMITED'},{ title: 'MIZUHO BANK LTD'},{ title: 'MAHARASHTRA STATE COOPERATIVE BANK'},{ title: 'MASHREQBANK PSC'},{ title: 'THE MEHSANA URBAN COOPERATIVE BANK'},{ title: 'THE MUNICIPAL COOPERATIVE BANK LIMITED'},{ title: 'NATIONAL AUSTRALIA BANK LIMITED'},{ title: 'FIRST ABU DHABI BANK PJSC'},{ title: 'NATIONAL BANK FOR AGRICULTURE AND RURAL DEVELOPMENT'},{ title: 'NORTH EAST SMALL FINANCE BANK LIMITED'},{ title: 'NAGPUR NAGARIK SAHAKARI BANK LIMITED'},{ title: 'NEW INDIA COOPERATIVE BANK LIMITED'},{ title: 'NKGSB COOPERATIVE BANK LIMITED'},{ title: 'THE NASIK MERCHANTS COOPERATIVE BANK LIMITED'},{ title: 'NUTAN NAGARIK SAHAKARI BANK LIMITED'},{ title: 'THE BANK OF NOVA SCOTIA'},{ title: 'THE NAINITAL BANK LIMITED'},{ title: 'NAGAR URBAN CO OPERATIVE BANK'},{ title: 'THE NAVNIRMAN CO-OPERATIVE BANK LIMITED'},{ title: 'ORIENTAL BANK OF COMMERCE'},{ title: 'G P PARSIK BANK'},{ title: 'PRAGATHI KRISHNA GRAMIN BANK'},{ title: 'PUNJAB AND MAHARSHTRA COOPERATIVE BANK'},{ title: 'PRIME COOPERATIVE BANK LIMITED'},{ title: 'PRATHAMA BANK'},{ title: 'PUNJAB AND SIND BANK'},{ title: 'THE PANDHARPUR URBAN CO OP. BANK LTD. PANDHARPUR'},{ title: 'PUNJAB NATIONAL BANK'},{ title: 'PAYTM PAYMENTS BANK LTD'},{ title: 'QATAR NATIONAL BANK SAQ'},{ title: 'RABOBANK INTERNATIONAL'},{ title: 'RBL Bank Limited'},{ title: 'RBL BANK LIMITED'},{ title: 'IDRBT'},{ title: 'RESERVE BANK OF INDIA '},{ title: ' PAD'},{ title: 'RESERVE BANK OF INDIA'},{ title: ' PAD'},{ title: 'RBI PAD'},{ title: ' AHMEDABAD'},{ title: 'RAJKOT NAGRIK SAHAKARI BANK LIMITED'},{ title: 'RAJARAMBAPU SAHAKARI BANK LIMITED'},{ title: 'RAJGURUNAGAR SAHAKARI BANK LIMITED'},{ title: 'THE RAJASTHAN STATE COOPERATIVE BANK LIMITED'},{ title: 'SBER BANK'},{ title: 'SAHEBRAO DESHMUKH COOPERATIVE BANK LIMITED'},{ title: 'STATE BANK OF INDIA'},{ title: 'SAMARTH SAHAKARI BANK LTD'},{ title: 'STANDARD CHARTERED BANK'},{ title: 'THE SURAT DISTRICT COOPERATIVE BANK LIMITED'},{ title: 'SHINHAN BANK'},{ title: 'SOUTH INDIAN BANK'},{ title: 'SMALL INDUSTRIES DEVELOPMENT BANK OF INDIA'},{ title: 'THE SINDHUDURG DISTRICT CENTRAL COOP BANK LTD'},{ title: 'SOLAPUR JANATA SAHAKARI BANK LIMITED'},{ title: 'SHIKSHAK SAHAKARI BANK LIMITED'},{ title: 'SUMITOMO MITSUI BANKING CORPORATION'},{ title: 'SHIVALIK MERCANTILE CO OPERATIVE BANK LTD'},{ title: 'SOCIETE GENERALE'},{ title: 'THE SURATH PEOPLES COOPERATIVE BANK LIMITED'},{ title: 'SARASWAT COOPERATIVE BANK LIMITED'},{ title: 'SBM BANK MAURITIUS LIMITED'},{ title: 'SURAT NATIONAL COOPERATIVE BANK LIMITED'},{ title: 'SURYODAY SMALL FINANCE BANK LIMITED'},{ title: 'SUTEX COOPERATIVE BANK LIMITED'},{ title: 'THE SEVA VIKAS COOPERATIVE BANK LIMITED'},{ title: 'THE SHAMRAO VITHAL COOPERATIVE BANK'},{ title: 'SYNDICATE BANK'},{ title: 'THE THANE BHARAT SAHAKARI BANK LIMITED'},{ title: 'THE THANE DISTRICT CENTRAL COOPERATIVE BANK LIMITED'},{ title: 'TUMKUR GRAIN MERCHANTS COOPERATIVE BANK LIMITED'},{ title: 'THRISSUR DISTRICT CO-OPERATIVE BANK LTD'},{ title: 'TJSB SAHAKARI BANK LTD'},{ title: 'TJSB SAHAKARI BANK LIMITED'},{ title: 'TAMILNAD MERCANTILE BANK LIMITED'},{ title: 'THE TAMIL NADU STATE APEX COOPERATIVE BANK'},{ title: 'TELANGANA STATE COOP APEX BANK'},{ title: 'TEXTILE TRADERS CO-OPERATIVE BANK LIMITED'},{ title: 'TEXTILE TRADERS CO OPERATIVE BANK LTD'},{ title: 'UNION BANK OF INDIA'},{ title: 'UCO BANK'},{ title: 'Ujjivan Small Finance Bank Limited'},{ title: 'UNITED OVERSEAS BANK LIMITED'},{ title: 'UNITED BANK OF INDIA'},{ title: 'AXIS BANK'},{ title: 'UTKARSH SMALL FINANCE BANK'},{ title: 'THE VARACHHA COOPERATIVE BANK LIMITED'},{ title: 'VIJAYA BANK'},{ title: 'THE VISHWESHWAR SAHAKARI BANK LIMITED'},{ title: 'VASAI VIKAS SAHAKARI BANK LIMITED'},{ title: 'VASAI VIKAS SAHAKARI BANK LTD'},{ title: 'THE WEST BENGAL STATE COOPERATIVE BANK'},{ title: 'WESTPAC BANKING CORPORATION'},{ title: 'YES BANK'},{ title: 'THE ZOROASTRIAN COOPERATIVE BANK LIMITED'},{ title: 'ZILA SAHAKRI BANK LIMITED GHAZIABAD'}]
+            ; 
+            //$('.ui.search')
+            $('#BankNameSearchField')
+                .search({
+                    type          : 'category',
+                    minCharacters : 3,
+                    apiSettings   : {
+                        onResponse: function(githubResponse) {
+                            var
+                            response = {
+                                results : {}
+                            }
+                            ;
+                            // translate GitHub API response to work with search
+                            $.each(githubResponse.items, function(index, item) {
+                                var
+                                language   = item.language || 'Unknown',
+                                    maxResults = 8
+                                ;
+                                if(index >= maxResults) {
+                                    return false;
+                                }
+                                // create new language category
+                                if(response.results[language] === undefined) {
+                                    response.results[language] = {
+                                        name    : language,
+                                        results : []
+                                    };
+                                }
+                                // add result to category
+                                response.results[language].results.push({
+                                    title       : item.name,
+                                    description : item.description,
+                                    url         : item.html_url
+                                });
+                            });
+                            return response;
+                        },
+                        url: 'https://api.github.com/search/repositories?q={query}'
+                    }
+                })
+            ;
+            //        .search({
+                //            source : content,
+                //            searchFields   : [
+                    //                'title'
+                    //           ],
+                //            fullTextSearch: false,
+                //            minCharacters : 3
+                //        })
+            //    ;
+        </script>
+    </head>
+    <body>
+        <div class="ui grid container">
+            <div class="ui four wide column">
+            </div>
+            <div class="ui segment eight wide column">
+                <div class="ui left rail">
+                    <div class="ui segment">
+                        Left Rail Content
+                    </div>
+                </div>
+                <div class="ui right rail">
+                    <div class="ui segment">
+                    <div class="ui medium rectangle ad">
+  <ins class="adsbygoogle"
+       style="display:inline-block;width:300px;height:250px"
+       data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+       data-ad-slot="XXXXXXXXXX"></ins>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
 </div>
-
-
+<div class="ui leaderboard ad">
+<!-- Leaderboard
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+     data-ad-slot="XXXXXXXXXXXXXXXX"></ins>
 <script>
-    // searches across any array/object of searchable objects
-    var content = [
-  { title: 'Andorra' },
-  { title: 'United Arab Emirates' },
-  { title: 'Afghanistan' },
-  { title: 'Antigua' },
-  { title: 'Anguilla' },
-  { title: 'Albania' },
-  { title: 'Armenia' },
-  { title: 'Netherlands Antilles' },
-  { title: 'Angola' },
-  { title: 'Argentina' },
-  { title: 'American Samoa' },
-  { title: 'Austria' },
-  { title: 'Australia' },
-  { title: 'Aruba' },
-  { title: 'Aland Islands' },
-  { title: 'Azerbaijan' },
-  { title: 'Bosnia' },
-  { title: 'Barbados' },
-  { title: 'Bangladesh' },
-  { title: 'Belgium' },
-  { title: 'Burkina Faso' },
-  { title: 'Bulgaria' },
-  { title: 'Bahrain' },
-  { title: 'Burundi' }
-  // etc
-];
-    
-    $('.ui.search')
-        .search({
-            source : content,
-            searchFields   : [
-                'title'
-            ],
-            //fullTextSearch: false
-        })
-    ;
+(adsbygoogle = window.adsbygoogle || []).push({});
 </script>
-
-<!--
+!-->
+</div>
+<div class="ui banner ad">
+<!-- Banner
+<ins class="adsbygoogle"
+     style="display:inline-block;width:468px;height:60px"
+     data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+     data-ad-slot="XXXXXXXXXXXXXXXX"></ins>
 <script>
-    // Define API endpoints once globally
-
-    $('.search input')
-        .api({
-            debug: true,
-            action: 'search',
-            url: 'https://api.github.com/search/repositories?q=AchiGame',
-            searchFullText: false,
-            stateContext: '.ui.input',
-            fields: {
-                results : 'items',
-                title   : 'name',
-                url     : 'html_url'
-            },
-            minCharacters : 3
-        });
+(adsbygoogle = window.adsbygoogle || []).push({});
 </script>
--->
-</body>
+!-->
+</div>
+                    </div>
+                </div>
+                <center style="padding: 30px 0;width: 227px;margin: 0 auto;">
+                    <div id="BankNameSearchField" class="ui search huge">
+                        <div class="ui left icon input">
+                            <input class="prompt" type="text" placeholder="Enter Bank Name">
+                            <i class="rupee sign icon"></i>
+                        </div>
+                    </div>
+
+                    <div id="CityNameSearchField" class="ui search huge">
+                        <div class="ui left icon input">
+                            <input class="prompt" type="text" placeholder="Enter City Name">
+                            <i class="rupee sign icon"></i>
+                        </div>
+                    </div>
+                </center>
+
+                <center>
+                    <div class="ui row">
+                        <div>
+                            <button class="ui primary button">
+                                Search 
+                            </button>
+                        </div>
+                    </div>
+                </center>
+            <div class="ui divider">
+            </div>
+            </div>
+
+            <div class="ui four wide column">
+            </div>
+    </body>
 </html>

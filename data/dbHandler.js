@@ -131,6 +131,16 @@ var BankDB = /** @class */ (function () {
             });
         });
     };
+    BankDB.prototype.getAllBankNames = function () {
+        return new Promise(function (resolve, reject) {
+            //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb
+            // I am using the in-efficinet regex method to make the find case-insensive.. check out the link above for a more optimizes soln.
+            console.log("In datastore");
+            bankNamesModel.find(function (err, values) {
+                console.log("We have found ALL .... : " + values.length);
+            });
+        });
+    };
     BankDB.prototype.getAllStateNamesForBank = function (bankName) {
         return new Promise(function (resolve, reject) {
             //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb

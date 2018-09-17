@@ -92,6 +92,7 @@ var BankCollection = /** @class */ (function () {
             }
             var uniqueBankNames = _.uniq(allBankNames);
             _this._allBankNames = _.uniq(allBankNames);
+            console.log("All Bank Names are : " + _this._allBankNames);
             //this.bankNameStoreTrie = Trie.from(uniqueBankNames);
             var bankData = results.data;
             // Create a Map of Bank Name vs Bank Details
@@ -124,6 +125,10 @@ var BankCollection = /** @class */ (function () {
             //            console.log("Func Hydrate : bankNameToFileMap is : %j",this.bankNameToFileMap)
             resolve(true);
         });
+    };
+    BankCollection.prototype.getAllBankNames = function () {
+        console.log("In the Coll... goint to talk to datastore");
+        return this.dataStore.getAllBankNames();
     };
     BankCollection.prototype.loadBranchDetailsForBank = function (bankName) {
         var _this = this;

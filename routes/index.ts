@@ -24,6 +24,12 @@ router.get('/loadDB', function(req, res, next) {
     })
 });
 
+router.get('/allBankNames', function(req, res, next) {
+    bankColl.getAllBankNames().then((bankList : Array<string>) => {
+        console.log("All Bank Names are : " + bankList)
+        res.render('index', { title: bankList.toString() });
+    })
+});
 
 router.get('/loadCityNames', function(req, res, next) {
     bankColl.getAllCityNamesForBank("DenA BanK").then((matchedCities : Array<string>) => {
@@ -56,5 +62,9 @@ router.get('/loadBranchDetailsEveryThing', function(req, res, next) {
     })
 });
 
+router.post('/DF', function(req, res, next) {
+    console.log("Holy Cow.. DialogFlow said something.. ")
+    res.json({"status" : "A Bloody Resounding success : POST"})
+});
 module.exports = router;
     //getAllBranchesForBankNameInStateDistrictCity(bankName : string, stateName : string, cityName : string, districtName : string = null) : Promise<Array<BankBranchDetail>> {
