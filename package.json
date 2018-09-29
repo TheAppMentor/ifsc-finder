@@ -24,6 +24,7 @@
         "morgan": "~1.9.0",
         "npm": "^6.2.0",
         "papaparse": "^4.6.0",
+        "parse-json": "^4.0.0",
         "semantic-ui": "^2.3.3",
         "symbol-tree": "^3.2.2",
         "tree-model": "^1.0.7",

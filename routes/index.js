@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express = require('express');
 var router = express.Router();
 var BankCollection_1 = require("../model/BankCollection");
+var dialogflow_responseParser_1 = require("../model/dialogflow-responseParser");
 var bankColl = new BankCollection_1.BankCollection();
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -54,7 +55,13 @@ router.post('/DF', function (req, res, next) {
     console.log("Holy Cow.. DialogFlow said something.. ");
     console.log("Request is Headers : " + JSON.stringify(req.headers));
     console.log("Request is body : " + JSON.stringify(req.body));
-    res.json({ "status": "A Bloody Resounding success : POST" });
+    //res.json({"status" : "A Bloody Resounding success : POST"})
+    var respParser = new dialogflow_responseParser_1.DialogFlowRespParser();
+    respParser.fulfillGetCityIntent(JSON.stringify(req.body))
+        .then(function (fulfillText) {
+        console.log("FulFill Text : " + fulfillText);
+        res.json({ "status": fulfillText });
+    });
 });
 module.exports = router;
 //getAllBranchesForBankNameInStateDistrictCity(bankName : string, stateName : string, cityName : string, districtName : string = null) : Promise<Array<BankBranchDetail>> {

@@ -4,6 +4,7 @@ var router = express.Router();
 import { BankCollection } from '../model/BankCollection'
 import { BankDB } from '../data/dbHandler'
 import { BankBranchDetail } from '../model/BankBranchDetail'
+import { DialogFlowRespParser } from '../model/dialogflow-responseParser'
 
 let bankColl = new BankCollection()
 
@@ -66,8 +67,15 @@ router.post('/DF', function(req, res, next) {
     console.log("Holy Cow.. DialogFlow said something.. ")
     console.log("Request is Headers : " + JSON.stringify(req.headers))
     console.log("Request is body : " + JSON.stringify(req.body))
-    res.json({"status" : "A Bloody Resounding success : POST"})
+    //res.json({"status" : "A Bloody Resounding success : POST"})
+    let respParser = new DialogFlowRespParser()
+    respParser.fulfillGetCityIntent(JSON.stringify(req.body))
+        .then((fulfillText : string) => {
+           console.log("FulFill Text : " + fulfillText) 
+            res.json({"status": fulfillText})
+        });
 });
+
 
 module.exports = router;
     //getAllBranchesForBankNameInStateDistrictCity(bankName : string, stateName : string, cityName : string, districtName : string = null) : Promise<Array<BankBranchDetail>> {
