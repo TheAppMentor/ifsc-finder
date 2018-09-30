@@ -78,8 +78,9 @@ router.post('/DF', function(req, res, next) {
         .then((fulfillText : string) => {
        return new Promise((resolve : any, reject : any) => {
             console.log("FulFill Text : " + fulfillText) 
-            agent.add('Now We are really talking ... ')
-        //res.json({"status": fulfillText})
+            //agent.add('Now We are really talking ... ')
+           res.json({ 'fulfillmentText': fulfillText}); 
+           //res.json({"status": fulfillText})
             resolve()
         })
         });
