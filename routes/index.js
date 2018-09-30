@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express = require('express');
 var router = express.Router();
 var WebhookClient = require('dialogflow-fulfillment').WebhookClient;
+var Promise = require('bluebird');
 var BankCollection_1 = require("../model/BankCollection");
 var dialogflow_responseParser_1 = require("../model/dialogflow-responseParser");
 var bankColl = new BankCollection_1.BankCollection();
@@ -62,9 +63,12 @@ router.post('/DF', function (req, res, next) {
     var respParser = new dialogflow_responseParser_1.DialogFlowRespParser();
     respParser.fulfillGetCityIntent(JSON.stringify(req.body))
         .then(function (fulfillText) {
-        console.log("FulFill Text : " + fulfillText);
-        agent.add('Now We are really talking ... ');
-        //res.json({"status": fulfillText})
+        return new Promise(function (resolve, reject) {
+            console.log("FulFill Text : " + fulfillText);
+            agent.add('Now We are really talking ... ');
+            //res.json({"status": fulfillText})
+            resolve();
+        });
     });
 });
 module.exports = router;

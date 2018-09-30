@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const { WebhookClient } = require('dialogflow-fulfillment')
+var Promise = require('bluebird')
 
 import { BankCollection } from '../model/BankCollection'
 import { BankDB } from '../data/dbHandler'
@@ -75,9 +76,12 @@ router.post('/DF', function(req, res, next) {
     let respParser = new DialogFlowRespParser()
     respParser.fulfillGetCityIntent(JSON.stringify(req.body))
         .then((fulfillText : string) => {
-           console.log("FulFill Text : " + fulfillText) 
+       return new Promise((resolve : any, reject : any) => {
+            console.log("FulFill Text : " + fulfillText) 
             agent.add('Now We are really talking ... ')
-            //res.json({"status": fulfillText})
+        //res.json({"status": fulfillText})
+            resolve()
+        })
         });
 });
 
