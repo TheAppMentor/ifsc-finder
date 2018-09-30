@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const { WebhookClient } = require('dialogflow-fulfillment')
 
 import { BankCollection } from '../model/BankCollection'
 import { BankDB } from '../data/dbHandler'
@@ -64,6 +65,8 @@ router.get('/loadBranchDetailsEveryThing', function(req, res, next) {
 });
 
 router.post('/DF', function(req, res, next) {
+    const agent = new WebhookClient({ req, res });
+    
     console.log("Holy Cow.. DialogFlow said something.. ")
     console.log("Request is Headers : " + JSON.stringify(req.headers))
     console.log("Request is body : " + JSON.stringify(req.body))
@@ -72,7 +75,8 @@ router.post('/DF', function(req, res, next) {
     respParser.fulfillGetCityIntent(JSON.stringify(req.body))
         .then((fulfillText : string) => {
            console.log("FulFill Text : " + fulfillText) 
-            res.json({"status": fulfillText})
+            agent.add('Now We are really talking ... ')
+            //res.json({"status": fulfillText})
         });
 });
 

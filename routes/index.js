@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var express = require('express');
 var router = express.Router();
+var WebhookClient = require('dialogflow-fulfillment').WebhookClient;
 var BankCollection_1 = require("../model/BankCollection");
 var dialogflow_responseParser_1 = require("../model/dialogflow-responseParser");
 var bankColl = new BankCollection_1.BankCollection();
@@ -52,6 +53,7 @@ router.get('/loadBranchDetailsEveryThing', function (req, res, next) {
     });
 });
 router.post('/DF', function (req, res, next) {
+    var agent = new WebhookClient({ req: req, res: res });
     console.log("Holy Cow.. DialogFlow said something.. ");
     console.log("Request is Headers : " + JSON.stringify(req.headers));
     console.log("Request is body : " + JSON.stringify(req.body));
@@ -60,7 +62,8 @@ router.post('/DF', function (req, res, next) {
     respParser.fulfillGetCityIntent(JSON.stringify(req.body))
         .then(function (fulfillText) {
         console.log("FulFill Text : " + fulfillText);
-        res.json({ "status": fulfillText });
+        agent.add('Now We are really talking ... ');
+        //res.json({"status": fulfillText})
     });
 });
 module.exports = router;
