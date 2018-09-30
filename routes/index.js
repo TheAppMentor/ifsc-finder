@@ -65,7 +65,7 @@ router.post('/DF', function (req, res, next) {
         .then(function (fulfillText) {
         return new Promise(function (resolve, reject) {
             console.log("FulFill Text : " + fulfillText);
-            //agent.add('Now We are really talking ... ')
+            agent.add('Now We are really talking ... ');
             res.json({ 'fulfillmentText': fulfillText });
             //res.json({"status": fulfillText})
             resolve();
