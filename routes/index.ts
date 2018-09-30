@@ -65,8 +65,9 @@ router.get('/loadBranchDetailsEveryThing', function(req, res, next) {
 });
 
 router.post('/DF', function(req, res, next) {
-    const agent = new WebhookClient({ req, res });
-    
+    //const agent = new WebhookClient({ req, res });
+    const agent = new WebhookClient({request: req, response: res});
+
     console.log("Holy Cow.. DialogFlow said something.. ")
     console.log("Request is Headers : " + JSON.stringify(req.headers))
     console.log("Request is body : " + JSON.stringify(req.body))
