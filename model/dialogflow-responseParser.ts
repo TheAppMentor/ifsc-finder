@@ -19,7 +19,7 @@ export class DialogFlowRespParser {
             if (queryResult.allRequiredParamsPresent == true){
                 console.log("We have all required parameters.... ")
                 //resolve(queryResult.intent.displayName)
-                this.fullfillIntentWithName(queryResult.intent.displayName,dialogFlowResp)
+                resolve(this.fullfillIntentWithName(queryResult.intent.displayName,dialogFlowResp))
             }
             resolve("Some Error man")
         })
