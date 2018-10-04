@@ -1,55 +1,53 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var BankCollection_1 = require("./BankCollection");
+import { BankCollection } from './BankCollection';
 var Papa = require('papaparse');
 var _ = require('lodash');
 var Promise = require("bluebird");
 var Trie = require('mnemonist/trie');
 //var fs = require('fs')
-var fs = require('fs-extra-promise');
-var theBank = new BankCollection_1.BankCollection("../data/ifsc_codes_all_clean.csv");
+const fs = require('fs-extra-promise');
+let theBank = new BankCollection("../data/ifsc_codes_all_clean.csv");
 console.log("We have now created a Bank Collection");
 //theBank.findBankMatchingName("IC").then((theNames) => {
 //    console.log(theNames)
 //})
 console.log("Waiting... ");
-setTimeout(function () {
+setTimeout(() => {
     theBank.getAllStateNamesForBank("DENA BANK")
-        .then(function (stateNames) {
+        .then((stateNames) => {
         console.log("\n\n State Names are : " + stateNames);
     })
-        .catch(function (error) {
+        .catch((error) => {
         console.log("We have an Error " + error);
     });
     theBank.getAllCityNamesForBank("DENA BANK")
-        .then(function (cityNames) {
+        .then((cityNames) => {
         console.log("\n\n City Names are : " + cityNames);
     })
-        .catch(function (error) {
+        .catch((error) => {
         console.log("We have an Error " + error);
     });
     theBank.getAllDistrictNamesForBank("DENA BANK")
-        .then(function (districtNames) {
+        .then((districtNames) => {
         console.log("\n\n District Names are : " + districtNames);
     })
-        .catch(function (error) {
+        .catch((error) => {
         console.log("We have an Error " + error);
     });
-    theBank.getAllBranchesForBankNameInStateDistrictCity("DENA BANK", "Karnataka", "Bangalore").then(function (finalList) {
+    theBank.getAllBranchesForBankNameInStateDistrictCity("DENA BANK", "Karnataka", "Bangalore").then((finalList) => {
         console.log("We Have fetched ... Final list of branches : " + finalList.length);
-        finalList.forEach(function (eachBranch) {
+        finalList.forEach(eachBranch => {
             console.log("%j", eachBranch);
         });
     });
-    theBank.getAllBranchesForBankNameInStateDistrictCity("IDBI BANK", "Karnataka", "Bangalore").then(function (finalList) {
+    theBank.getAllBranchesForBankNameInStateDistrictCity("IDBI BANK", "Karnataka", "Bangalore").then((finalList) => {
         console.log("We Have fetched ... Final list of branches : " + finalList.length);
-        finalList.forEach(function (eachBranch) {
+        finalList.forEach(eachBranch => {
             console.log("%j", eachBranch);
         });
     });
-    theBank.getAllBranchesForBankNameInStateDistrictCity("IDBI BANK", "Bihar", "Patna").then(function (finalList) {
+    theBank.getAllBranchesForBankNameInStateDistrictCity("IDBI BANK", "Bihar", "Patna").then((finalList) => {
         console.log("We Have fetched ... Final list of branches : " + finalList.length);
-        finalList.forEach(function (eachBranch) {
+        finalList.forEach(eachBranch => {
             console.log("%j", eachBranch);
         });
     });

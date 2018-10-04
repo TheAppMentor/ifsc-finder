@@ -61,15 +61,84 @@ router.post('/DF', function (req, res, next) {
     console.log("Request is body : " + JSON.stringify(req.body));
     //res.json({"status" : "A Bloody Resounding success : POST"})
     var respParser = new dialogflow_responseParser_1.DialogFlowRespParser();
-    respParser.fulfillGetCityIntent(JSON.stringify(req.body))
+    respParser.determineMatchedIntent(JSON.stringify(req.body))
         .then(function (fulfillText) {
-        return new Promise(function (resolve, reject) {
-            console.log("FulFill Text : " + fulfillText);
-            agent.add('Now We are really talking ... ');
-            res.json({ 'fulfillmentText': fulfillText });
-            //res.json({"status": fulfillText})
-            resolve();
-        });
+        console.log("Got a Simply Request.... ");
+        console.log(fulfillText);
+        res.json({ 'fulfillmentText': fulfillText });
+        res.render('index', { title: fulfillText });
+    });
+    /*
+        respParser.fulfillGetCityIntent(JSON.stringify(req.body))
+            .then((fulfillText : string) => {
+           return new Promise((resolve : any, reject : any) => {
+                console.log("FulFill Text : " + fulfillText)
+                agent.add('Now We are really talking ... ')
+                res.json({ 'fulfillmentText': fulfillText});
+                resolve()
+            })
+            });
+    */
+});
+router.get('/simply', function (req, res, next) {
+    var respParser = new dialogflow_responseParser_1.DialogFlowRespParser();
+    var sampleJSON = { "responseId": "574b5f75-f257-42fe-9275-0d61f852365d", "queryResult": { "queryText": "\"Bangalore\"", "parameters": { "geo-city": ["Bangalore"] }, "allRequiredParamsPresent": true, "intent": { "name": "projects/ifsc-finder-a3f6d/agent/intents/c7f18d63-5d51-4678-82ef-9946819d6d80", "displayName": "getCity" }, "intentDetectionConfidence": 1, "languageCode": "en-us" }, "originalDetectIntentRequest": { "payload": {} }, "session": "projects/ifsc-finder-a3f6d/agent/sessions/quickstart-session-id" };
+    var sampleJSON1 = {
+        "responseId": "7d37ca9a-a871-40d7-ace0-f7e93c396b9d",
+        "queryResult": {
+            "queryText": "icici",
+            "parameters": {
+                "geo-country": "",
+                "geo-city": [],
+                "bankName": "icici",
+                "geo-country1": ""
+            },
+            "allRequiredParamsPresent": true,
+            "fulfillmentText": "talking back baby.. ",
+            "fulfillmentMessages": [
+                {
+                    "text": {
+                        "text": [
+                            "talking back baby.. "
+                        ]
+                    }
+                }
+            ],
+            "outputContexts": [
+                {
+                    "name": "projects/ifsc-finder-a3f6d/agent/sessions/4b813ab6-7c80-117d-4e2f-118f51fcf2e8/contexts/getbankname-followup",
+                    "lifespanCount": 2,
+                    "parameters": {
+                        "bankName": "icici",
+                        "geo-country1": "",
+                        "geo-city.original": "",
+                        "geo-city": [],
+                        "geo-country.original": "",
+                        "bankName.original": "icici",
+                        "geo-country1.original": "",
+                        "geo-country": ""
+                    }
+                }
+            ],
+            "intent": {
+                "name": "projects/ifsc-finder-a3f6d/agent/intents/6754d62c-ba0b-410f-89fb-8e70359f079b",
+                "displayName": "getBankName"
+            },
+            "intentDetectionConfidence": 1,
+            "diagnosticInfo": {
+                "webhook_latency_ms": 183
+            },
+            "languageCode": "en"
+        },
+        "webhookStatus": {
+            "message": "Webhook execution successful"
+        }
+    };
+    respParser.determineMatchedIntent(JSON.stringify(sampleJSON1))
+        .then(function (fulfillText) {
+        console.log("Got a Simply Request.... ");
+        console.log(fulfillText);
+        res.render('index', { title: fulfillText });
     });
 });
 module.exports = router;
