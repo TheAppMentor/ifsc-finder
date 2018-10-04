@@ -19,7 +19,12 @@ export class DialogFlowRespParser {
             if (queryResult.allRequiredParamsPresent == true){
                 console.log("We have all required parameters.... ")
                 //resolve(queryResult.intent.displayName)
-                resolve(this.fullfillIntentWithName(queryResult.intent.displayName,dialogFlowResp))
+                this.fullfillIntentWithName(queryResult.intent.displayName,dialogFlowResp).then((fetchednames : string) => {
+                    console.log("Fetched Names are : " + fetchednames) 
+                    resolve(fetchednames)
+                })
+                
+                //resolve(this.fullfillIntentWithName(queryResult.intent.displayName,dialogFlowResp))
             }
             resolve("Some Error man")
         })
@@ -60,7 +65,6 @@ export class DialogFlowRespParser {
 
         return new Promise((resolve : any, reject : any) => {
             let resp = parseJson(dialogFlowResp)
-
             let queryResult = resp.queryResult.queryText
 
             console.log("Query Result Bank Name : " + queryResult)
