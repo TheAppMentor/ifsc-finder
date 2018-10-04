@@ -54,6 +54,7 @@ var DialogFlowRespParser = /** @class */ (function () {
             var resp = parseJson(dialogFlowResp);
             var queryResult = resp.queryResult.queryText;
             console.log("fulfillGetBankNameIntent : Query Result Bank Name : " + queryResult);
+            resolve(queryResult);
             bankColl.getAllBranchesForBankNameInCity("Dena Bank", "Bangalore")
                 .then(function (matchedBranches) {
                 resolve("We found many Branches.... ");
