@@ -14,7 +14,7 @@ var DialogFlowRespParser = /** @class */ (function () {
             console.log("allRequiredParamsPresent : " + queryResult.allRequiredParamsPresent);
             if (queryResult.allRequiredParamsPresent == true) {
                 console.log("We have all required parameters.... ");
-                resolve(queryResult.intent.name);
+                resolve(queryResult.intent.displayName);
             }
             resolve("Some Error man");
         });
