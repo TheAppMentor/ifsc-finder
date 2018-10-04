@@ -82,20 +82,6 @@ router.post('/DF', function(req, res, next) {
             res.json({ 'fulfillmentText': fulfillText}); 
             res.render('index', { title: fulfillText});
         })
-    
-    
-/*    
-    respParser.fulfillGetCityIntent(JSON.stringify(req.body))
-        .then((fulfillText : string) => {
-       return new Promise((resolve : any, reject : any) => {
-            console.log("FulFill Text : " + fulfillText) 
-            agent.add('Now We are really talking ... ')
-            res.json({ 'fulfillmentText': fulfillText}); 
-            resolve()
-        })
-        });
-*/
-
 });
 
 

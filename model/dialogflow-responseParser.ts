@@ -47,15 +47,9 @@ export class DialogFlowRespParser {
 
         return new Promise((resolve : any, reject : any) => {
             let resp = parseJson(dialogFlowResp)
-
             let queryResult = resp.queryResult.queryText
-
             console.log("Query Result : " + queryResult)
-
-           bankColl.getAllBranchesForBankNameInCity("Dena Bank","Bangalore")
-                .then((matchedBranches : Array<BankBranchDetail>) => {
-                resolve("We found many Branches.... ") 
-           })
+            resolve("NodejS Resoloving with : " + queryResult)
         })
     }
 
@@ -66,7 +60,7 @@ export class DialogFlowRespParser {
             let queryResult = resp.queryResult.queryText
 
             console.log("fulfillGetBankNameIntent : Query Result Bank Name : " + queryResult)
-            resolve(queryResult)
+            resolve("NodejS Resoloving with : " + queryResult)
         })
     }
 
@@ -75,15 +69,9 @@ export class DialogFlowRespParser {
 
         return new Promise((resolve : any, reject : any) => {
             let resp = parseJson(dialogFlowResp)
-
             let queryResult = resp.queryResult.queryText
-
             console.log("Query Result Bank Name : " + queryResult)
-
-           bankColl.getAllBranchesForBankNameInCity("Dena Bank","Bangalore")
-                .then((matchedBranches : Array<BankBranchDetail>) => {
-                resolve("We found many Branches.... ") 
-           })
+            resolve("NodejS Resoloving with : " + queryResult)
         })
     }
 

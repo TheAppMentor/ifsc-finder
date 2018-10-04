@@ -41,10 +41,7 @@ var DialogFlowRespParser = /** @class */ (function () {
             var resp = parseJson(dialogFlowResp);
             var queryResult = resp.queryResult.queryText;
             console.log("Query Result : " + queryResult);
-            bankColl.getAllBranchesForBankNameInCity("Dena Bank", "Bangalore")
-                .then(function (matchedBranches) {
-                resolve("We found many Branches.... ");
-            });
+            resolve("NodejS Resoloving with : " + queryResult);
         });
     };
     DialogFlowRespParser.prototype.fulfillGetBankNameIntent = function (dialogFlowResp) {
@@ -52,7 +49,7 @@ var DialogFlowRespParser = /** @class */ (function () {
             var resp = parseJson(dialogFlowResp);
             var queryResult = resp.queryResult.queryText;
             console.log("fulfillGetBankNameIntent : Query Result Bank Name : " + queryResult);
-            resolve(queryResult);
+            resolve("NodejS Resoloving with : " + queryResult);
         });
     };
     DialogFlowRespParser.prototype.fulfillGetBankBranchNameIntent = function (dialogFlowResp) {
@@ -60,10 +57,7 @@ var DialogFlowRespParser = /** @class */ (function () {
             var resp = parseJson(dialogFlowResp);
             var queryResult = resp.queryResult.queryText;
             console.log("Query Result Bank Name : " + queryResult);
-            bankColl.getAllBranchesForBankNameInCity("Dena Bank", "Bangalore")
-                .then(function (matchedBranches) {
-                resolve("We found many Branches.... ");
-            });
+            resolve("NodejS Resoloving with : " + queryResult);
         });
     };
     return DialogFlowRespParser;
