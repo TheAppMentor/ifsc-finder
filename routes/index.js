@@ -138,6 +138,7 @@ router.get('/simply', function (req, res, next) {
         .then(function (fulfillText) {
         console.log("Got a Simply Request.... ");
         console.log(fulfillText);
+        res.json({ 'fulfillmentText': fulfillText });
         res.render('index', { title: fulfillText });
     });
 });

@@ -162,8 +162,11 @@ let sampleJSON1 = {
         .then((fulfillText : string) => {
             console.log("Got a Simply Request.... ")
             console.log(fulfillText)
+            res.json({ 'fulfillmentText': fulfillText}); 
             res.render('index', { title: fulfillText});
         })
+
+
 });
 
 module.exports = router;

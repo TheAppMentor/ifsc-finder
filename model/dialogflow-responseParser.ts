@@ -18,15 +18,11 @@ export class DialogFlowRespParser {
             console.log("allRequiredParamsPresent : " +  queryResult.allRequiredParamsPresent)
             if (queryResult.allRequiredParamsPresent == true){
                 console.log("We have all required parameters.... ")
-                //resolve(queryResult.intent.displayName)
                 this.fullfillIntentWithName(queryResult.intent.displayName,dialogFlowResp).then((fetchednames : string) => {
                     console.log("Fetched Names are : " + fetchednames) 
                     resolve(fetchednames)
                 })
-                
-                //resolve(this.fullfillIntentWithName(queryResult.intent.displayName,dialogFlowResp))
             }
-            resolve("Some Error man")
         })
     }
 
@@ -34,7 +30,8 @@ export class DialogFlowRespParser {
       //Prashanth : Make this an enum here..       
         if (intentName == "getBankName"){
             console.log("fullfillIntentWithName : I am in the get bank name ")
-            return this.fulfillGetBankNameIntent(response)
+            console.log("I will now return " + this.fulfillGetBankNameIntent(response))
+                return this.fulfillGetBankNameIntent(response)
         }
         
         if (intentName == "getBankName - getCityName"){

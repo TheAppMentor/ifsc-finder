@@ -15,20 +15,18 @@ var DialogFlowRespParser = /** @class */ (function () {
             console.log("allRequiredParamsPresent : " + queryResult.allRequiredParamsPresent);
             if (queryResult.allRequiredParamsPresent == true) {
                 console.log("We have all required parameters.... ");
-                //resolve(queryResult.intent.displayName)
                 _this.fullfillIntentWithName(queryResult.intent.displayName, dialogFlowResp).then(function (fetchednames) {
                     console.log("Fetched Names are : " + fetchednames);
                     resolve(fetchednames);
                 });
-                //resolve(this.fullfillIntentWithName(queryResult.intent.displayName,dialogFlowResp))
             }
-            resolve("Some Error man");
         });
     };
     DialogFlowRespParser.prototype.fullfillIntentWithName = function (intentName, response) {
         //Prashanth : Make this an enum here..       
         if (intentName == "getBankName") {
             console.log("fullfillIntentWithName : I am in the get bank name ");
+            console.log("I will now return " + this.fulfillGetBankNameIntent(response));
             return this.fulfillGetBankNameIntent(response);
         }
         if (intentName == "getBankName - getCityName") {
