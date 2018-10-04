@@ -28,6 +28,7 @@ var DialogFlowRespParser = /** @class */ (function () {
     DialogFlowRespParser.prototype.fullfillIntentWithName = function (intentName, response) {
         //Prashanth : Make this an enum here..       
         if (intentName == "getBankName") {
+            console.log("fullfillIntentWithName : I am in the get bank name ");
             return this.fulfillGetBankNameIntent(response);
         }
         if (intentName == "getBankName - getCityName") {
@@ -52,7 +53,7 @@ var DialogFlowRespParser = /** @class */ (function () {
         return new Promise(function (resolve, reject) {
             var resp = parseJson(dialogFlowResp);
             var queryResult = resp.queryResult.queryText;
-            console.log("Query Result Bank Name : " + queryResult);
+            console.log("fulfillGetBankNameIntent : Query Result Bank Name : " + queryResult);
             bankColl.getAllBranchesForBankNameInCity("Dena Bank", "Bangalore")
                 .then(function (matchedBranches) {
                 resolve("We found many Branches.... ");

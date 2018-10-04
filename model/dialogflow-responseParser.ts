@@ -33,6 +33,7 @@ export class DialogFlowRespParser {
     fullfillIntentWithName(intentName : string, response : string) : Promise<string>{
       //Prashanth : Make this an enum here..       
         if (intentName == "getBankName"){
+            console.log("fullfillIntentWithName : I am in the get bank name ")
             return this.fulfillGetBankNameIntent(response)
         }
         
@@ -67,7 +68,7 @@ export class DialogFlowRespParser {
             let resp = parseJson(dialogFlowResp)
             let queryResult = resp.queryResult.queryText
 
-            console.log("Query Result Bank Name : " + queryResult)
+            console.log("fulfillGetBankNameIntent : Query Result Bank Name : " + queryResult)
 
            bankColl.getAllBranchesForBankNameInCity("Dena Bank","Bangalore")
                 .then((matchedBranches : Array<BankBranchDetail>) => {
