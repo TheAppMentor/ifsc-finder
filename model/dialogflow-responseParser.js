@@ -49,6 +49,11 @@ var DialogFlowRespParser = /** @class */ (function () {
             var resp = parseJson(dialogFlowResp);
             var queryResult = resp.queryResult.queryText;
             console.log("fulfillGetBankNameIntent : Query Result Bank Name : " + queryResult);
+            // Find out how many banks we have... 
+            bankColl.findBankNameContainingString(queryResult)
+                .then(function (matchedBankNames) {
+                resolve("We found these many banks : " + matchedBankNames.length);
+            });
             resolve("NodejS Resoloving with : " + queryResult);
         });
     };

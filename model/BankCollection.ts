@@ -17,6 +17,19 @@ export interface IHash {
 } 
 
 export class BankCollection {
+    
+    findBankNameContainingString(bankName : string){
+        return new Promise((resolve : any, reject : any) => {
+            var matchingNames = []
+            for (var eachBankName of this.allBankNames){
+               if (eachBankName.search(bankName)){
+                   matchingNames.push(eachBankName)  
+               } 
+            }
+            resolve(matchingNames)
+        })
+    }
+
 
     findBankMatchingName(name : string) : Promise<Array<string>> {
         return new Promise((resolve,reject) => {
