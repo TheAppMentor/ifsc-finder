@@ -70,10 +70,6 @@ export class DialogFlowRespParser {
 
             console.log("fulfillGetBankNameIntent : Query Result Bank Name : " + queryResult)
             resolve(queryResult)
-           bankColl.getAllBranchesForBankNameInCity("Dena Bank","Bangalore")
-                .then((matchedBranches : Array<BankBranchDetail>) => {
-                resolve("We found many Branches.... ") 
-           })
         })
     }
 
