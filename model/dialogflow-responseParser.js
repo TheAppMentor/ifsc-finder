@@ -40,6 +40,7 @@ var DialogFlowRespParser = /** @class */ (function () {
             var resp = parseJson(dialogFlowResp);
             var queryResult = resp.queryResult.queryText;
             console.log("Query Result : " + queryResult);
+            //bankColl.getAllBranchesForBankNameInCity(queryResult)
             resolve("NodejS Resoloving with : " + queryResult);
         });
     };
@@ -52,7 +53,9 @@ var DialogFlowRespParser = /** @class */ (function () {
             bankColl.findBankNameContainingString(queryResult)
                 .then(function (matchedBankNames) {
                 if (matchedBankNames.length == 1) {
-                    resolve("Cool. I found your bank. " + matchedBankNames[0]);
+                    var responseObject = { fulfillmentText: "Cool. I found your bank. " + matchedBankNames[0] };
+                    //resolve("Cool. I found your bank. " + matchedBankNames[0])
+                    resolve(responseObject);
                 }
                 resolve("We have found many banks that match : " + matchedBankNames.length);
             });
@@ -64,6 +67,12 @@ var DialogFlowRespParser = /** @class */ (function () {
             var queryResult = resp.queryResult.queryText;
             console.log("Query Result Bank Name : " + queryResult);
             resolve("NodejS Resoloving with : " + queryResult);
+        });
+    };
+    DialogFlowRespParser.prototype.getOutputContextsFromResponse = function (dialogFlowResp) {
+        return new Promise(function (resolve, reject) {
+            var resp = parseJson(dialogFlowResp);
+            var outputContexts = resp.queryResult.getOutputContexts;
         });
     };
     return DialogFlowRespParser;

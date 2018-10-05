@@ -48,6 +48,9 @@ export class DialogFlowRespParser {
             let resp = parseJson(dialogFlowResp)
             let queryResult = resp.queryResult.queryText
             console.log("Query Result : " + queryResult)
+            
+            //bankColl.getAllBranchesForBankNameInCity(queryResult)
+            
             resolve("NodejS Resoloving with : " + queryResult)
         })
     }
@@ -63,7 +66,10 @@ export class DialogFlowRespParser {
             bankColl.findBankNameContainingString(queryResult)           
             .then((matchedBankNames : [string]) => {
                 if (matchedBankNames.length == 1){
-                    resolve("Cool. I found your bank. " + matchedBankNames[0])
+                    let responseObject = {fulfillmentText : "Cool. I found your bank. " + matchedBankNames[0]}
+                    
+                    //resolve("Cool. I found your bank. " + matchedBankNames[0])
+                    resolve(responseObject)
                 }
                 resolve("We have found many banks that match : " + matchedBankNames.length)
             })
@@ -81,5 +87,16 @@ export class DialogFlowRespParser {
         })
     }
 
+
+    getOutputContextsFromResponse(dialogFlowResp : string) : Promise<string>{
+        return new Promise((resolve : any, reject : any) => {
+            
+            let resp = parseJson(dialogFlowResp)
+            let outputContexts = resp.queryResult.getOutputContexts;
+            
+        
+        })
+
+    }
 }
 

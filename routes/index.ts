@@ -89,7 +89,8 @@ router.post('/DF', function(req, res, next) {
         .then((fulfillText : string) => {
             console.log("Got a Simply Request.... ")
             console.log(fulfillText)
-            res.json({ 'fulfillmentText': fulfillText}); 
+            //res.json({ 'fulfillmentText': fulfillText}); 
+            res.json(fulfillText)
             res.render('index', { title: fulfillText});
         })
 });
