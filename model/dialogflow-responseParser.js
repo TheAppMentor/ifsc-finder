@@ -49,7 +49,8 @@ var DialogFlowRespParser = /** @class */ (function () {
                 }
             }
             console.log("Bank Name identified : ==> " + bankNameIdentified);
-            resolve("NodejS : Look like you want " + queryText + "Resoloving with : " + bankNameIdentified);
+            var responseObject = { fulfillmentText: ("NodejS : Look like you want " + queryText + "Resoloving with : " + bankNameIdentified) };
+            resolve(responseObject);
         });
     };
     DialogFlowRespParser.prototype.fulfillGetBankNameIntent = function (dialogFlowResp) {
