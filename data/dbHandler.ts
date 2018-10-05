@@ -173,7 +173,7 @@ export class BankDB {
                 var uniqbankNames = _.uniq(bankNames)
                 let sortedUniqueBankNames = _.sortBy(uniqbankNames)
                 console.log("Unique sorted names are... " + sortedUniqueBankNames)
-                resolve(sortedUniqueBankNames)
+                resolve([sortedUniqueBankNames])
             })
         })
     }
