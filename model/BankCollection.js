@@ -16,8 +16,7 @@ var BankCollection = /** @class */ (function () {
         this._allBankNames = Array();
     }
     BankCollection.prototype.findBankNameContainingString = function (bankName) {
-        console.log("Bank Collection : ...... ");
-        console.log("All Bank Names are : " + this._allBankNames);
+        console.log("Bank Collection : findBankNameContainingString  ...... ");
         return this.dataStore.getAllBankNamesMatching(bankName);
     };
     BankCollection.prototype.findBankMatchingName = function (name) {
@@ -149,6 +148,45 @@ var BankCollection = /** @class */ (function () {
     BankCollection.prototype.getAllBranchesForBankNameInStateDistrictCity = function (bankName, stateName, cityName, districtName) {
         if (districtName === void 0) { districtName = null; }
         return this.dataStore.getAllBranchesForBankNameInStateDistrictCity(bankName, stateName, cityName, districtName);
+        /*
+        return new Promise((resolve,reject) => {
+            this.loadBranchDetailsForBank(bankName)
+                .then((allBranchDetails : Array<BankBranchDetail>) : Promise<Array<BankBranchDetail>>  => {
+                    return new Promise((resolve,reject) => {
+                        let branchesFilteredByState = allBranchDetails.filter(eachBranch => {
+                            return eachBranch.state.toUpperCase() == stateName.toUpperCase()
+                        })
+                        resolve(branchesFilteredByState)
+                    })
+                })
+                .then((branchesFilteredByState : Array<BankBranchDetail>) : Promise<Array<BankBranchDetail>> => {
+                    return new Promise((resolve,reject) => {
+                        if (districtName == null) {
+                            resolve(branchesFilteredByState)
+                        }
+                        let branchesFilteredByDistrict = branchesFilteredByState .filter(eachBranch => {
+                            return eachBranch.district.toUpperCase() == districtName.toUpperCase()
+                        })
+                        resolve(branchesFilteredByDistrict)
+                    })
+                })
+                .then((branchesFilteredByDistrict: Array<BankBranchDetail>) : Promise<Array<BankBranchDetail>> => {
+                    return new Promise((resolve,reject) => {
+                        let branchesFilteredByCity = branchesFilteredByDistrict.filter(eachBranch => {
+                            return eachBranch.city.toUpperCase() == cityName.toUpperCase()
+                        })
+                        resolve(branchesFilteredByCity)
+                    })
+                })
+                .then((branchesFilteredByCity) => {
+                    resolve(branchesFilteredByCity)
+                })
+                .catch((err) => {
+                    reject(err)
+                })
+
+        })
+        */
     };
     BankCollection.prototype.getAllBranchesForBankNameInState = function (bankName, stateName) {
         return this.dataStore.getAllBranchesForBankNameInState(bankName, stateName);

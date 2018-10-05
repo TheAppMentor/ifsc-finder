@@ -19,8 +19,7 @@ export interface IHash {
 export class BankCollection {
     
     findBankNameContainingString(bankName : string){
-        console.log("Bank Collection : ...... ")
-        console.log("All Bank Names are : " + this._allBankNames)
+        console.log("Bank Collection : findBankNameContainingString  ...... ")
         return this.dataStore.getAllBankNamesMatching(bankName)
     }
 
@@ -172,6 +171,46 @@ export class BankCollection {
 
     getAllBranchesForBankNameInStateDistrictCity(bankName : string, stateName : string, cityName : string, districtName : string = null) : Promise<Array<BankBranchDetail>> {
         return this.dataStore.getAllBranchesForBankNameInStateDistrictCity(bankName,stateName,cityName,districtName)
+       
+        /*
+        return new Promise((resolve,reject) => {
+            this.loadBranchDetailsForBank(bankName)
+                .then((allBranchDetails : Array<BankBranchDetail>) : Promise<Array<BankBranchDetail>>  => {
+                    return new Promise((resolve,reject) => {
+                        let branchesFilteredByState = allBranchDetails.filter(eachBranch => {
+                            return eachBranch.state.toUpperCase() == stateName.toUpperCase()
+                        })
+                        resolve(branchesFilteredByState)
+                    })
+                })
+                .then((branchesFilteredByState : Array<BankBranchDetail>) : Promise<Array<BankBranchDetail>> => {
+                    return new Promise((resolve,reject) => {
+                        if (districtName == null) {
+                            resolve(branchesFilteredByState)
+                        } 
+                        let branchesFilteredByDistrict = branchesFilteredByState .filter(eachBranch => {
+                            return eachBranch.district.toUpperCase() == districtName.toUpperCase()
+                        })    
+                        resolve(branchesFilteredByDistrict)
+                    })
+                })
+                .then((branchesFilteredByDistrict: Array<BankBranchDetail>) : Promise<Array<BankBranchDetail>> => {
+                    return new Promise((resolve,reject) => {
+                        let branchesFilteredByCity = branchesFilteredByDistrict.filter(eachBranch => {
+                            return eachBranch.city.toUpperCase() == cityName.toUpperCase()
+                        })    
+                        resolve(branchesFilteredByCity)
+                    })
+                })
+                .then((branchesFilteredByCity) => {
+                    resolve(branchesFilteredByCity)
+                })
+                .catch((err) => {
+                    reject(err)
+                })
+
+        })
+        */
     }
 
     getAllBranchesForBankNameInState(bankName : string, stateName : string) : Promise<Array<BankBranchDetail>> {
