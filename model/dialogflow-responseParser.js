@@ -51,7 +51,11 @@ var DialogFlowRespParser = /** @class */ (function () {
             // Find out how many banks we have... 
             bankColl.findBankNameContainingString(queryResult)
                 .then(function (matchedBankNames) {
-                resolve("We found these many banks : " + queryResult + " ==> " + matchedBankNames.length);
+                if (matchedBankNames.length == 1) {
+                    resolve("Cool. I found your bank. " + matchedBankNames[0]);
+                }
+                resolve("There are a lot of banks man.. ");
+                //resolve("We found these many banks : " + queryResult + " ==> "+ matchedBankNames.length) 
             });
         });
     };
