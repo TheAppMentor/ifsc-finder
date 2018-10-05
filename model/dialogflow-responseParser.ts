@@ -65,6 +65,7 @@ export class DialogFlowRespParser {
             // Find out how many banks we have... 
             bankColl.findBankNameContainingString(queryResult)           
             .then((matchedBankNames : [string]) => {
+                console.log("LOG : dialogflow-responseParser.ts : matchedBankNames => " + matchedBankNames)
                 if (matchedBankNames.length == 1){
 //                    let responseObject = {fulfillmentText : ("Cool. I found your bank. " + matchedBankNames[0]), outputContexts.paramters.bankName : "ICICI BANK KA Baccha limited"}
                     let responseObject = {fulfillmentText : ("Cool. I found your bank. " + matchedBankNames[0])}
@@ -82,6 +83,8 @@ export class DialogFlowRespParser {
                     resolve(responseObject)
                 }
                 resolve("We have found many banks that match : " + matchedBankNames.length)
+            }).catch((err) => {
+                reject("Error ! : dialogflow-responseParser.ts => " + err)
             })
         })
     }

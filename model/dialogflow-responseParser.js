@@ -52,6 +52,7 @@ var DialogFlowRespParser = /** @class */ (function () {
             // Find out how many banks we have... 
             bankColl.findBankNameContainingString(queryResult)
                 .then(function (matchedBankNames) {
+                console.log("LOG : dialogflow-responseParser.ts : matchedBankNames => " + matchedBankNames);
                 if (matchedBankNames.length == 1) {
                     //                    let responseObject = {fulfillmentText : ("Cool. I found your bank. " + matchedBankNames[0]), outputContexts.paramters.bankName : "ICICI BANK KA Baccha limited"}
                     var responseObject = { fulfillmentText: ("Cool. I found your bank. " + matchedBankNames[0]) };
@@ -67,6 +68,8 @@ var DialogFlowRespParser = /** @class */ (function () {
                     resolve(responseObject);
                 }
                 resolve("We have found many banks that match : " + matchedBankNames.length);
+            }).catch(function (err) {
+                reject("Error ! : dialogflow-responseParser.ts => " + err);
             });
         });
     };
