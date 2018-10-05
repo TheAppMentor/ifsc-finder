@@ -84,9 +84,10 @@ var DialogFlowRespParser = /** @class */ (function () {
     DialogFlowRespParser.prototype.fulfillGetBankBranchNameIntent = function (dialogFlowResp) {
         return new Promise(function (resolve, reject) {
             var resp = parseJson(dialogFlowResp);
-            var queryResult = resp.queryResult.queryText;
-            console.log("Query Result Bank Name : " + queryResult);
-            resolve("NodejS Resoloving with : " + queryResult);
+            var queryText = resp.queryResult.queryText;
+            var queryResponse = resp.queryResult;
+            var responseObject = { fulfillmentText: ("Cool. I found your Branch Name. " + queryText) };
+            resolve(responseObject);
         });
     };
     DialogFlowRespParser.prototype.getOutputContextsFromResponse = function (dialogFlowResp) {

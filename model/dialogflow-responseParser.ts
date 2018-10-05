@@ -103,9 +103,12 @@ export class DialogFlowRespParser {
 
         return new Promise((resolve : any, reject : any) => {
             let resp = parseJson(dialogFlowResp)
-            let queryResult = resp.queryResult.queryText
-            console.log("Query Result Bank Name : " + queryResult)
-            resolve("NodejS Resoloving with : " + queryResult)
+            let queryText = resp.queryResult.queryText
+            let queryResponse = resp.queryResult
+            
+            let responseObject = {fulfillmentText : ("Cool. I found your Branch Name. " + queryText)}
+            
+            resolve(responseObject)
         })
     }
 
