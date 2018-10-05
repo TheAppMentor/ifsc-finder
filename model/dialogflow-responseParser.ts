@@ -106,8 +106,17 @@ export class DialogFlowRespParser {
             let queryText = resp.queryResult.queryText
             let queryResponse = resp.queryResult
             
-            let responseObject = {fulfillmentText : ("Cool. I found your Branch Name. " + queryText)}
+            let bankNameIdentified = "Unknown !!"
+            let inputCityName = "Unknown !!"
             
+            for (var eachContext of resp.queryResult.outputContexts){
+                if (eachContext.name == "projects/ifsc-finder-a3f6d/agent/sessions/4b813ab6-7c80-117d-4e2f-118f51fcf2e8/contexts/getbankname-followup"){
+                    bankNameIdentified = eachContext.parameters["bankNameIdentified"]
+                    inputCityName = eachContext.parameters["geo-city"]
+                }
+            }
+            
+            let responseObject = {fulfillmentText : ("Cool. BankName = " + bankNameIdentified + "City Name : " + inputCityName + "Branch Name :" + queryText)}
             resolve(responseObject)
         })
     }

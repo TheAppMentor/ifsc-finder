@@ -86,7 +86,16 @@ var DialogFlowRespParser = /** @class */ (function () {
             var resp = parseJson(dialogFlowResp);
             var queryText = resp.queryResult.queryText;
             var queryResponse = resp.queryResult;
-            var responseObject = { fulfillmentText: ("Cool. I found your Branch Name. " + queryText) };
+            var bankNameIdentified = "Unknown !!";
+            var inputCityName = "Unknown !!";
+            for (var _i = 0, _a = resp.queryResult.outputContexts; _i < _a.length; _i++) {
+                var eachContext = _a[_i];
+                if (eachContext.name == "projects/ifsc-finder-a3f6d/agent/sessions/4b813ab6-7c80-117d-4e2f-118f51fcf2e8/contexts/getbankname-followup") {
+                    bankNameIdentified = eachContext.parameters["bankNameIdentified"];
+                    inputCityName = eachContext.parameters["geo-city"];
+                }
+            }
+            var responseObject = { fulfillmentText: ("Cool. BankName = " + bankNameIdentified + "City Name : " + inputCityName + "Branch Name :" + queryText) };
             resolve(responseObject);
         });
     };
