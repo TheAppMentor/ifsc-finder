@@ -37,7 +37,7 @@ export class DialogFlowRespParser {
             return this.fulfillGetCityIntent(response) 
         }
 
-        if (intentName == "getBankName - getCityName - getBranchName"){
+        if (intentName == "getBankName - getCityName - getBankBranchDetails"){
             return this.fulfillGetBankBranchNameIntent(response) 
         }
     }

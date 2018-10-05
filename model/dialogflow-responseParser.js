@@ -31,7 +31,7 @@ var DialogFlowRespParser = /** @class */ (function () {
         if (intentName == "getBankName - getCityName") {
             return this.fulfillGetCityIntent(response);
         }
-        if (intentName == "getBankName - getCityName - getBranchName") {
+        if (intentName == "getBankName - getCityName - getBankBranchDetails") {
             return this.fulfillGetBankBranchNameIntent(response);
         }
     };
