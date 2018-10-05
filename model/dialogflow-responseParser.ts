@@ -68,7 +68,15 @@ export class DialogFlowRespParser {
                 if (matchedBankNames.length == 1){
 //                    let responseObject = {fulfillmentText : ("Cool. I found your bank. " + matchedBankNames[0]), outputContexts.paramters.bankName : "ICICI BANK KA Baccha limited"}
                     let responseObject = {fulfillmentText : ("Cool. I found your bank. " + matchedBankNames[0])}
-                   responseObject["outputContexts.parameters.bankName"] =  "ICICI Bank ka baccha"
+                   
+                    for (var eachContext of dialogFlowResp["outputContexts"]){
+                        if (eachContext.name == "projects/ifsc-finder-a3f6d/agent/sessions/4b813ab6-7c80-117d-4e2f-118f51fcf2e8/contexts/getbankname-followup"){
+                           eachContext.paramters["bankNameIdentified"] = "ICICI BANK ka Baccha" 
+                        }
+                        responseObject["outputContexts"]= [eachContext]
+                    }
+                    
+                    responseObject["outputContexts.parameters.bankName"] =  "ICICI Bank ka baccha"
 
                     //resolve("Cool. I found your bank. " + matchedBankNames[0])
                     resolve(responseObject)

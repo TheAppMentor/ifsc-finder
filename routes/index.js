@@ -81,22 +81,22 @@ router.post('/DF', function (req, res, next) {
 router.get('/simply', function (req, res, next) {
     var respParser = new dialogflow_responseParser_1.DialogFlowRespParser();
     var sampleJSON1 = {
-        "responseId": "7d37ca9a-a871-40d7-ace0-f7e93c396b9d",
+        "responseId": "63847c5d-72de-4073-8cbd-80a1081fe603",
         "queryResult": {
             "queryText": "icici",
             "parameters": {
-                "geo-country": "",
-                "geo-city": [],
                 "bankName": "icici",
-                "geo-country1": ""
+                "geo-country1": "",
+                "geo-country": "",
+                "geo-city": []
             },
             "allRequiredParamsPresent": true,
-            "fulfillmentText": "talking back baby.. ",
+            "fulfillmentText": "Found your Bank Prashanth !!!",
             "fulfillmentMessages": [
                 {
                     "text": {
                         "text": [
-                            "talking back baby.. "
+                            "Found your Bank Prashanth !!!"
                         ]
                     }
                 }
@@ -106,14 +106,14 @@ router.get('/simply', function (req, res, next) {
                     "name": "projects/ifsc-finder-a3f6d/agent/sessions/4b813ab6-7c80-117d-4e2f-118f51fcf2e8/contexts/getbankname-followup",
                     "lifespanCount": 2,
                     "parameters": {
+                        "geo-country1.original": "",
+                        "geo-country": "",
                         "bankName": "icici",
                         "geo-country1": "",
                         "geo-city.original": "",
                         "geo-city": [],
                         "geo-country.original": "",
-                        "bankName.original": "icici",
-                        "geo-country1.original": "",
-                        "geo-country": ""
+                        "bankName.original": "icici"
                     }
                 }
             ],
@@ -123,19 +123,20 @@ router.get('/simply', function (req, res, next) {
             },
             "intentDetectionConfidence": 1,
             "diagnosticInfo": {
-                "webhook_latency_ms": 183
+                "webhook_latency_ms": 580
             },
             "languageCode": "en"
         },
         "webhookStatus": {
-            "message": "Webhook execution successful"
+            "code": 3,
+            "message": "Webhook call failed. Error: Failed to parse webhook JSON response: Cannot find field: outputContexts.parameters.bankName in message google.cloud.dialogflow.v2beta1.WebhookResponse."
         }
     };
     respParser.determineMatchedIntent(JSON.stringify(sampleJSON1))
         .then(function (fulfillText) {
         console.log("Got a Simply Request.... ");
         console.log(fulfillText);
-        res.json({ 'fulfillmentText': fulfillText });
+        res.json(fulfillText);
         res.render('index', { title: fulfillText });
     });
 });
