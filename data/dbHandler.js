@@ -153,7 +153,7 @@ var BankDB = /** @class */ (function () {
                 var uniqbankNames = _.uniq(bankNames);
                 var sortedUniqueBankNames = _.sortBy(uniqbankNames);
                 console.log("Unique sorted names are... " + sortedUniqueBankNames);
-                resolve([sortedUniqueBankNames]);
+                resolve(sortedUniqueBankNames);
             });
         });
     };

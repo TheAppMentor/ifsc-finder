@@ -50,7 +50,7 @@ var DialogFlowRespParser = /** @class */ (function () {
             var queryResult = resp.queryResult.queryText;
             console.log("fulfillGetBankNameIntent : Query Result Bank Name : " + queryResult);
             // Find out how many banks we have... 
-            bankColl.findBankNameContainingString(queryResult)
+            bankColl.findBankMatchingName(queryResult)
                 .then(function (matchedBankNames) {
                 console.log("LOG : dialogflow-responseParser.ts : matchedBankNames => " + matchedBankNames);
                 if (matchedBankNames.length == 1) {
