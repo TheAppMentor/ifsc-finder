@@ -116,8 +116,7 @@ export class DialogFlowRespParser {
                 }
             }
           
-            bankColl.getAllBranchesForBankNameInCity(bankNameIdentified,inputCityName).then((bankBranchDetailsArr : Array<BankBranchDetail>) => {
-                console.log("We found many bank GBranchse.....")            
+            bankColl.getBranchesDetailsForBankInCityWithBranchName(bankNameIdentified,inputCityName,queryText).then((bankBranchDetailsArr : Array<BankBranchDetail>) => {
             let responseObject = {fulfillmentText : ("Cool. BankName = " + bankNameIdentified + "City Name : " + inputCityName + "Branch Name :" + queryText + "Count = " + bankBranchDetailsArr.length)}
             resolve(responseObject)
             })

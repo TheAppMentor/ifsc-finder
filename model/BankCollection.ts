@@ -171,7 +171,6 @@ export class BankCollection {
 
     getAllBranchesForBankNameInStateDistrictCity(bankName : string, stateName : string, cityName : string, districtName : string = null) : Promise<Array<BankBranchDetail>> {
         return this.dataStore.getAllBranchesForBankNameInStateDistrictCity(bankName,stateName,cityName,districtName)
-       
         /*
         return new Promise((resolve,reject) => {
             this.loadBranchDetailsForBank(bankName)
@@ -219,6 +218,11 @@ export class BankCollection {
 
     getAllBranchesForBankNameInCity(bankName : string, cityName : string) : Promise<Array<BankBranchDetail>> {
         return this.dataStore.getAllBranchesForBankNameInCity(bankName,cityName)
+    }
+
+
+    getBranchesDetailsForBankInCityWithBranchName(bankName : string, cityName : string, branchName : string) : Promise<Array<BankBranchDetail>> {
+        return this.dataStore.getAllBranchesForBankNameInCityBranchName(bankName,cityName,branchName)
     }
 
     getAllStateNamesForBank(bankName : string) : Promise<Array<string>>{

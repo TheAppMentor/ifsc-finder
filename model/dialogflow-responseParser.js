@@ -95,8 +95,7 @@ var DialogFlowRespParser = /** @class */ (function () {
                     inputCityName = eachContext.parameters["geo-city"];
                 }
             }
-            bankColl.getAllBranchesForBankNameInCity(bankNameIdentified, inputCityName).then(function (bankBranchDetailsArr) {
-                console.log("We found many bank GBranchse.....");
+            bankColl.getBranchesDetailsForBankInCityWithBranchName(bankNameIdentified, inputCityName, queryText).then(function (bankBranchDetailsArr) {
                 var responseObject = { fulfillmentText: ("Cool. BankName = " + bankNameIdentified + "City Name : " + inputCityName + "Branch Name :" + queryText + "Count = " + bankBranchDetailsArr.length) };
                 resolve(responseObject);
             });

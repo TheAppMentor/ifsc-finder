@@ -218,6 +218,16 @@ var BankDB = /** @class */ (function () {
             });
         });
     };
+    BankDB.prototype.getAllBranchesForBankNameInCityBranchName = function (bankName, cityName, branchName) {
+        return new Promise(function (resolve, reject) {
+            //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb
+            // I am using the in-efficinet regex method to make the find case-insensive.. check out the link above for a more optimizes soln.
+            // DRY vioation.... !!!! 
+            bankBranchDetailModel.find({ name: { $regex: new RegExp(bankName, "i") }, city: { $regex: new RegExp(cityName, "i") }, branch: { $regex: new RegExp(branchName, "i") } }, function (err, results) {
+                resolve(results);
+            });
+        });
+    };
     BankDB.prototype.getAllBranchesForBankNameInState = function (bankName, stateName) {
         return new Promise(function (resolve, reject) {
             //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb

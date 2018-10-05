@@ -194,6 +194,9 @@ var BankCollection = /** @class */ (function () {
     BankCollection.prototype.getAllBranchesForBankNameInCity = function (bankName, cityName) {
         return this.dataStore.getAllBranchesForBankNameInCity(bankName, cityName);
     };
+    BankCollection.prototype.getBranchesDetailsForBankInCityWithBranchName = function (bankName, cityName, branchName) {
+        return this.dataStore.getAllBranchesForBankNameInCityBranchName(bankName, cityName, branchName);
+    };
     BankCollection.prototype.getAllStateNamesForBank = function (bankName) {
         return this.dataStore.getAllStateNamesForBank(bankName);
     };
