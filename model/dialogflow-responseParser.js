@@ -54,8 +54,7 @@ var DialogFlowRespParser = /** @class */ (function () {
                 if (matchedBankNames.length == 1) {
                     resolve("Cool. I found your bank. " + matchedBankNames[0]);
                 }
-                resolve("There are a lot of banks man.. ");
-                //resolve("We found these many banks : " + queryResult + " ==> "+ matchedBankNames.length) 
+                resolve("We have found many banks that match : " + matchedBankNames.length);
             });
         });
     };
