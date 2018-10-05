@@ -30,8 +30,8 @@ var BankDB = /** @class */ (function () {
         var _this = this;
         return new Promise(function (resolve, reject) {
             //mongodb://heroku_ptln6dnj:vi22d3nuk65m1ktjqrtjalvnku@ds111492.mlab.com:11492/heroku_ptln6dnj
-            mongoose.connect('mongodb://localhost/bankDetailsColl')
-                //mongoose.connect('mongodb://heroku_ptln6dnj:vi22d3nuk65m1ktjqrtjalvnku@ds111492.mlab.com:11492/heroku_ptln6dnj')
+            //mongoose.connect('mongodb://localhost/bankDetailsColl')
+            mongoose.connect('mongodb://heroku_ptln6dnj:vi22d3nuk65m1ktjqrtjalvnku@ds111492.mlab.com:11492/heroku_ptln6dnj')
                 .then(function () {
                 console.log("We have logged in... to the DB..");
                 if (appConfigOptions["reloadBankDetailsDB"] == true) {
