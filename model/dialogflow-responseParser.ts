@@ -46,17 +46,24 @@ export class DialogFlowRespParser {
 
         return new Promise((resolve : any, reject : any) => {
             let resp = parseJson(dialogFlowResp)
-            let queryResult = resp.queryResult.queryText
-            console.log("Query Result : " + queryResult)
-            
-            //bankColl.getAllBranchesForBankNameInCity(queryResult)
-            
-            resolve("NodejS Resoloving with : " + queryResult)
-        })
-    }
+            let queryText = resp.queryResult.queryText
+            console.log("Query Result : " + queryText)
+
+            let queryResult = resp.queryResult
+            var bankNameIdentified = "" 
+
+            for (var eachContext of resp.queryResult.outputContexts){
+                if (eachContext.name == "projects/ifsc-finder-a3f6d/agent/sessions/4b813ab6-7c80-117d-4e2f-118f51fcf2e8/contexts/getbankname-followup"){
+                    bankNameIdentified = eachContext.parameters["bankNameIdentified"]
+                    //eachContext.parameters["bankNameIdentified"] = "ICICI BANK ka Baccha" 
+                }
+            }
+                console.log("Bank Name identified : ==> " +  bankNameIdentified)
+                resolve("NodejS : Look like you want " + queryText + "Resoloving with : " + bankNameIdentified)
+            })
+        }
 
     fulfillGetBankNameIntent(dialogFlowResp : string) : Promise<string> {
-
         return new Promise((resolve : any, reject : any) => {
             let resp = parseJson(dialogFlowResp)
             let queryResult = resp.queryResult.queryText
@@ -65,24 +72,16 @@ export class DialogFlowRespParser {
             // Find out how many banks we have... 
             bankColl.findBankNameContainingString(queryResult)           
             .then((matchedBankNames : Array<string>) => {
-                console.log(typeof(matchedBankNames))
-                console.log(matchedBankNames)
-                console.log("LOG : dialogflow-responseParser.ts : matchedBankNames => " + matchedBankNames)
-                console.log("LOG : dialogflow-responseParser.ts : lets Check the length => " + matchedBankNames.length)
                 if (matchedBankNames.length == 1){
-//                    let responseObject = {fulfillmentText : ("Cool. I found your bank. " + matchedBankNames[0]), outputContexts.paramters.bankName : "ICICI BANK KA Baccha limited"}
                     let responseObject = {fulfillmentText : ("Cool. I found your bank. " + matchedBankNames[0])}
-                    console.log("GOt the felllow " + resp.queryResult)  
-                    console.log("GOt the felllow " + resp.queryResult)  
                     
                     for (var eachContext of resp.queryResult.outputContexts){
                         if (eachContext.name == "projects/ifsc-finder-a3f6d/agent/sessions/4b813ab6-7c80-117d-4e2f-118f51fcf2e8/contexts/getbankname-followup"){
-                           eachContext.parameters["bankNameIdentified"] = "ICICI BANK ka Baccha" 
+                           eachContext.parameters["bankNameIdentified"] = matchedBankNames[0] 
                         }
                         responseObject["outputContexts"]= [eachContext]
                     }
 
-                    //resolve("Cool. I found your bank. " + matchedBankNames[0])
                     resolve(responseObject)
                 }
                 resolve("We have found many banks that match : " + matchedBankNames.length)
