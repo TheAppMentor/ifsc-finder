@@ -73,11 +73,11 @@ export class DialogFlowRespParser {
         return new Promise((resolve : any, reject : any) => {
             let resp = parseJson(dialogFlowResp)
             let queryResult = resp.queryResult.queryText
+            let bankName = resp.queryResult.parameters.bankName
 
-
-            console.log("fulfillGetBankNameIntent : Query Result Bank Name : " + queryResult)
+            console.log("fulfillGetBankNameIntent : Query Result Bank Name : " + bankName)
             // Find out how many banks we have... 
-            bankColl.findBankNameContainingString(queryResult)           
+            bankColl.findBankNameContainingString(bankName)           
             .then((matchedBankNames : Array<string>) => {
                 if (matchedBankNames.length == 1){
                     let responseObject = {fulfillmentText : ("Cool. I found your bank. " + matchedBankNames[0])}
@@ -120,9 +120,6 @@ export class DialogFlowRespParser {
             let responseObject = {fulfillmentText : ("Cool. BankName = " + bankNameIdentified + "City Name : " + inputCityName + "Branch Name :" + queryText + "Count = " + bankBranchDetailsArr.length)}
             resolve(responseObject)
             })
-
-            //let responseObject = {fulfillmentText : ("Cool. BankName = " + bankNameIdentified + "City Name : " + inputCityName + "Branch Name :" + queryText)}
-            //resolve(responseObject)
         })
     }
 

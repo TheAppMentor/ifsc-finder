@@ -60,9 +60,10 @@ var DialogFlowRespParser = /** @class */ (function () {
         return new Promise(function (resolve, reject) {
             var resp = parseJson(dialogFlowResp);
             var queryResult = resp.queryResult.queryText;
-            console.log("fulfillGetBankNameIntent : Query Result Bank Name : " + queryResult);
+            var bankName = resp.queryResult.parameters.bankName;
+            console.log("fulfillGetBankNameIntent : Query Result Bank Name : " + bankName);
             // Find out how many banks we have... 
-            bankColl.findBankNameContainingString(queryResult)
+            bankColl.findBankNameContainingString(bankName)
                 .then(function (matchedBankNames) {
                 if (matchedBankNames.length == 1) {
                     var responseObject = { fulfillmentText: ("Cool. I found your bank. " + matchedBankNames[0]) };
@@ -99,8 +100,6 @@ var DialogFlowRespParser = /** @class */ (function () {
                 var responseObject = { fulfillmentText: ("Cool. BankName = " + bankNameIdentified + "City Name : " + inputCityName + "Branch Name :" + queryText + "Count = " + bankBranchDetailsArr.length) };
                 resolve(responseObject);
             });
-            //let responseObject = {fulfillmentText : ("Cool. BankName = " + bankNameIdentified + "City Name : " + inputCityName + "Branch Name :" + queryText)}
-            //resolve(responseObject)
         });
     };
     DialogFlowRespParser.prototype.getOutputContextsFromResponse = function (dialogFlowResp) {
