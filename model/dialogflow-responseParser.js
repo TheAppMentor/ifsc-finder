@@ -42,6 +42,9 @@ var DialogFlowRespParser = /** @class */ (function () {
             console.log("Query Result : " + queryText);
             var queryResult = resp.queryResult;
             var bankNameIdentified = "";
+            //Extract the city Name from the intent.
+            //"geo-city"
+            var inputCityName = queryResult.parameters["geo-city"];
             for (var _i = 0, _a = resp.queryResult.outputContexts; _i < _a.length; _i++) {
                 var eachContext = _a[_i];
                 if (eachContext.name == "projects/ifsc-finder-a3f6d/agent/sessions/4b813ab6-7c80-117d-4e2f-118f51fcf2e8/contexts/getbankname-followup") {
@@ -49,7 +52,7 @@ var DialogFlowRespParser = /** @class */ (function () {
                 }
             }
             console.log("Bank Name identified : ==> " + bankNameIdentified);
-            var responseObject = { fulfillmentText: ("NodejS : Look like you want " + queryText + "Resoloving with : " + bankNameIdentified) };
+            var responseObject = { fulfillmentText: ("NodejS : Look like you want " + inputCityName + "Resoloving with : " + bankNameIdentified) };
             resolve(responseObject);
         });
     };

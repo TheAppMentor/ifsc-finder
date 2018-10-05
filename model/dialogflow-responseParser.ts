@@ -52,13 +52,19 @@ export class DialogFlowRespParser {
             let queryResult = resp.queryResult
             var bankNameIdentified = "" 
 
+            //Extract the city Name from the intent.
+            //"geo-city"
+           
+            var inputCityName = queryResult.parameters["geo-city"] 
+            
+
             for (var eachContext of resp.queryResult.outputContexts){
                 if (eachContext.name == "projects/ifsc-finder-a3f6d/agent/sessions/4b813ab6-7c80-117d-4e2f-118f51fcf2e8/contexts/getbankname-followup"){
                     bankNameIdentified = eachContext.parameters["bankNameIdentified"]
                 }
             }
                 console.log("Bank Name identified : ==> " +  bankNameIdentified)
-                    let responseObject = {fulfillmentText : ("NodejS : Look like you want " + queryText + "Resoloving with : " + bankNameIdentified)}
+                    let responseObject = {fulfillmentText : ("NodejS : Look like you want " + inputCityName + "Resoloving with : " + bankNameIdentified)}
                 resolve(responseObject)
             })
         }
@@ -67,6 +73,7 @@ export class DialogFlowRespParser {
         return new Promise((resolve : any, reject : any) => {
             let resp = parseJson(dialogFlowResp)
             let queryResult = resp.queryResult.queryText
+
 
             console.log("fulfillGetBankNameIntent : Query Result Bank Name : " + queryResult)
             // Find out how many banks we have... 
