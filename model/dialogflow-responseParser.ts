@@ -115,9 +115,15 @@ export class DialogFlowRespParser {
                     inputCityName = eachContext.parameters["geo-city"]
                 }
             }
-            
-            let responseObject = {fulfillmentText : ("Cool. BankName = " + bankNameIdentified + "City Name : " + inputCityName + "Branch Name :" + queryText)}
+          
+            bankColl.getAllBranchesForBankNameInCity(bankNameIdentified,inputCityName).then((bankBranchDetailsArr : Array<BankBranchDetail>) => {
+                console.log("We found many bank GBranchse.....")            
+            let responseObject = {fulfillmentText : ("Cool. BankName = " + bankNameIdentified + "City Name : " + inputCityName + "Branch Name :" + queryText + "Count = " + bankBranchDetailsArr.length)}
             resolve(responseObject)
+            })
+
+            //let responseObject = {fulfillmentText : ("Cool. BankName = " + bankNameIdentified + "City Name : " + inputCityName + "Branch Name :" + queryText)}
+            //resolve(responseObject)
         })
     }
 

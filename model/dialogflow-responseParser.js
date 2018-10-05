@@ -95,8 +95,13 @@ var DialogFlowRespParser = /** @class */ (function () {
                     inputCityName = eachContext.parameters["geo-city"];
                 }
             }
-            var responseObject = { fulfillmentText: ("Cool. BankName = " + bankNameIdentified + "City Name : " + inputCityName + "Branch Name :" + queryText) };
-            resolve(responseObject);
+            bankColl.getAllBranchesForBankNameInCity(bankNameIdentified, inputCityName).then(function (bankBranchDetailsArr) {
+                console.log("We found many bank GBranchse.....");
+                var responseObject = { fulfillmentText: ("Cool. BankName = " + bankNameIdentified + "City Name : " + inputCityName + "Branch Name :" + queryText + "Count = " + bankBranchDetailsArr.length) };
+                resolve(responseObject);
+            });
+            //let responseObject = {fulfillmentText : ("Cool. BankName = " + bankNameIdentified + "City Name : " + inputCityName + "Branch Name :" + queryText)}
+            //resolve(responseObject)
         });
     };
     DialogFlowRespParser.prototype.getOutputContextsFromResponse = function (dialogFlowResp) {
