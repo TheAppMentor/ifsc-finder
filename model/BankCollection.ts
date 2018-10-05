@@ -18,7 +18,7 @@ export interface IHash {
 
 export class BankCollection {
     
-    findBankNameContainingString(bankName : string){
+    findBankNameContainingString(bankName : string) : Promise<Array<string>> {
         console.log("Bank Collection : findBankNameContainingString  ...... ")
         return this.dataStore.getAllBankNamesMatching(bankName)
     }

@@ -52,18 +52,22 @@ var DialogFlowRespParser = /** @class */ (function () {
             // Find out how many banks we have... 
             bankColl.findBankNameContainingString(queryResult)
                 .then(function (matchedBankNames) {
+                console.log(typeof (matchedBankNames));
+                console.log(matchedBankNames);
                 console.log("LOG : dialogflow-responseParser.ts : matchedBankNames => " + matchedBankNames);
+                console.log("LOG : dialogflow-responseParser.ts : lets Check the length => " + matchedBankNames.length);
                 if (matchedBankNames.length == 1) {
                     //                    let responseObject = {fulfillmentText : ("Cool. I found your bank. " + matchedBankNames[0]), outputContexts.paramters.bankName : "ICICI BANK KA Baccha limited"}
                     var responseObject = { fulfillmentText: ("Cool. I found your bank. " + matchedBankNames[0]) };
-                    for (var _i = 0, _a = dialogFlowResp["outputContexts"]; _i < _a.length; _i++) {
+                    console.log("GOt the felllow " + resp.queryResult);
+                    console.log("GOt the felllow " + resp.queryResult);
+                    for (var _i = 0, _a = resp.queryResult.outputContexts; _i < _a.length; _i++) {
                         var eachContext = _a[_i];
                         if (eachContext.name == "projects/ifsc-finder-a3f6d/agent/sessions/4b813ab6-7c80-117d-4e2f-118f51fcf2e8/contexts/getbankname-followup") {
-                            eachContext.paramters["bankNameIdentified"] = "ICICI BANK ka Baccha";
+                            eachContext.parameters["bankNameIdentified"] = "ICICI BANK ka Baccha";
                         }
                         responseObject["outputContexts"] = [eachContext];
                     }
-                    responseObject["outputContexts.parameters.bankName"] = "ICICI Bank ka baccha";
                     //resolve("Cool. I found your bank. " + matchedBankNames[0])
                     resolve(responseObject);
                 }

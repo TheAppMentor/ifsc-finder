@@ -34,8 +34,8 @@ export class BankDB {
     connectoToDBAndLoadData(bankCollection : BankCollection) : Promise<boolean> {
         return new Promise((resolve,reject) => {
             //mongodb://heroku_ptln6dnj:vi22d3nuk65m1ktjqrtjalvnku@ds111492.mlab.com:11492/heroku_ptln6dnj
-            //mongoose.connect('mongodb://localhost/bankDetailsColl')
-            mongoose.connect('mongodb://heroku_ptln6dnj:vi22d3nuk65m1ktjqrtjalvnku@ds111492.mlab.com:11492/heroku_ptln6dnj')
+            mongoose.connect('mongodb://localhost/bankDetailsColl')
+            //mongoose.connect('mongodb://heroku_ptln6dnj:vi22d3nuk65m1ktjqrtjalvnku@ds111492.mlab.com:11492/heroku_ptln6dnj')
                 .then(() => {
                     console.log("We have logged in... to the DB..")
                     if (appConfigOptions["reloadBankDetailsDB"] == true){
@@ -170,10 +170,15 @@ export class BankDB {
                 var bankNames = results.map(eachRec => {
                     return eachRec.name
                 })
-                var uniqbankNames = _.uniq(bankNames)
-                let sortedUniqueBankNames = _.sortBy(uniqbankNames)
-                console.log("Unique sorted names are... " + sortedUniqueBankNames)
-                resolve(sortedUniqueBankNames)
+                console.log("Resolving with : ", bankNames) 
+                resolve(bankNames)
+                //var uniqbankNames = _.uniq(bankNames)
+                //let sortedUniqueBankNames = _.sortBy(uniqbankNames)
+                //console.log("Unique sorted names are... " + sortedUniqueBankNames)
+                //
+                //
+                //:w
+                //resolve(sortedUniqueBankNames)
             })
         })
     }
