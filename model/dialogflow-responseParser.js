@@ -26,7 +26,6 @@ var DialogFlowRespParser = /** @class */ (function () {
         //Prashanth : Make this an enum here..       
         if (intentName == "getBankName") {
             console.log("fullfillIntentWithName : I am in the get bank name ");
-            console.log("I will now return " + this.fulfillGetBankNameIntent(response));
             return this.fulfillGetBankNameIntent(response);
         }
         if (intentName == "getBankName - getCityName") {
@@ -52,9 +51,8 @@ var DialogFlowRespParser = /** @class */ (function () {
             // Find out how many banks we have... 
             bankColl.findBankNameContainingString(queryResult)
                 .then(function (matchedBankNames) {
-                resolve("We found these many banks : " + matchedBankNames.length);
+                resolve("We found these many banks : " + queryResult + " ==> " + matchedBankNames.length);
             });
-            resolve("NodejS Resoloving with : " + queryResult);
         });
     };
     DialogFlowRespParser.prototype.fulfillGetBankBranchNameIntent = function (dialogFlowResp) {

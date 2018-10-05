@@ -141,13 +141,28 @@ var BankDB = /** @class */ (function () {
             });
         });
     };
+    BankDB.prototype.getAllBankNamesMatching = function (bankName) {
+        return new Promise(function (resolve, reject) {
+            //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb
+            // I am using the in-efficinet regex method to make the find case-insensive.. check out the link above for a more optimizes soln.
+            bankNamesModel.find({ name: { $regex: new RegExp(bankName, "i") } }, function (err, results) {
+                //bankBranchDetailModel.find({name : bankName},function(err,results){
+                var bankNames = results.map(function (eachRec) {
+                    return eachRec.name;
+                });
+                var uniqbankNames = _.uniq(bankNames);
+                var sortedUniqueBankNames = _.sortBy(uniqbankNames);
+                console.log("Unique sorted names are... " + sortedUniqueBankNames);
+                resolve(sortedUniqueBankNames);
+            });
+        });
+    };
     BankDB.prototype.getAllStateNamesForBank = function (bankName) {
         return new Promise(function (resolve, reject) {
             //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb
             // I am using the in-efficinet regex method to make the find case-insensive.. check out the link above for a more optimizes soln.
             console.log("DB Handler : getAllStateNamesForBank ==> " + bankName);
             bankBranchDetailModel.find({ name: { $regex: new RegExp(bankName, "i") } }, function (err, results) {
-                //bankBranchDetailModel.find({name : bankName},function(err,results){
                 var stateNames = results.map(function (eachRec) {
                     return eachRec.state;
                 });

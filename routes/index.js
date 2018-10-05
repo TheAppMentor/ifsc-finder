@@ -7,21 +7,29 @@ var Promise = require('bluebird');
 var BankCollection_1 = require("../model/BankCollection");
 var dialogflow_responseParser_1 = require("../model/dialogflow-responseParser");
 var bankColl = new BankCollection_1.BankCollection();
+bankColl.hydrateBankCollection("./data/ifsc_codes_all_clean.csv")
+    .then(function () {
+    return bankColl.loadDataBasesWithDataFromFile();
+}).then(function () {
+    console.log("Printing : All State Names for Dena Bank");
+    return bankColl.getAllStateNamesForBank("DenA BanK");
+});
 /* GET home page. */
 router.get('/', function (req, res, next) {
     res.render('index', { title: 'Finder Boy' });
 });
 /* GET home page. */
-router.get('/loadDB', function (req, res, next) {
-    var bankColl = new BankCollection_1.BankCollection();
-    bankColl.hydrateBankCollection("./data/ifsc_codes_all_clean.csv").then(function () {
-        return bankColl.loadDataBasesWithDataFromFile();
-    }).then(function () {
-        return bankColl.getAllStateNamesForBank("DenA BanK");
-    }).then(function (matchedStates) {
+/*
+router.get('/loadDB', function(req, res, next) {
+    bankColl.hydrateBankCollection("./data/ifsc_codes_all_clean.csv").then(() : Promise<boolean> => {
+        return bankColl.loadDataBasesWithDataFromFile()
+    }).then(() : Promise<Array<string>> => {
+        return bankColl.getAllStateNamesForBank("DenA BanK")
+    }).then((matchedStates : Array<string>) => {
         res.render('index', { title: matchedStates.toString() });
-    });
+    })
 });
+*/
 router.get('/allBankNames', function (req, res, next) {
     bankColl.getAllBankNames().then(function (bankList) {
         console.log("All Bank Names are : " + bankList);
@@ -71,7 +79,6 @@ router.post('/DF', function (req, res, next) {
 });
 router.get('/simply', function (req, res, next) {
     var respParser = new dialogflow_responseParser_1.DialogFlowRespParser();
-    var sampleJSON = { "responseId": "574b5f75-f257-42fe-9275-0d61f852365d", "queryResult": { "queryText": "\"Bangalore\"", "parameters": { "geo-city": ["Bangalore"] }, "allRequiredParamsPresent": true, "intent": { "name": "projects/ifsc-finder-a3f6d/agent/intents/c7f18d63-5d51-4678-82ef-9946819d6d80", "displayName": "getCity" }, "intentDetectionConfidence": 1, "languageCode": "en-us" }, "originalDetectIntentRequest": { "payload": {} }, "session": "projects/ifsc-finder-a3f6d/agent/sessions/quickstart-session-id" };
     var sampleJSON1 = {
         "responseId": "7d37ca9a-a871-40d7-ace0-f7e93c396b9d",
         "queryResult": {

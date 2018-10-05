@@ -19,17 +19,10 @@ export interface IHash {
 export class BankCollection {
     
     findBankNameContainingString(bankName : string){
-        return new Promise((resolve : any, reject : any) => {
-            var matchingNames = []
-            for (var eachBankName of this.allBankNames){
-               if (eachBankName.search(bankName)){
-                   matchingNames.push(eachBankName)  
-               } 
-            }
-            resolve(matchingNames)
-        })
+        console.log("Bank Collection : ...... ")
+        console.log("All Bank Names are : " + this._allBankNames)
+        return this.dataStore.getAllBankNamesMatching(bankName)
     }
-
 
     findBankMatchingName(name : string) : Promise<Array<string>> {
         return new Promise((resolve,reject) => {
@@ -109,10 +102,12 @@ export class BankCollection {
             console.log("Error:", results.errors);
 
             var allBankNames = Array<string>()
+            
             // Get list of all unqiue bank names.
             for (var eachBank of results.data){
                 allBankNames.push(eachBank["BANK"])
             }
+           
             let uniqueBankNames = _.uniq(allBankNames) 
             this._allBankNames = _.uniq(allBankNames)
             console.log("All Bank Names are : " + this._allBankNames)

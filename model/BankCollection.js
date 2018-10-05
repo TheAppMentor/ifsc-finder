@@ -16,17 +16,9 @@ var BankCollection = /** @class */ (function () {
         this._allBankNames = Array();
     }
     BankCollection.prototype.findBankNameContainingString = function (bankName) {
-        var _this = this;
-        return new Promise(function (resolve, reject) {
-            var matchingNames = [];
-            for (var _i = 0, _a = _this.allBankNames; _i < _a.length; _i++) {
-                var eachBankName = _a[_i];
-                if (eachBankName.search(bankName)) {
-                    matchingNames.push(eachBankName);
-                }
-            }
-            resolve(matchingNames);
-        });
+        console.log("Bank Collection : ...... ");
+        console.log("All Bank Names are : " + this._allBankNames);
+        return this.dataStore.getAllBankNamesMatching(bankName);
     };
     BankCollection.prototype.findBankMatchingName = function (name) {
         var _this = this;

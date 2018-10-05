@@ -10,14 +10,22 @@ import { DialogFlowRespParser } from '../model/dialogflow-responseParser'
 
 let bankColl = new BankCollection()
 
+bankColl.hydrateBankCollection("./data/ifsc_codes_all_clean.csv")
+    .then(() : Promise<boolean> => {
+        return bankColl.loadDataBasesWithDataFromFile()
+    }).then(() : Promise<Array<string>> => {
+        console.log("Printing : All State Names for Dena Bank")
+        return bankColl.getAllStateNamesForBank("DenA BanK")
+    })
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
     res.render('index', { title: 'Finder Boy' });
 });
 
 /* GET home page. */
+/*
 router.get('/loadDB', function(req, res, next) {
-    let bankColl = new BankCollection()
     bankColl.hydrateBankCollection("./data/ifsc_codes_all_clean.csv").then(() : Promise<boolean> => {
         return bankColl.loadDataBasesWithDataFromFile()
     }).then(() : Promise<Array<string>> => {
@@ -26,6 +34,8 @@ router.get('/loadDB', function(req, res, next) {
         res.render('index', { title: matchedStates.toString() });
     })
 });
+*/
+
 
 router.get('/allBankNames', function(req, res, next) {
     bankColl.getAllBankNames().then((bankList : Array<string>) => {
@@ -84,12 +94,9 @@ router.post('/DF', function(req, res, next) {
         })
 });
 
-
 router.get('/simply', function(req, res, next) {
 
     let respParser = new DialogFlowRespParser()
-
-    let sampleJSON = {"responseId":"574b5f75-f257-42fe-9275-0d61f852365d","queryResult":{"queryText":"\"Bangalore\"","parameters":{"geo-city":["Bangalore"]},"allRequiredParamsPresent":true,"intent":{"name":"projects/ifsc-finder-a3f6d/agent/intents/c7f18d63-5d51-4678-82ef-9946819d6d80","displayName":"getCity"},"intentDetectionConfidence":1,"languageCode":"en-us"},"originalDetectIntentRequest":{"payload":{}},"session":"projects/ifsc-finder-a3f6d/agent/sessions/quickstart-session-id"} 
 
 
 let sampleJSON1 = {
@@ -151,8 +158,6 @@ let sampleJSON1 = {
             res.json({ 'fulfillmentText': fulfillText}); 
             res.render('index', { title: fulfillText});
         })
-
-
 });
 
 module.exports = router;
