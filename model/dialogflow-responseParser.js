@@ -46,7 +46,6 @@ var DialogFlowRespParser = /** @class */ (function () {
                 var eachContext = _a[_i];
                 if (eachContext.name == "projects/ifsc-finder-a3f6d/agent/sessions/4b813ab6-7c80-117d-4e2f-118f51fcf2e8/contexts/getbankname-followup") {
                     bankNameIdentified = eachContext.parameters["bankNameIdentified"];
-                    //eachContext.parameters["bankNameIdentified"] = "ICICI BANK ka Baccha" 
                 }
             }
             console.log("Bank Name identified : ==> " + bankNameIdentified);
