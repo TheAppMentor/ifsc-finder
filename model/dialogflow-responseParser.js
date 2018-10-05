@@ -53,7 +53,9 @@ var DialogFlowRespParser = /** @class */ (function () {
             bankColl.findBankNameContainingString(queryResult)
                 .then(function (matchedBankNames) {
                 if (matchedBankNames.length == 1) {
-                    var responseObject = { fulfillmentText: "Cool. I found your bank. " + matchedBankNames[0] };
+                    //                    let responseObject = {fulfillmentText : ("Cool. I found your bank. " + matchedBankNames[0]), outputContexts.paramters.bankName : "ICICI BANK KA Baccha limited"}
+                    var responseObject = { fulfillmentText: ("Cool. I found your bank. " + matchedBankNames[0]) };
+                    responseObject["outputContexts.parameters.bankName"] = "ICICI Bank ka baccha";
                     //resolve("Cool. I found your bank. " + matchedBankNames[0])
                     resolve(responseObject);
                 }

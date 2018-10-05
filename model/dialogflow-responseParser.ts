@@ -66,8 +66,10 @@ export class DialogFlowRespParser {
             bankColl.findBankNameContainingString(queryResult)           
             .then((matchedBankNames : [string]) => {
                 if (matchedBankNames.length == 1){
-                    let responseObject = {fulfillmentText : "Cool. I found your bank. " + matchedBankNames[0]}
-                    
+//                    let responseObject = {fulfillmentText : ("Cool. I found your bank. " + matchedBankNames[0]), outputContexts.paramters.bankName : "ICICI BANK KA Baccha limited"}
+                    let responseObject = {fulfillmentText : ("Cool. I found your bank. " + matchedBankNames[0])}
+                   responseObject["outputContexts.parameters.bankName"] =  "ICICI Bank ka baccha"
+
                     //resolve("Cool. I found your bank. " + matchedBankNames[0])
                     resolve(responseObject)
                 }
