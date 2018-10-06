@@ -105,7 +105,8 @@ var DialogFlowRespParser = /** @class */ (function () {
                 }
             }
             bankColl.getBranchesDetailsForBankInCityWithBranchName(bankNameIdentified, inputCityName, queryText).then(function (bankBranchDetailsArr) {
-                var responseObject = { fulfillmentText: ("Cool. BankName = " + bankNameIdentified + "City Name : " + inputCityName + "Branch Name :" + queryText + "Count = " + bankBranchDetailsArr.length) };
+                var responseObject = { fulfillmentText: ("Cool. BankName = " + bankNameIdentified + "    City Name : " + inputCityName + "   Branch Name :" + queryText + "  Count = " + bankBranchDetailsArr.length) };
+                console.log("PRASHANTH !!!!!! => We are now fetching bank details...  ==>" + bankBranchDetailsArr);
                 resolve(responseObject);
             });
         });

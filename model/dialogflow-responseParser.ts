@@ -125,8 +125,9 @@ export class DialogFlowRespParser {
             }
           
             bankColl.getBranchesDetailsForBankInCityWithBranchName(bankNameIdentified,inputCityName,queryText).then((bankBranchDetailsArr : Array<BankBranchDetail>) => {
-            let responseObject = {fulfillmentText : ("Cool. BankName = " + bankNameIdentified + "City Name : " + inputCityName + "Branch Name :" + queryText + "Count = " + bankBranchDetailsArr.length)}
-            resolve(responseObject)
+                let responseObject = {fulfillmentText : ("Cool. BankName = " + bankNameIdentified + "    City Name : " + inputCityName + "   Branch Name :" + queryText + "  Count = " + bankBranchDetailsArr.length)}
+                console.log("PRASHANTH !!!!!! => We are now fetching bank details...  ==>" + bankBranchDetailsArr)
+                resolve(responseObject)
             })
         })
     }
