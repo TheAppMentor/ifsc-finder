@@ -85,10 +85,7 @@ export class DialogFlowRespParser {
                 if (matchedBankNames.length == 1){
                     let responseObject = {fulfillmentText : ("Cool. I found your bank. " + matchedBankNames[0])}
                     
-                    //"projects/ifsc-finder-a3f6d/agent/sessions/4b813ab6-7c80-117d-4e2f-118f51fcf2e8/contexts/getbankname-followup"
-                    
                     for (var eachContext of resp.queryResult.outputContexts){
-                            console.log("We are looking at context : " + resp.session + "/contexts/getbankname-followup")
                         if (eachContext.name == resp.session + "/contexts/getbankname-followup"){
                         //if (eachContext.name == resp.session + "getbankname-followup"){
                             console.log("We are looking at context : " + resp.session)
@@ -118,7 +115,10 @@ export class DialogFlowRespParser {
             let inputCityName = "Unknown !!"
             
             for (var eachContext of resp.queryResult.outputContexts){
-                if (eachContext.name == "projects/ifsc-finder-a3f6d/agent/sessions/4b813ab6-7c80-117d-4e2f-118f51fcf2e8/contexts/getbankname-followup"){
+                //resp.session + 
+                
+                //if (eachContext.name == "projects/ifsc-finder-a3f6d/agent/sessions/4b813ab6-7c80-117d-4e2f-118f51fcf2e8/contexts/getbankname-followup"){
+                if (eachContext.name == resp.session + "/contexts/getbankname-followup"){
                     bankNameIdentified = eachContext.parameters["bankNameIdentified"]
                     inputCityName = eachContext.parameters["geo-city"]
                 }
