@@ -12,8 +12,8 @@ export class DialogFlowRespParser {
     determineMatchedIntent(dialogFlowResp : string) : Promise<string> {
 
         return new Promise((resolve : any, reject : any) => {
-            let resp = parseJson(dialogFlowResp.body)
-            let sessionID = resp["sessionID"]
+            let resp = parseJson(dialogFlowResp).body
+            let sessionID = resp["session"]
 
             let queryResult = resp.queryResult
             console.log("allRequiredParamsPresent : " +  queryResult.allRequiredParamsPresent)
@@ -60,7 +60,9 @@ export class DialogFlowRespParser {
             
 
             for (var eachContext of resp.queryResult.outputContexts){
-                if (eachContext.name == "projects/ifsc-finder-a3f6d/agent/sessions/4b813ab6-7c80-117d-4e2f-118f51fcf2e8/contexts/getbankname-followup"){
+                //if (eachContext.name == "projects/ifsc-finder-a3f6d/agent/sessions/4b813ab6-7c80-117d-4e2f-118f51fcf2e8/contexts/getbankname-followup"){
+                if (eachContext.name == resp.session + "/contexts/getbankname-followup"){
+                            console.log("We are looking at context : " + resp.session)
                     bankNameIdentified = eachContext.parameters["bankNameIdentified"]
                 }
             }
@@ -85,7 +87,8 @@ export class DialogFlowRespParser {
                     
                     for (var eachContext of resp.queryResult.outputContexts){
                         //if (eachContext.name == "projects/ifsc-finder-a3f6d/agent/sessions/4b813ab6-7c80-117d-4e2f-118f51fcf2e8/contexts/getbankname-followup"){
-                        if (eachContext.name == "getbankname-followup"){
+                        if (eachContext.name == resp.session + "getbankname-followup"){
+                            console.log("We are looking at context : " + resp.session)
                             eachContext.parameters["bankNameIdentified"] = matchedBankNames[0] 
                         }
                         responseObject["outputContexts"]= [eachContext]

@@ -10,8 +10,8 @@ var DialogFlowRespParser = /** @class */ (function () {
     DialogFlowRespParser.prototype.determineMatchedIntent = function (dialogFlowResp) {
         var _this = this;
         return new Promise(function (resolve, reject) {
-            var resp = parseJson(dialogFlowResp.body);
-            var sessionID = resp["sessionID"];
+            var resp = parseJson(dialogFlowResp).body;
+            var sessionID = resp["session"];
             var queryResult = resp.queryResult;
             console.log("allRequiredParamsPresent : " + queryResult.allRequiredParamsPresent);
             if (queryResult.allRequiredParamsPresent == true) {
@@ -48,7 +48,9 @@ var DialogFlowRespParser = /** @class */ (function () {
             var inputCityName = queryResult.parameters["geo-city"];
             for (var _i = 0, _a = resp.queryResult.outputContexts; _i < _a.length; _i++) {
                 var eachContext = _a[_i];
-                if (eachContext.name == "projects/ifsc-finder-a3f6d/agent/sessions/4b813ab6-7c80-117d-4e2f-118f51fcf2e8/contexts/getbankname-followup") {
+                //if (eachContext.name == "projects/ifsc-finder-a3f6d/agent/sessions/4b813ab6-7c80-117d-4e2f-118f51fcf2e8/contexts/getbankname-followup"){
+                if (eachContext.name == resp.session + "/contexts/getbankname-followup") {
+                    console.log("We are looking at context : " + resp.session);
                     bankNameIdentified = eachContext.parameters["bankNameIdentified"];
                 }
             }
@@ -71,7 +73,8 @@ var DialogFlowRespParser = /** @class */ (function () {
                     for (var _i = 0, _a = resp.queryResult.outputContexts; _i < _a.length; _i++) {
                         var eachContext = _a[_i];
                         //if (eachContext.name == "projects/ifsc-finder-a3f6d/agent/sessions/4b813ab6-7c80-117d-4e2f-118f51fcf2e8/contexts/getbankname-followup"){
-                        if (eachContext.name == "getbankname-followup") {
+                        if (eachContext.name == resp.session + "getbankname-followup") {
+                            console.log("We are looking at context : " + resp.session);
                             eachContext.parameters["bankNameIdentified"] = matchedBankNames[0];
                         }
                         responseObject["outputContexts"] = [eachContext];
