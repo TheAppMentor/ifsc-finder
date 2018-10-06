@@ -255,7 +255,11 @@ export class BankDB {
             //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb
             // I am using the in-efficinet regex method to make the find case-insensive.. check out the link above for a more optimizes soln.
             // DRY vioation.... !!!! 
+            console.log("Database Boy Talking : => " + bankName + " " + cityName + " " + branchName +  " ")
+            
             bankBranchDetailModel.find({name : { $regex : new RegExp(bankName, "i") } , city : { $regex : new RegExp(cityName, "i") }, branch : { $regex : new RegExp(branchName, "i")}},function(err,results){
+                console.log("Database boy => Resolving With results : " + results)
+                console.log("Database Boy => Error is " + err)
                 resolve(results)
             })
         })
