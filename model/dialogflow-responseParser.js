@@ -41,7 +41,7 @@ var DialogFlowRespParser = /** @class */ (function () {
             var queryText = resp.queryResult.queryText;
             console.log("Query Result : " + queryText);
             var queryResult = resp.queryResult;
-            var bankNameIdentified = "";
+            var bankNameIdentified = "Unknown Bank !!";
             //Extract the city Name from the intent.
             //"geo-city"
             var inputCityName = queryResult.parameters["geo-city"];
