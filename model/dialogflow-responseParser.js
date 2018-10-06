@@ -71,11 +71,11 @@ var DialogFlowRespParser = /** @class */ (function () {
                 .then(function (matchedBankNames) {
                 if (matchedBankNames.length == 1) {
                     var responseObject = { fulfillmentText: ("Cool. I found your bank. " + matchedBankNames[0]) };
+                    //"projects/ifsc-finder-a3f6d/agent/sessions/4b813ab6-7c80-117d-4e2f-118f51fcf2e8/contexts/getbankname-followup"
                     for (var _i = 0, _a = resp.queryResult.outputContexts; _i < _a.length; _i++) {
                         var eachContext = _a[_i];
-                        //"projects/ifsc-finder-a3f6d/agent/sessions/4b813ab6-7c80-117d-4e2f-118f51fcf2e8/contexts/getbankname-getcityname-followup"
-                        //if (eachContext.name == "projects/ifsc-finder-a3f6d/agent/sessions/4b813ab6-7c80-117d-4e2f-118f51fcf2e8/contexts/getbankname-followup"){
-                        if (eachContext.name == resp.session + "getbankname-getcityname-followup") {
+                        console.log("We are looking at context : " + resp.session + "/contexts/getbankname-followup");
+                        if (eachContext.name == resp.session + "/contexts/getbankname-followup") {
                             //if (eachContext.name == resp.session + "getbankname-followup"){
                             console.log("We are looking at context : " + resp.session);
                             eachContext.parameters["bankNameIdentified"] = matchedBankNames[0];
