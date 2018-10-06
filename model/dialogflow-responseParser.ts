@@ -12,9 +12,9 @@ export class DialogFlowRespParser {
     determineMatchedIntent(dialogFlowResp : string) : Promise<string> {
 
         return new Promise((resolve : any, reject : any) => {
-            let resp = parseJson(dialogFlowResp).body
+            let resp = parseJson(dialogFlowResp)
             let sessionID = resp["session"]
-
+            console.log("REsponse Parser talking : Sesion is " + sessionID)
             let queryResult = resp.queryResult
             console.log("allRequiredParamsPresent : " +  queryResult.allRequiredParamsPresent)
             if (queryResult.allRequiredParamsPresent == true){

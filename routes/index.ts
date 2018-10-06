@@ -85,7 +85,7 @@ router.post('/DF', function(req, res, next) {
     //res.json({"status" : "A Bloody Resounding success : POST"})
     let respParser = new DialogFlowRespParser()
 
-    respParser.determineMatchedIntent(JSON.stringify(req))
+    respParser.determineMatchedIntent(JSON.stringify(req.body))
         .then((fulfillText : string) => {
             console.log("Got a Simply Request.... ")
             console.log(fulfillText)

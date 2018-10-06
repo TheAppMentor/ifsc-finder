@@ -10,8 +10,9 @@ var DialogFlowRespParser = /** @class */ (function () {
     DialogFlowRespParser.prototype.determineMatchedIntent = function (dialogFlowResp) {
         var _this = this;
         return new Promise(function (resolve, reject) {
-            var resp = parseJson(dialogFlowResp).body;
+            var resp = parseJson(dialogFlowResp);
             var sessionID = resp["session"];
+            console.log("REsponse Parser talking : Sesion is " + sessionID);
             var queryResult = resp.queryResult;
             console.log("allRequiredParamsPresent : " + queryResult.allRequiredParamsPresent);
             if (queryResult.allRequiredParamsPresent == true) {
