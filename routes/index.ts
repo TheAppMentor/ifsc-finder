@@ -82,15 +82,13 @@ router.post('/DF', function(req, res, next) {
     console.log("Holy Cow.. DialogFlow said something.. ")
     console.log("Request is Headers : " + JSON.stringify(req.headers))
     console.log("Request is body : " + JSON.stringify(req.body))
-    //res.json({"status" : "A Bloody Resounding success : POST"})
     let respParser = new DialogFlowRespParser()
 
     respParser.determineMatchedIntent(JSON.stringify(req.body))
         .then((fulfillText : string) => {
-            console.log("Got a Simply Request.... ")
-            console.log(fulfillText)
-            res.json(fulfillText)
-            res.render('index', { title: fulfillText});
+            agent.add(fulfillText)
+            //res.json(fulfillText)
+            //res.render('index', { title: fulfillText});
         })
 });
 
