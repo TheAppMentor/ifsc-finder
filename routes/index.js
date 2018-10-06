@@ -69,11 +69,10 @@ router.post('/DF', function (req, res, next) {
     console.log("Request is body : " + JSON.stringify(req.body));
     //res.json({"status" : "A Bloody Resounding success : POST"})
     var respParser = new dialogflow_responseParser_1.DialogFlowRespParser();
-    respParser.determineMatchedIntent(JSON.stringify(req.body))
+    respParser.determineMatchedIntent(JSON.stringify(req))
         .then(function (fulfillText) {
         console.log("Got a Simply Request.... ");
         console.log(fulfillText);
-        //res.json({ 'fulfillmentText': fulfillText}); 
         res.json(fulfillText);
         res.render('index', { title: fulfillText });
     });

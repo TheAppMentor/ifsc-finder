@@ -12,7 +12,8 @@ export class DialogFlowRespParser {
     determineMatchedIntent(dialogFlowResp : string) : Promise<string> {
 
         return new Promise((resolve : any, reject : any) => {
-            let resp = parseJson(dialogFlowResp)
+            let resp = parseJson(dialogFlowResp.body)
+            let sessionID = resp["sessionID"]
 
             let queryResult = resp.queryResult
             console.log("allRequiredParamsPresent : " +  queryResult.allRequiredParamsPresent)
@@ -83,8 +84,9 @@ export class DialogFlowRespParser {
                     let responseObject = {fulfillmentText : ("Cool. I found your bank. " + matchedBankNames[0])}
                     
                     for (var eachContext of resp.queryResult.outputContexts){
-                        if (eachContext.name == "projects/ifsc-finder-a3f6d/agent/sessions/4b813ab6-7c80-117d-4e2f-118f51fcf2e8/contexts/getbankname-followup"){
-                           eachContext.parameters["bankNameIdentified"] = matchedBankNames[0] 
+                        //if (eachContext.name == "projects/ifsc-finder-a3f6d/agent/sessions/4b813ab6-7c80-117d-4e2f-118f51fcf2e8/contexts/getbankname-followup"){
+                        if (eachContext.name == "getbankname-followup"){
+                            eachContext.parameters["bankNameIdentified"] = matchedBankNames[0] 
                         }
                         responseObject["outputContexts"]= [eachContext]
                     }

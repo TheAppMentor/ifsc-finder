@@ -10,7 +10,8 @@ var DialogFlowRespParser = /** @class */ (function () {
     DialogFlowRespParser.prototype.determineMatchedIntent = function (dialogFlowResp) {
         var _this = this;
         return new Promise(function (resolve, reject) {
-            var resp = parseJson(dialogFlowResp);
+            var resp = parseJson(dialogFlowResp.body);
+            var sessionID = resp["sessionID"];
             var queryResult = resp.queryResult;
             console.log("allRequiredParamsPresent : " + queryResult.allRequiredParamsPresent);
             if (queryResult.allRequiredParamsPresent == true) {
@@ -69,7 +70,8 @@ var DialogFlowRespParser = /** @class */ (function () {
                     var responseObject = { fulfillmentText: ("Cool. I found your bank. " + matchedBankNames[0]) };
                     for (var _i = 0, _a = resp.queryResult.outputContexts; _i < _a.length; _i++) {
                         var eachContext = _a[_i];
-                        if (eachContext.name == "projects/ifsc-finder-a3f6d/agent/sessions/4b813ab6-7c80-117d-4e2f-118f51fcf2e8/contexts/getbankname-followup") {
+                        //if (eachContext.name == "projects/ifsc-finder-a3f6d/agent/sessions/4b813ab6-7c80-117d-4e2f-118f51fcf2e8/contexts/getbankname-followup"){
+                        if (eachContext.name == "getbankname-followup") {
                             eachContext.parameters["bankNameIdentified"] = matchedBankNames[0];
                         }
                         responseObject["outputContexts"] = [eachContext];
