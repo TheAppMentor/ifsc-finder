@@ -15,8 +15,11 @@ var BankCollection = /** @class */ (function () {
         this.dataStore = new dbHandler_1.BankDB();
         this._allBankNames = Array();
     }
+    BankCollection.prototype.getAllBranchesCount = function (bankName) {
+        if (bankName === void 0) { bankName = ""; }
+        return this.dataStore.getAllBranchesCount(bankName);
+    };
     BankCollection.prototype.findBankNameContainingString = function (bankName) {
-        console.log("Bank Collection : findBankNameContainingString  ...... ");
         return this.dataStore.getAllBankNamesMatching(bankName);
     };
     BankCollection.prototype.findBankMatchingName = function (name) {
@@ -24,6 +27,9 @@ var BankCollection = /** @class */ (function () {
         return new Promise(function (resolve, reject) {
             resolve(_this.bankNameStoreTrie.find(name));
         });
+    };
+    BankCollection.prototype.getAllBankNamesCount = function () {
+        return this.dataStore.getAllBankNamesCount();
     };
     BankCollection.prototype.addBank = function (bank) {
         var _this = this;
@@ -196,6 +202,9 @@ var BankCollection = /** @class */ (function () {
     };
     BankCollection.prototype.getBranchesDetailsForBankInCityWithBranchName = function (bankName, cityName, branchName) {
         return this.dataStore.getAllBranchesForBankNameInCityBranchName(bankName, cityName, branchName);
+    };
+    BankCollection.prototype.getAllBranchNamesForBankNameInCity = function (bankName, cityName) {
+        return this.dataStore.getAllBranchNamesForBankNameInCity(bankName, cityName);
     };
     BankCollection.prototype.getAllStateNamesForBank = function (bankName) {
         return this.dataStore.getAllStateNamesForBank(bankName);

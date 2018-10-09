@@ -15,11 +15,13 @@ const fs = require('fs-extra-promise')
 export interface IHash {
     [details: string] : string;
 } 
-
 export class BankCollection {
     
+    getAllBranchesCount(bankName : string = "") : Promise<number>{
+        return this.dataStore.getAllBranchesCount(bankName)
+    }
+    
     findBankNameContainingString(bankName : string) : Promise<Array<string>> {
-        console.log("Bank Collection : findBankNameContainingString  ...... ")
         return this.dataStore.getAllBankNamesMatching(bankName)
     }
 
@@ -27,6 +29,10 @@ export class BankCollection {
         return new Promise((resolve,reject) => {
             resolve(this.bankNameStoreTrie.find(name))
         }) 
+    }
+
+    getAllBankNamesCount() : Promise<number>{
+        return this.dataStore.getAllBankNamesCount()
     }
 
     addBank(bank : Bank) : Promise<boolean> {
@@ -220,11 +226,13 @@ export class BankCollection {
         return this.dataStore.getAllBranchesForBankNameInCity(bankName,cityName)
     }
 
-
     getBranchesDetailsForBankInCityWithBranchName(bankName : string, cityName : string, branchName : string) : Promise<Array<BankBranchDetail>> {
         return this.dataStore.getAllBranchesForBankNameInCityBranchName(bankName,cityName,branchName)
     }
 
+    getAllBranchNamesForBankNameInCity(bankName : string, cityName : string) : Promise<Array<string>> {
+        return this.dataStore.getAllBranchNamesForBankNameInCity(bankName,cityName)
+    }    
     getAllStateNamesForBank(bankName : string) : Promise<Array<string>>{
         return this.dataStore.getAllStateNamesForBank(bankName)
     }

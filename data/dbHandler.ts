@@ -152,11 +152,48 @@ export class BankDB {
         return new Promise((resolve,reject) => {
             //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb
             // I am using the in-efficinet regex method to make the find case-insensive.. check out the link above for a more optimizes soln.
-
-            console.log("In datastore")
             bankNamesModel.find((err,values) => {
-                console.log("We have found ALL .... : " + values.length)
+                
+                if (err){
+                    reject("DB Hanlder : getAllBankCount : Error ! : " + err)
+                }
+                
+                var bankNames = values.map(eachRec => {
+                    return eachRec.name
+                })
+                
+                resolve(bankNames)
             })
+        })
+    }
+
+    getAllBankNamesCount() : Promise<number>{
+        return new Promise((resolve,reject) => {
+            //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb
+            // I am using the in-efficinet regex method to make the find case-insensive.. check out the link above for a more optimizes soln.
+            
+            this.getAllBankNames()
+                .then((allBankNames : [string]) => {
+                    resolve(allBankNames.length)
+                }).catch((err) => {
+                    reject("DB Hanlder : getAllBankCount : Error ! : " + err)
+                })
+        })
+    }
+
+
+    getAllBranchesCount(bankName : string = "") : Promise<number>{
+        return new Promise((resolve : any, reject : any) => {
+            if (bankName == ""){
+                bankBranchDetailModel.find((err,values) => {
+                    resolve(values.length)
+                })
+            }
+                else{
+                bankBranchDetailModel.find({name : { $regex : new RegExp(bankName, "i")}},function(err,values) {
+                    resolve(values.length)
+                })
+            } 
         })
     }
 
@@ -250,7 +287,24 @@ export class BankDB {
         })
     }
 
-   getAllBranchesForBankNameInCityBranchName(bankName : string, cityName : string, branchName : string) : Promise<Array<BankBranchDetail>> {
+
+    //Prashanth : Scope for optimiztion ehre.. here you query the db for list of branch names etc. U can just get the cout here and only and pass it to the caller... why make another call.. just to get the counts. Or even better.. have some kind of metadata store.. that is created each time you the db with new data from RBI.
+    getAllBranchNamesForBankNameInCity(bankName : string, cityName : string) : Promise<Array<string>> {
+        return new Promise((resolve : any, reject : any) => {
+            this.getAllBranchesForBankNameInCity(bankName,cityName)   
+                .then((branchDetailsArr : Array<BankBranchDetail>) => {
+                    var branchNames = branchDetailsArr.map(eachRec => {
+                        return eachRec.branch 
+                    }) 
+                    resolve(branchNames)
+                }).catch((err) => {
+                    reject("Error ! : DB Handler.ts : getCountOfBranchesBankNameInCity : "  + err)    
+                }) 
+        })
+    }
+
+   
+    getAllBranchesForBankNameInCityBranchName(bankName : string, cityName : string, branchName : string) : Promise<Array<BankBranchDetail>> {
         return new Promise((resolve,reject) => {
             //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb
             // I am using the in-efficinet regex method to make the find case-insensive.. check out the link above for a more optimizes soln.
