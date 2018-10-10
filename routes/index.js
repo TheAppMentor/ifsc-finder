@@ -3,11 +3,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express = require('express');
 var router = express.Router();
 var _ = require('lodash');
+var handlebars = require('handlebars');
+var fs = require('fs');
 var WebhookClient = require('dialogflow-fulfillment').WebhookClient;
 var Promise = require('bluebird');
 var BankCollection_1 = require("../model/BankCollection");
 var dialogflow_responseParser_1 = require("../model/dialogflow-responseParser");
+var DOM_Generator = require('../templates/dom_gen');
 var bankColl = new BankCollection_1.BankCollection();
+var dom_gen = new DOM_Generator();
 var totalNumberOfBankBranchesInDB;
 var totalNumberOfBanksInDB;
 var allBankNamesArr = ["PlaceHolder1", "PlaceHolder2"];
@@ -53,9 +57,10 @@ router.get('/', function (req, res, next) {
                     ],
                     allBankNames: allCityNames,
                     statistic: [
-                        { label: "Bank Count", value: totalNumberOfBanksInDB },
-                        { label: "Bank Branches", value: totalNumberOfBankBranchesInDB }, { label: "Bank Count", value: 1000 }, { label: "Bank Count", value: 1000 }
-                    ]
+                        { label: allCityNames.length == 1 ? "Location" : "Locations", value: allCityNames.length }
+                    ],
+                    statisticCount: "one",
+                    statiticTitle: bankName
                 });
             });
         }
@@ -74,9 +79,10 @@ router.get('/', function (req, res, next) {
                     ],
                     allBankNames: branchNameArr,
                     statistic: [
-                        { label: "Bank Count", value: totalNumberOfBanksInDB },
-                        { label: "Bank Branches", value: totalNumberOfBankBranchesInDB }, { label: "Bank Count", value: 1000 }, { label: "Bank Count", value: 1000 }
-                    ]
+                        { label: branchNameArr.length == 1 ? "Branch" : "Branches", value: branchNameArr.length }
+                    ],
+                    statisticCount: "one",
+                    statiticTitle: bankName + " in " + cityName
                 });
             }).catch(function (err) {
                 console.log("ERROR! : Finding branch Name");
@@ -87,18 +93,20 @@ router.get('/', function (req, res, next) {
             bankColl.getBranchesDetailsForBankInCityWithBranchName(bankName, cityName, branchName).then(function (branchNameArr) {
                 console.log("\n\n\n All Branches array is ... ." + branchNameArr);
                 res.render('index', {
-                    title: 'Finder Boy',
+                    title: 'IFSC Finder',
                     processStep: "findBranch",
                     stepStatus: [
                         { title: "Find Bank", status: "completed", description: bankName },
                         { title: "Find City", status: "completed", description: cityName },
-                        { title: "Find Branch", status: "completed", description: "Enter Bank Name below" }
+                        { title: "Find Branch", status: "completed", description: "Enter Branch Name" }
                     ],
                     allBankNames: branchNameArr,
                     statistic: [
                         { label: "Bank Count", value: totalNumberOfBanksInDB },
-                        { label: "Bank Branches", value: totalNumberOfBankBranchesInDB }, { label: "Bank Count", value: 1000 }, { label: "Bank Count", value: 1000 }
-                    ]
+                        { label: cityName, value: totalNumberOfBankBranchesInDB }, { label: "Bank Count", value: 1000 }, { label: "Bank Count", value: 1000 }
+                    ],
+                    statisticCount: "one",
+                    statiticTitle: bankName
                 });
             }).catch(function (err) {
                 console.log("ERROR! : Finding branch Name");
@@ -110,19 +118,57 @@ router.get('/', function (req, res, next) {
             title: 'Finder Boy',
             processStep: "findBank",
             lov: ["one", "two", "three"],
-            stepStatus: [{ title: "Find Bank", status: "active", description: "Enter Bank Name below" }, { title: "Find City", status: "disabled", description: "Enter Bank Name below" }, { title: "Find Bank", status: "disabled", description: "Enter Bank Name below" }],
+            stepStatus: [{ title: "Find Bank", status: "active", description: "Enter Bank Name" }, { title: "Find City", status: "disabled", description: "Enter Bank Location" }, { title: "Find Bank", status: "disabled", description: "Enter Bank Branch" }],
             allBankNames: allBankNamesArr,
-            statistic: [{ label: "Bank Count", value: totalNumberOfBanksInDB }, { label: "Bank Branches", value: totalNumberOfBankBranchesInDB }, { label: "Bank Count", value: 1000 }, { label: "Bank Count", value: 1000 }]
+            statistic: [{ label: "Banks", value: totalNumberOfBanksInDB }, { label: "Bank Branches", value: totalNumberOfBankBranchesInDB }],
+            statisticCount: "two",
+            statiticTitle: "Banks in India"
         });
     }
 });
 router.get('/branches/', function (req, res, next) {
-    console.log("Banks Name is + ..., " + JSON.stringify(req.params));
-    console.log("Banks Name is + ..., " + JSON.stringify(req.query));
     var bankName = req.query.bankName;
-    console.log("Bank name is :" + bankName);
-    res.render('index', { title: "OK BOSS", });
-    statistic: [{ label: "Bank Count", value: totalNumberOfBanksInDB }, { label: "Bank Branches", value: totalNumberOfBankBranchesInDB }, { label: "Bank Count", value: 1000 }, { label: "Bank Count", value: 1000 }];
+    var cityName = req.query.cityName;
+    var branchName = req.query.branchName;
+    bankColl.getBranchesDetailsForBankInCityWithBranchName(bankName, cityName, branchName).then(function (branchNameArr) {
+        var statistics_div = dom_gen.getDivForStatistics({
+            statistic: [
+                { label: branchNameArr.length == 1 ? "Branch" : "Branches", value: branchNameArr.length }
+            ],
+            statisticCount: "one",
+            statiticTitle: bankName + " in " + cityName
+        });
+        var steps_div = dom_gen.getDivForSteps({ processStep: "findBranch",
+            stepStatus: [
+                { title: "Bank Name", status: "completed", description: bankName },
+                { title: "Location Name", status: "completed", description: cityName },
+                { title: "Branch", status: "completed", description: branchName }
+            ],
+        });
+        var dropdown_div = dom_gen.getDivForDropDown({
+            processStep: "findBranch",
+            allBankNames: branchNameArr,
+        });
+        res.json({ div_dropdown: dropdown_div, div_stats: statistics_div, div_steps: steps_div });
+        /*
+        res.send({
+            title: 'IFSC Finder',
+            processStep : "findBranch",
+            stepStatus : [
+                {title : "Find Bank", status : "completed", description :  bankName},
+                {title : "Find City", status : "completed", description : cityName},
+                {title : "Find Branch", status : "completed", description : "Enter Branch Name"}],
+            allBankNames : branchNameArr,
+            statistic: [
+                {label : "Bank Count", value: totalNumberOfBanksInDB},
+                {label : cityName, value: totalNumberOfBankBranchesInDB},{label : "Bank Count", value: 1000},{label : "Bank Count", value: 1000}],
+            statisticCount : "one",
+            statiticTitle : bankName
+        });
+        */
+    }).catch(function (err) {
+        console.log("ERROR! : index.ts : /branches/ => Finding branch Name " + err);
+    });
 });
 /* GET home page. */
 /*

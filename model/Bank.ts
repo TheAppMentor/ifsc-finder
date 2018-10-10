@@ -3,7 +3,7 @@ import { BankBranchDetail } from './BankBranchDetail'
 export class Bank {
     private _allKnownBankNames : any 
     private _allBranches : Array<BankBranchDetail>
-        name : string
+    name : string
 
     bankNameStore : any 
 

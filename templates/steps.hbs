@@ -1,0 +1,10 @@
+<div class="ui ordered steps">
+    {{#each stepStatus }}
+        <div class="{{this.status}} step">
+            <div class="content">
+                <div class="title">{{this.title}}</div>
+                <div class="description">{{this.description}}</div>
+            </div>
+        </div>
+    {{/each}}
+</div>

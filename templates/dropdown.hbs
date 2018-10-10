@@ -1,0 +1,10 @@
+                    <div class="ui massive fluid search icon selection dropdown" id={{processStep}}>
+                        <input type="hidden" name="country">
+                        <i class="dropdown icon"></i>
+                        <div class="default text">Enter Bank Name</div>
+                        <div class="menu">
+                            {{#each allBankNames}}
+                                <div class="item" data-value={{this}} class="bankName"></i>{{this}}</div>
+                            {{/each}}
+                        </div>
+                    </div>
