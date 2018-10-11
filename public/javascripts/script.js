@@ -71,10 +71,13 @@ $(document)
                                 document.getElementById('steps-div').innerHTML = myObj.div_steps
                                 document.getElementById('statistics-row').innerHTML = myObj.div_stats
                                 
+                                console.log("div Modal => : " + myObj.div_modal) 
+                                // Final results modal
+                                document.getElementById('modal-finalResult').innerHTML = myObj.div_modal 
+                                    
                                 $('.ui.modal')
-                                    .modal('show')
+                                  .modal('show')
                                 ;
-
                             }
                         };
 

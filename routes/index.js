@@ -42,16 +42,15 @@ router.get('/', function (req, res, next) {
     var cityName = req.query.cityName;
     var branchName = req.query.branchName;
     if (_.isEmpty(req.query) == false) {
-        console.log("We have a query Parm  :  " + req.query);
         if (_.isEmpty(bankName) == false && _.isEmpty(cityName) == true) {
-            console.log("Finding City Name : bankName =>" + bankName);
             // Find all Cities for the Bank Name :
             bankColl.getAllCityNamesForBank(bankName).then(function (allCityNames) {
                 res.render('index', {
                     title: 'Finder Boy',
                     processStep: "findCity",
+                    dropDownPlaceHolderText: "Pick Bank Location",
                     stepStatus: [
-                        { title: "Find Bank", status: "completed", description: bankName },
+                        { title: "Bank Name", status: "completed", description: bankName },
                         { title: "Find City", status: "active", description: "Enter Bank Name below" },
                         { title: "Find Branch", status: "disabled", description: "Enter Bank Name below" }
                     ],
@@ -68,13 +67,13 @@ router.get('/', function (req, res, next) {
             // Find all Branches for Bank name & City Name:
             console.log("Finding Branch Name : City Name => " + cityName + "bankName =>" + bankName);
             bankColl.getAllBranchNamesForBankNameInCity(bankName, cityName).then(function (branchNameArr) {
-                console.log("\n\n\n All Branches array is ... ." + branchNameArr);
                 res.render('index', {
                     title: 'Finder Boy',
                     processStep: "findBranch",
+                    dropDownPlaceHolderText: "Pick Bank Branch",
                     stepStatus: [
-                        { title: "Find Bank", status: "completed", description: bankName },
-                        { title: "Find City", status: "completed", description: cityName },
+                        { title: "Bank Name", status: "completed", description: bankName },
+                        { title: "Location Name", status: "completed", description: cityName },
                         { title: "Find Branch", status: "active", description: "Enter Bank Name below" }
                     ],
                     allBankNames: branchNameArr,
@@ -88,36 +87,38 @@ router.get('/', function (req, res, next) {
                 console.log("ERROR! : Finding branch Name");
             });
         }
-        if (_.isEmpty(branchName) == false && _.isEmpty(cityName) == false && _.isEmpty(bankName) == false) {
-            // Find all Branches for Bank name & City Name:
-            bankColl.getBranchesDetailsForBankInCityWithBranchName(bankName, cityName, branchName).then(function (branchNameArr) {
-                console.log("\n\n\n All Branches array is ... ." + branchNameArr);
-                res.render('index', {
-                    title: 'IFSC Finder',
-                    processStep: "findBranch",
-                    stepStatus: [
-                        { title: "Find Bank", status: "completed", description: bankName },
-                        { title: "Find City", status: "completed", description: cityName },
-                        { title: "Find Branch", status: "completed", description: "Enter Branch Name" }
-                    ],
-                    allBankNames: branchNameArr,
-                    statistic: [
-                        { label: "Bank Count", value: totalNumberOfBanksInDB },
-                        { label: cityName, value: totalNumberOfBankBranchesInDB }, { label: "Bank Count", value: 1000 }, { label: "Bank Count", value: 1000 }
-                    ],
-                    statisticCount: "one",
-                    statiticTitle: bankName
-                });
-            }).catch(function (err) {
-                console.log("ERROR! : Finding branch Name");
-            });
-        }
+        /*
+                if (_.isEmpty(branchName) == false && _.isEmpty(cityName) == false && _.isEmpty(bankName) == false) {
+                    // Find all Branches for Bank name & City Name:
+                    
+                    bankColl.getBranchesDetailsForBankInCityWithBranchName(bankName,cityName,branchName).then((branchNameArr: Array<BankBranchDetail>) => {
+        
+                            console.log("\n\n\n All Branches array is ... ." + branchNameArr)
+                            res.render('index', {
+                            title: 'IFSC Finder',
+                            processStep : "findBranch",
+                            stepStatus : [
+                                {title : "Find Bank", status : "completed", description :  bankName},
+                                {title : "Find City", status : "completed", description : cityName},
+                                {title : "Find Branch", status : "completed", description : "Enter Branch Name"}],
+                            allBankNames : branchNameArr,
+                            statistic: [
+                                {label : "Bank Count", value: totalNumberOfBanksInDB},
+                                {label : cityName, value: totalNumberOfBankBranchesInDB},{label : "Bank Count", value: 1000},{label : "Bank Count", value: 1000}],
+                            statisticCount : "one",
+                            statiticTitle : bankName
+                            });
+                    }).catch((err) => {
+                        console.log("ERROR! : Finding branch Name")
+                    })
+            }
+        */
     }
     if (_.isEmpty(req.query)) {
         res.render('index', {
             title: 'Finder Boy',
             processStep: "findBank",
-            lov: ["one", "two", "three"],
+            dropDownPlaceHolderText: "Enter Bank Name",
             stepStatus: [{ title: "Find Bank", status: "active", description: "Enter Bank Name" }, { title: "Find City", status: "disabled", description: "Enter Bank Location" }, { title: "Find Bank", status: "disabled", description: "Enter Bank Branch" }],
             allBankNames: allBankNamesArr,
             statistic: [{ label: "Banks", value: totalNumberOfBanksInDB }, { label: "Bank Branches", value: totalNumberOfBankBranchesInDB }],
@@ -131,6 +132,8 @@ router.get('/branches/', function (req, res, next) {
     var cityName = req.query.cityName;
     var branchName = req.query.branchName;
     bankColl.getBranchesDetailsForBankInCityWithBranchName(bankName, cityName, branchName).then(function (branchNameArr) {
+        var fetchedBranch = _.first(branchNameArr);
+        console.log("Fetched Branch is..." + fetchedBranch);
         var statistics_div = dom_gen.getDivForStatistics({
             statistic: [
                 { label: branchNameArr.length == 1 ? "Branch" : "Branches", value: branchNameArr.length }
@@ -149,7 +152,13 @@ router.get('/branches/', function (req, res, next) {
             processStep: "findBranch",
             allBankNames: branchNameArr,
         });
-        res.json({ div_dropdown: dropdown_div, div_stats: statistics_div, div_steps: steps_div });
+        var modal_div = dom_gen.getDivForModal({
+            bankName: fetchedBranch.name,
+            ifscCode: fetchedBranch.ifsc,
+            address: fetchedBranch.address,
+            branchName: fetchedBranch.branch
+        });
+        res.json({ div_dropdown: dropdown_div, div_stats: statistics_div, div_steps: steps_div, div_modal: modal_div });
         /*
         res.send({
             title: 'IFSC Finder',

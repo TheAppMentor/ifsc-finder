@@ -74,10 +74,13 @@
                     -->
 
 
+                    <!-- ==================== -->
+                    <!--      Drop Down Div   -->
+                    <!-- ==================== -->
                     <div class="ui massive fluid search icon selection dropdown" id={{processStep}}>
                         <input type="hidden" name="country">
                         <i class="dropdown icon"></i>
-                        <div class="default text">Enter Bank Name</div>
+                        <div class="default text">{{dropDownPlaceHolderText}}</div>
                         <div class="menu">
                             {{#each allBankNames}}
                                 <div class="item" data-value={{this}} class="bankName"></i>{{this}}</div>
@@ -90,6 +93,10 @@
             </div>
 
 
+            <!-- ==================== -->
+            <!--   Statistics title   -->
+            <!-- ==================== -->
+            
             <div class="ui vertical stripe segment">
                 <div class="ui middle aligned stackable grid container">
 
@@ -101,7 +108,10 @@
                         </div>
                     </div>
 
-
+                    <!-- ==================== -->
+                    <!-- Statistics Row Div   -->
+                    <!-- ==================== -->
+                    
                     <div class="row" id="statistics-row">
                         <div class="center aligned column">
                             <div class="ui {{ statisticCount }} statistics">
@@ -119,25 +129,76 @@
                         </div>
                     </div>
 
-                    <div class="ui modal">
-                        <i class="close icon"></i>
-                        <div class="header">
-                            Modal Title
+
+
+
+                    <--! ==================== -->
+                    <--! Final Results Modal -->
+                    <--! ==================== -->
+                    
+                    <div class="ui small modal" id="modal-finalResult">
+                        <i class="close red icon"></i>
+                        <div class="header" align="center">
+                            ICICI Bank Limited 
                         </div>
-                        <div class="image content">
-                            <div class="image">
-                                An image can appear on left or an icon
-                            </div>
-                            <div class="description">
-                                A description can appear on the right
+                        <br>
+                        <div class="row" align="center">
+                            <div class="center aligned column">
+                                <div class="ui raised card">
+                                    <div class="content">
+                                        <div class="header">Project Timeline</div>
+                                    </div>
+                                    <div class="content">
+                                        <h4 class="ui sub header">Activity</h4>
+                                        <div class="ui small feed">
+                                            <div class="event">
+                                                <div class="content">
+                                                    <div class="summary">
+                                                        <a>Elliot Fu</a> added <a>Jenny Hess</a> to the project
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="event">
+                                                <div class="content">
+                                                    <div class="summary">
+                                                        <a>Stevie Feliciano</a> was added as an <a>Administrator</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="event">
+                                                <div class="content">
+                                                    <div class="summary">
+                                                        <a>Helen Troy</a> added two pictures
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="actions">
-                            <div class="ui button">Cancel</div>
-                            <div class="ui button">OK</div>
+                        <br>
+                        <div class="row"> 
+                            <div class="center aligned column">
+                                <div class="actions">
+                                    <div class="extra content" align="center">
+                                        <button class="ui center aligned blue button">Copy IFSC</button>
+                                    </div>
+                                </div>
+
+                                <br>
+                                <br>
+                            </div>
                         </div>
                     </div>
 
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                     <h4 class="ui horizontal header divider">
                         <a href="#">Case Studies</a>
                     </h4>
