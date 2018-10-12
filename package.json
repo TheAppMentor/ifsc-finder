@@ -11,6 +11,7 @@
         "ajv": "^6.5.4",
         "ajv-keywords": "^3.2.0",
         "bluebird": "^3.5.2",
+        "clipboard": "^2.0.1",
         "cookie-parser": "~1.4.3",
         "debug": "~2.6.9",
         "dialogflow-fulfillment": "^0.5.0",

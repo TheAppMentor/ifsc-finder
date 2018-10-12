@@ -38,6 +38,7 @@ bankColl.hydrateBankCollection("./data/ifsc_codes_all_clean.csv")
 var appStep = "find_bank";
 /* GET home page. */
 router.get('/', function (req, res, next) {
+    //TODO : Check the allSetReadyToLaunch variable, if we are not yet ready. Show a an appropriate page. 
     var bankName = req.query.bankName;
     var cityName = req.query.cityName;
     var branchName = req.query.branchName;
@@ -66,7 +67,6 @@ router.get('/', function (req, res, next) {
         }
         if (_.isEmpty(cityName) == false && _.isEmpty(bankName) == false) {
             // Find all Branches for Bank name & City Name:
-            console.log("Finding Branch Name : City Name => " + cityName + "bankName =>" + bankName);
             bankColl.getAllBranchNamesForBankNameInCity(bankName, cityName).then(function (branchNameArr) {
                 res.render('index', {
                     title: 'Finder Boy',

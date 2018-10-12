@@ -48,6 +48,7 @@ var appStep = "find_bank";
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+//TODO : Check the allSetReadyToLaunch variable, if we are not yet ready. Show a an appropriate page. 
 
     let bankName = req.query.bankName 
     let cityName = req.query.cityName
@@ -67,12 +68,9 @@ router.get('/', function(req, res, next) {
                         {title : "Bank Name", status : "completed", description :  bankName},
                         {title : "Find City", status : "active", description : "Enter Bank Name below"},
                         {title : "Find Branch", status : "disabled", description : "Enter Bank Name below"}],
-
                     allBankNames : allCityNames,
-
                     statistic: [
                         {label : allCityNames.length == 1 ? "Location" : "Locations", value: allCityNames.length}],
-
                     statisticCount : "one",
                     statiticTitle : bankName, 
                     statiticSubTitle : cityName 
@@ -82,7 +80,7 @@ router.get('/', function(req, res, next) {
 
         if (_.isEmpty(cityName) == false && _.isEmpty(bankName) == false) { 
             // Find all Branches for Bank name & City Name:
-            console.log("Finding Branch Name : City Name => " + cityName + "bankName =>" + bankName)
+            
             bankColl.getAllBranchNamesForBankNameInCity(bankName,cityName).then((branchNameArr: Array<string>) => {
                     res.render('index', { 
                     title: 'Finder Boy', 
@@ -106,33 +104,6 @@ router.get('/', function(req, res, next) {
                 console.log("ERROR! : Finding branch Name")
             })
         }
-
-/*
-        if (_.isEmpty(branchName) == false && _.isEmpty(cityName) == false && _.isEmpty(bankName) == false) { 
-            // Find all Branches for Bank name & City Name:
-            
-            bankColl.getBranchesDetailsForBankInCityWithBranchName(bankName,cityName,branchName).then((branchNameArr: Array<BankBranchDetail>) => {
-
-                    console.log("\n\n\n All Branches array is ... ." + branchNameArr)
-                    res.render('index', { 
-                    title: 'IFSC Finder', 
-                    processStep : "findBranch",
-                    stepStatus : [
-                        {title : "Find Bank", status : "completed", description :  bankName},
-                        {title : "Find City", status : "completed", description : cityName},
-                        {title : "Find Branch", status : "completed", description : "Enter Branch Name"}],
-                    allBankNames : branchNameArr,
-                    statistic: [
-                        {label : "Bank Count", value: totalNumberOfBanksInDB},
-                        {label : cityName, value: totalNumberOfBankBranchesInDB},{label : "Bank Count", value: 1000},{label : "Bank Count", value: 1000}],
-                    statisticCount : "one",
-                    statiticTitle : bankName 
-                    });
-            }).catch((err) => {
-                console.log("ERROR! : Finding branch Name")
-            })
-    }
-*/ 
  }
 
     if (_.isEmpty(req.query)){
@@ -153,7 +124,6 @@ router.get('/', function(req, res, next) {
 
 
 router.get('/branches/', function(req, res, next) {
-            
     let bankName = req.query.bankName 
     let cityName = req.query.cityName
     let branchName = req.query.branchName
@@ -193,24 +163,7 @@ router.get('/branches/', function(req, res, next) {
         })
         
         res.json({div_dropdown : dropdown_div, div_stats : statistics_div, div_steps : steps_div, div_modal : modal_div})
-
-
-        /* 
-        res.send({ 
-            title: 'IFSC Finder', 
-            processStep : "findBranch",
-            stepStatus : [
-                {title : "Find Bank", status : "completed", description :  bankName},
-                {title : "Find City", status : "completed", description : cityName},
-                {title : "Find Branch", status : "completed", description : "Enter Branch Name"}],
-            allBankNames : branchNameArr,
-            statistic: [
-                {label : "Bank Count", value: totalNumberOfBanksInDB},
-                {label : cityName, value: totalNumberOfBankBranchesInDB},{label : "Bank Count", value: 1000},{label : "Bank Count", value: 1000}],
-            statisticCount : "one",
-            statiticTitle : bankName 
-        });
-        */
+    
     }).catch((err) => {
         console.log("ERROR! : index.ts : /branches/ => Finding branch Name " + err)
     })

@@ -8,9 +8,6 @@ let steps_template
 
 fs.readFile('./templates/statistics.hbs', function read(err, data) {
         if (err) {throw err;}
-        // Generate - statitics div 
-        // Prashanth : this is wrong.. need to use the precompile here.. no point compiling each time you get a request..
-        // https://handlebarsjs.com/reference.html
         statistics_template =  handlebars.compile(data.toString())
     })
 
