@@ -53,7 +53,10 @@
                     </h1>
                     <h2>Find IFSC codes in 3 easy steps</h2>
 
-                    <div class="ui ordered steps" id="steps-div">
+                    <!-- ==================== -->
+                    <!--      Steps Div       -->
+                    <!-- ==================== -->
+                    <div class="ui ordered three steps" id="steps-div">
                         {{#each stepStatus }}
                             <div class="{{this.status}} step">
                             <div class="content">
@@ -63,15 +66,6 @@
                         </div>
                         {{/each}}
                     </div>
-
-                    <!-- Prash Large Searh Bar
-                        <div class="row">
-                        <div class="ui massive action input">
-                        <input type="text" placeholder="Enter Bank Name">
-                        <button class="ui massive blue button">Find Bank</button>
-                        </div>
-                        </div>
-                    -->
 
 
                     <!-- ==================== -->
@@ -88,7 +82,7 @@
                         </div>
                     </div>
                     <br>
-                    <a class="ui center aligned tiny pink button">Reset</a>
+                    <a class="ui center aligned mini negative button" id="reset-button">Reset</a>
                 </div>
             </div>
 
@@ -104,6 +98,7 @@
                         <div class="ui middle aligned stackable grid container">
                             <div class="center aligned column">
                                 <h1>{{statiticTitle}}</h1>
+                                <h1>{{statiticSubTitle}}</h1>
                             </div>
                         </div>
                     </div>
@@ -132,9 +127,9 @@
 
 
 
-                    <--! ==================== -->
-                    <--! Final Results Modal -->
-                    <--! ==================== -->
+                    <!-- ==================== -->
+                    <!-- Final Results Modal -->
+                    <!-- ==================== -->
                     
                     <div class="ui small modal" id="modal-finalResult">
                         <i class="close red icon"></i>

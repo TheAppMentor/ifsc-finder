@@ -19,6 +19,7 @@ $(document)
         $('.ui.sidebar')
             .sidebar('attach events', '.toc.item');
 
+
         $('#findBank.ui.dropdown')
             .dropdown(
                 {
@@ -63,15 +64,13 @@ $(document)
                         xmlhttp.onreadystatechange = function() {
                             if (this.readyState == 4 && this.status == 200) {
                                 var myObj = JSON.parse(this.responseText);
-                                console.log(">>>>>>>>>>>>>>>> Resonpse boy...... " + JSON.stringify(myObj))
-                                var respObj = JSON.stringify(myObj)
 
                                //Generate Statistics talkg
                                 document.getElementById('findBranch').innerHTML
                                 document.getElementById('steps-div').innerHTML = myObj.div_steps
                                 document.getElementById('statistics-row').innerHTML = myObj.div_stats
-                                
-                                console.log("div Modal => : " + myObj.div_modal) 
+                                console.log("The Div Stats fellow is :  \n" + myObj.div_stats)
+
                                 // Final results modal
                                 document.getElementById('modal-finalResult').innerHTML = myObj.div_modal 
                                     

@@ -59,7 +59,8 @@ router.get('/', function (req, res, next) {
                         { label: allCityNames.length == 1 ? "Location" : "Locations", value: allCityNames.length }
                     ],
                     statisticCount: "one",
-                    statiticTitle: bankName
+                    statiticTitle: bankName,
+                    statiticSubTitle: cityName
                 });
             });
         }
@@ -81,7 +82,8 @@ router.get('/', function (req, res, next) {
                         { label: branchNameArr.length == 1 ? "Branch" : "Branches", value: branchNameArr.length }
                     ],
                     statisticCount: "one",
-                    statiticTitle: bankName + " in " + cityName
+                    statiticTitle: bankName,
+                    statiticSubTitle: cityName
                 });
             }).catch(function (err) {
                 console.log("ERROR! : Finding branch Name");
@@ -123,7 +125,8 @@ router.get('/', function (req, res, next) {
             allBankNames: allBankNamesArr,
             statistic: [{ label: "Banks", value: totalNumberOfBanksInDB }, { label: "Bank Branches", value: totalNumberOfBankBranchesInDB }],
             statisticCount: "two",
-            statiticTitle: "Banks in India"
+            statiticTitle: "All Banks",
+            statiticSubTitle: "India"
         });
     }
 });
@@ -139,7 +142,8 @@ router.get('/branches/', function (req, res, next) {
                 { label: branchNameArr.length == 1 ? "Branch" : "Branches", value: branchNameArr.length }
             ],
             statisticCount: "one",
-            statiticTitle: bankName + " in " + cityName
+            statiticTitle: bankName,
+            statiticSubTitle: cityName
         });
         var steps_div = dom_gen.getDivForSteps({ processStep: "findBranch",
             stepStatus: [
