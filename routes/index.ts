@@ -122,6 +122,44 @@ router.get('/', function(req, res, next) {
     }
 });
 
+router.get('/getLocations/', function(req, res, next) {
+    
+    let bankName = req.query.bankName 
+    
+    bankColl.getAllCityNamesForBank(bankName).then((allCityNames : [string]) => {
+
+        var statistics_div = dom_gen.getDivForStatistics( 
+            {
+                statistic: [
+                    {label : allCityNames.length == 1 ? "Location" : "Locations", value: allCityNames.length}],
+                statisticCount : "one",
+                statiticTitle : bankName, 
+                //TODO : Prashanth add a condition in hbs file to omit the subtitle div if no value is passed.
+                statiticSubTitle : "" 
+            })
+
+        var steps_div = dom_gen.getDivForSteps(
+            {processStep : "findCity",
+                stepStatus : [
+                    {title : "Bank Name", status : "completed", description :  bankName},
+                    {title : "Find City", status : "active", description : "Enter Bank Name below"},
+                    {title : "Find Branch", status : "disabled", description : "Enter Branch Name"}],
+            })
+
+        var dropdown_div = dom_gen.getDivForDropDown({
+            processStep : "findCity",
+            allBankNames : allCityNames,
+            dropDownPlaceHolderText : "Pick Bank Location", 
+        }) 
+
+        console.log("Send back Response --> Call to /Cities " + {div_dropdown : dropdown_div, div_stats : statistics_div, div_steps : steps_div})
+        res.json({div_dropdown : dropdown_div, div_stats : statistics_div, div_steps : steps_div})
+
+    }).catch((err) => {
+        console.log("ERROR! : index.ts : /cities/ => Finding City Name Name " + err)
+    })
+});
+
 
 router.get('/branches/', function(req, res, next) {
     let bankName = req.query.bankName 
