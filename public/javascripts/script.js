@@ -73,8 +73,16 @@ $(document)
 
                                 // Final results modal
                                 document.getElementById('modal-finalResult').innerHTML = myObj.div_modal 
-                                    
-                                $('.ui.modal')
+                        
+                                new ClipboardJS('#button-copy-ifsc');
+                                
+                                $('html, body').animate({ scrollTop: $('#statistics-segment').offset().top }, 'slow');
+
+                                $('.ui.modal').modal({
+                                // Set Properites of the modal here.
+                                    //blurring: true 
+                                    //inverted: true
+                                })
                                   .modal('show')
                                 ;
                             }
