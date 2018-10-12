@@ -55,11 +55,7 @@ $(document)
                     //action: 'hide',
                     onChange: function(value, text, $selectedItem) {
                         // custom action
-                        console.log("We are now.. Find Branch  >>>>>>>>>>>>>>>>>>>>>>>>>> New Boy" + JSON.stringify(text))
-                        //window.location.href = '/?bankName=' + value
-                        //window.location.href += '&branchName=' + text 
-                        //var newURL = window.location.href += '&branchName=' + text  
-
+                        
                         var xmlhttp = new XMLHttpRequest();
                         xmlhttp.onreadystatechange = function() {
                             if (this.readyState == 4 && this.status == 200) {
