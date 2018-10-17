@@ -104,6 +104,7 @@ router.get('/', function (req, res, next) {
         });
     }
 });
+// For Bank Name : Get all locations
 router.get('/getLocations/', function (req, res, next) {
     var bankName = req.query.bankName;
     bankColl.getAllCityNamesForBank(bankName).then(function (allCityNames) {
@@ -116,10 +117,10 @@ router.get('/getLocations/', function (req, res, next) {
             //TODO : Prashanth add a condition in hbs file to omit the subtitle div if no value is passed.
             statiticSubTitle: ""
         });
-        var steps_div = dom_gen.getDivForSteps({ processStep: "findCity",
+        var steps_div = dom_gen.getDivForSteps({
             stepStatus: [
                 { title: "Bank Name", status: "completed", description: bankName },
-                { title: "Find City", status: "active", description: "Enter Bank Name below" },
+                { title: "Find City", status: "active", description: "Enter Location name below" },
                 { title: "Find Branch", status: "disabled", description: "Enter Branch Name" }
             ],
         });
@@ -129,12 +130,46 @@ router.get('/getLocations/', function (req, res, next) {
             dropDownPlaceHolderText: "Pick Bank Location",
         });
         console.log("Send back Response --> Call to /Cities " + { div_dropdown: dropdown_div, div_stats: statistics_div, div_steps: steps_div });
+        res.set('bankName', bankName);
         res.json({ div_dropdown: dropdown_div, div_stats: statistics_div, div_steps: steps_div });
     }).catch(function (err) {
         console.log("ERROR! : index.ts : /cities/ => Finding City Name Name " + err);
     });
 });
-router.get('/branches/', function (req, res, next) {
+router.get('/getBranches/', function (req, res, next) {
+    var bankName = req.query.bankName;
+    var cityName = req.query.cityName;
+    // Find all Branches for Bank name & City Name:
+    bankColl.getAllBranchNamesForBankNameInCity(bankName, cityName).then(function (branchNameArr) {
+        var statistics_div = dom_gen.getDivForStatistics({
+            statistic: [
+                { label: branchNameArr.length == 1 ? "Branch" : "Branches", value: branchNameArr.length }
+            ],
+            statisticCount: "one",
+            statiticTitle: bankName,
+            //TODO : Prashanth add a condition in hbs file to omit the subtitle div if no value is passed.
+            statiticSubTitle: cityName
+        });
+        var steps_div = dom_gen.getDivForSteps({
+            stepStatus: [
+                { title: "Bank Name", status: "completed", description: bankName },
+                { title: "Location", status: "completed", description: cityName },
+                { title: "Find Branch", status: "active", description: "Choose Branch" }
+            ],
+        });
+        var dropdown_div = dom_gen.getDivForBranchDropDown({
+            processStep: "findBranch",
+            allBankNames: branchNameArr,
+            dropDownPlaceHolderText: "Pick Bank Branch",
+        });
+        res.set('bankName', bankName);
+        res.set('cityName', cityName);
+        res.json({ div_dropdown: dropdown_div, div_stats: statistics_div, div_steps: steps_div });
+    }).catch(function (err) {
+        console.log("ERROR! : Finding branch Name");
+    });
+});
+router.get('/getBranchDetails/', function (req, res, next) {
     var bankName = req.query.bankName;
     var cityName = req.query.cityName;
     var branchName = req.query.branchName;
@@ -149,7 +184,7 @@ router.get('/branches/', function (req, res, next) {
             statiticTitle: bankName,
             statiticSubTitle: cityName
         });
-        var steps_div = dom_gen.getDivForSteps({ processStep: "findBranch",
+        var steps_div = dom_gen.getDivForSteps({
             stepStatus: [
                 { title: "Bank Name", status: "completed", description: bankName },
                 { title: "Location Name", status: "completed", description: cityName },
@@ -166,6 +201,9 @@ router.get('/branches/', function (req, res, next) {
             address: fetchedBranch.address,
             branchName: fetchedBranch.branch
         });
+        res.set('bankName', bankName);
+        res.set('cityName', cityName);
+        res.set('branchName', branchName);
         res.json({ div_dropdown: dropdown_div, div_stats: statistics_div, div_steps: steps_div, div_modal: modal_div });
     }).catch(function (err) {
         console.log("ERROR! : index.ts : /branches/ => Finding branch Name " + err);

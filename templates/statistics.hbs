@@ -1,14 +1,28 @@
-    <div class="center aligned column">
-        <div class="ui {{ statisticCount }} statistics">
-            {{#each statistic}}
-                <div class="statistic">
-                    <div class="value">
-                        {{this.value}} 
-                    </div>
-                    <div class="label">
-                        {{this.label}}
-                    </div>
-                </div>
-            {{/each}}
+<div class="ui middle aligned stackable grid container">
+    <div class="row">
+        <div class="ui middle aligned stackable grid container">
+            <div class="center aligned column">
+                <h1>{{statiticTitle}}</h1>
+                <h1>{{statiticSubTitle}}</h1>
+            </div>
         </div>
     </div>
+
+
+    <div class="row">
+        <div class="center aligned column">
+            <div class="ui {{ statisticCount }} statistics">
+                {{#each statistic}}
+                    <div class="statistic">
+                        <div class="value">
+                            {{this.value}} 
+                        </div>
+                        <div class="label">
+                            {{this.label}}
+                        </div>
+                    </div>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+</div>
