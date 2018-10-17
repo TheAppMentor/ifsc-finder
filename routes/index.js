@@ -42,60 +42,16 @@ router.get('/', function (req, res, next) {
     var bankName = req.query.bankName;
     var cityName = req.query.cityName;
     var branchName = req.query.branchName;
-    if (_.isEmpty(req.query) == false) {
-        if (_.isEmpty(bankName) == false && _.isEmpty(cityName) == true) {
-            // Find all Cities for the Bank Name :
-            bankColl.getAllCityNamesForBank(bankName).then(function (allCityNames) {
-                res.render('index', {
-                    title: 'Finder Boy',
-                    processStep: "findCity",
-                    dropDownPlaceHolderText: "Pick Bank Location",
-                    stepStatus: [
-                        { title: "Bank Name", status: "completed", description: bankName },
-                        { title: "Find City", status: "active", description: "Enter Bank Name below" },
-                        { title: "Find Branch", status: "disabled", description: "Enter Bank Name below" }
-                    ],
-                    allBankNames: allCityNames,
-                    statistic: [
-                        { label: allCityNames.length == 1 ? "Location" : "Locations", value: allCityNames.length }
-                    ],
-                    statisticCount: "one",
-                    statiticTitle: bankName,
-                    statiticSubTitle: cityName
-                });
-            });
-        }
-        if (_.isEmpty(cityName) == false && _.isEmpty(bankName) == false) {
-            // Find all Branches for Bank name & City Name:
-            bankColl.getAllBranchNamesForBankNameInCity(bankName, cityName).then(function (branchNameArr) {
-                res.render('index', {
-                    title: 'Finder Boy',
-                    processStep: "findBranch",
-                    dropDownPlaceHolderText: "Pick Bank Branch",
-                    stepStatus: [
-                        { title: "Bank Name", status: "completed", description: bankName },
-                        { title: "Location Name", status: "completed", description: cityName },
-                        { title: "Find Branch", status: "active", description: "Enter Bank Name below" }
-                    ],
-                    allBankNames: branchNameArr,
-                    statistic: [
-                        { label: branchNameArr.length == 1 ? "Branch" : "Branches", value: branchNameArr.length }
-                    ],
-                    statisticCount: "one",
-                    statiticTitle: bankName,
-                    statiticSubTitle: cityName
-                });
-            }).catch(function (err) {
-                console.log("ERROR! : Finding branch Name");
-            });
-        }
-    }
     if (_.isEmpty(req.query)) {
         res.render('index', {
-            title: 'Finder Boy',
+            title: 'IFSC Search',
             processStep: "findBank",
-            dropDownPlaceHolderText: "Enter Bank Name",
-            stepStatus: [{ title: "Find Bank", status: "active", description: "Enter Bank Name" }, { title: "Find City", status: "disabled", description: "Enter Bank Location" }, { title: "Find Bank", status: "disabled", description: "Enter Bank Branch" }],
+            dropDownPlaceHolderText: "Search Bank Name",
+            stepStatus: [
+                { title: "Find Bank", status: "active", description: "Enter Bank Name" },
+                { title: "Find City", status: "disabled", description: "Enter Bank Location" },
+                { title: "Find Branch", status: "disabled", description: "Enter Bank Branch" }
+            ],
             allBankNames: allBankNamesArr,
             statistic: [{ label: "Banks", value: totalNumberOfBanksInDB }, { label: "Bank Branches", value: totalNumberOfBankBranchesInDB }],
             statisticCount: "two",
@@ -119,17 +75,16 @@ router.get('/getLocations/', function (req, res, next) {
         });
         var steps_div = dom_gen.getDivForSteps({
             stepStatus: [
-                { title: "Bank Name", status: "completed", description: bankName },
-                { title: "Find City", status: "active", description: "Enter Location name below" },
+                { title: "Bank", status: "completed", description: bankName },
+                { title: "Find City", status: "active", description: "Choose Location below" },
                 { title: "Find Branch", status: "disabled", description: "Enter Branch Name" }
             ],
         });
         var dropdown_div = dom_gen.getDivForDropDown({
             processStep: "findCity",
             allBankNames: allCityNames,
-            dropDownPlaceHolderText: "Pick Bank Location",
+            dropDownPlaceHolderText: "Search Bank Location",
         });
-        console.log("Send back Response --> Call to /Cities " + { div_dropdown: dropdown_div, div_stats: statistics_div, div_steps: steps_div });
         res.set('bankName', bankName);
         res.json({ div_dropdown: dropdown_div, div_stats: statistics_div, div_steps: steps_div });
     }).catch(function (err) {
@@ -152,7 +107,7 @@ router.get('/getBranches/', function (req, res, next) {
         });
         var steps_div = dom_gen.getDivForSteps({
             stepStatus: [
-                { title: "Bank Name", status: "completed", description: bankName },
+                { title: "Bank", status: "completed", description: bankName },
                 { title: "Location", status: "completed", description: cityName },
                 { title: "Find Branch", status: "active", description: "Choose Branch" }
             ],
@@ -160,7 +115,7 @@ router.get('/getBranches/', function (req, res, next) {
         var dropdown_div = dom_gen.getDivForBranchDropDown({
             processStep: "findBranch",
             allBankNames: branchNameArr,
-            dropDownPlaceHolderText: "Pick Bank Branch",
+            dropDownPlaceHolderText: "Search Bank Branch",
         });
         res.set('bankName', bankName);
         res.set('cityName', cityName);
@@ -186,8 +141,8 @@ router.get('/getBranchDetails/', function (req, res, next) {
         });
         var steps_div = dom_gen.getDivForSteps({
             stepStatus: [
-                { title: "Bank Name", status: "completed", description: bankName },
-                { title: "Location Name", status: "completed", description: cityName },
+                { title: "Bank", status: "completed", description: bankName },
+                { title: "Location", status: "completed", description: cityName },
                 { title: "Branch", status: "completed", description: branchName }
             ],
         });
