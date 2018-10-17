@@ -1,81 +1,192 @@
-        <!-- Following Menu -->
-        <div class="ui large top fixed hidden menu">
-            <div class="ui container">
+<!-- Following Menu -->
+<div class="ui large top fixed hidden menu">
+    <div class="ui container">
+        <a href="#" class="active item" id="home-button">Home</a>
+        <a class="item">About</a>
+    </div>
+</div>
+
+<!-- Sidebar Menu -->
+<div class="ui vertical inverted sidebar menu">
+    <a href="#" class="active item" id="home-button">Home</a>
+    <a class="item">About</a>
+</div>
+
+<!-- Page Contents -->
+<div class="pusher">
+
+    <!-- Black segment at the top of the page...... -->
+    <div class="ui inverted vertical masthead center aligned segment" style="background-image: url('/images/bg.jpg'); background-size: cover; background-position: center center;">
+        <div class="ui container">
+            <div class="ui large secondary inverted pointing menu">
+                <a class="toc item">
+                    <i class="sidebar icon"></i>
+                </a>
                 <a href="#" class="active item" id="home-button">Home</a>
                 <a class="item">About</a>
             </div>
         </div>
 
-        <!-- Sidebar Menu -->
-        <div class="ui vertical inverted sidebar menu">
-            <a href="#" class="active item" id="home-button">Home</a>
-            <a class="item">About</a>
-        </div>
+        <div class="ui text container">
+            <h1 class="ui inverted header">
+                IFSC Finder 
+            </h1>
+            <h2>Find Bank IFSC in 3 easy steps</h2>
 
-        <!-- Page Contents -->
-        <div class="pusher">
-            <div class="ui inverted vertical masthead center aligned segment" style="background-image: url('/images/bg.jpg'); background-size: cover; background-position: center center;">
-
-                <div class="ui container">
-                    <div class="ui large secondary inverted pointing menu">
-                        <a class="toc item">
-                            <i class="sidebar icon"></i>
-                        </a>
-                        <a href="#" class="active item" id="home-button">Home</a>
-                        <a class="item">About</a>
-                    </div>
-                </div>
-
-                <div class="ui text container">
-                    <h1 class="ui inverted header">
-                        IFSC Finder 
-                    </h1>
-                    <h2>Find IFSC codes in 3 easy steps</h2>
-
-                    <!-- ==================== -->
-                    <!--      Steps Div       -->
-                    <!-- ==================== -->
-                    <div class="ui ordered three steps" id="steps-div">
-                        {{#each stepStatus }}
-                        <div class="{{this.status}} step">
-                            <div class="content">
-                                <div class="title">{{this.title}}</div>
-                                <div class="description">{{this.description}}</div>
-                            </div>
-                        </div>
-                        {{/each}}
-                    </div>
-
-                    <!-- ==================== -->
-                    <!--      Drop Down Div   -->
-                    <!-- ==================== -->
-                    <div class="ui massive fluid search icon selection dropdown" id=findBank>
-                        <input type="hidden" name="country">
-                        <i class="dropdown icon"></i>
-                        <div class="default text">{{dropDownPlaceHolderText}}</div>
-                        <div class="menu" id="menuboy">
-                            {{#each allBankNames}}
-                                <div class="item" data-value={{this}} class="bankName">{{this}}</div>
-                            {{/each}}
+            <!-- ==================== -->
+            <!--      Steps Div       -->
+            <!-- ==================== -->
+            <div class="ui ordered three steps" id="steps-div">
+                {{#each stepStatus }}
+                    <div class="{{this.status}} step">
+                        <div class="content">
+                            <div class="title">{{this.title}}</div>
+                            <div class="description">{{this.description}}</div>
                         </div>
                     </div>
-                    <br>
-                    <a href="/" class="ui center aligned mini negative button" id="reset-button">Reset</a>
-                </div>
+                {{/each}}
             </div>
 
             <!-- ==================== -->
-            <!-- Final Results Modal -->
+            <!--      Drop Down Div   -->
             <!-- ==================== -->
+            <div class="ui massive fluid search icon selection dropdown" id=findBank>
+                <input type="hidden" name="country">
+                <i class="dropdown icon"></i>
+                <div class="default text">{{dropDownPlaceHolderText}}</div>
+                <div class="menu" id="menuboy">
+                    {{#each allBankNames}}
+                        <div class="item" data-value={{this}} class="bankName">{{this}}</div>
+                    {{/each}}
+                </div>
+            </div>
+            <br>
+            <a href="/" class="ui center aligned mini negative button" id="reset-button">Reset</a>
+        </div>
+    </div>
 
-            <div class="ui small modal" id="modal-finalResult">
-                <i class="close red icon"></i>
-                <div class="header" align="center">
-                    ICICI Bank Limited 
+    <!-- ==================== -->
+    <!-- Final Results Modal -->
+    <!-- ==================== -->
+
+    <div class="ui small modal" id="modal-finalResult">
+        <i class="close red icon"></i>
+        <div class="header" align="center">
+            ICICI Bank Limited 
+        </div>
+        <br>
+        <div class="row" align="center">
+            <div class="center aligned column">
+                <div class="ui raised card">
+                    <div class="content">
+                        <div class="header">Project Timeline</div>
+                    </div>
+                    <div class="content">
+                        <h4 class="ui sub header">Activity</h4>
+                        <div class="ui small feed">
+                            <div class="event">
+                                <div class="content">
+                                    <div class="summary">
+                                        <a>Elliot Fu</a> added <a>Jenny Hess</a> to the project
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="event">
+                                <div class="content">
+                                    <div class="summary">
+                                        <a>Stevie Feliciano</a> was added as an <a>Administrator</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="event">
+                                <div class="content">
+                                    <div class="summary">
+                                        <a>Helen Troy</a> added two pictures
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row"> 
+            <div class="center aligned column">
+                <div class="actions">
+                    <div class="extra content" align="center">
+                        <button class="ui center aligned blue button">Copy IFSC</button>
+                    </div>
                 </div>
                 <br>
-                <div class="row" align="center">
+                <br>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui segment">
+        <div class="ui massive left dividing rail">
+            <div class="ui segment">
+                <div class="ui wide skyscraper test ad" data-text="Wide Skyscraper"></div>
+            </div>
+        </div>
+        <div class="ui massive right dividing rail">
+            <div class="ui segment">
+                <div class="ui wide skyscraper test ad" data-text="Wide Skyscraper"></div>
+            </div>
+        </div>
+        <!-- ==================== -->
+        <!--   Statistics title   -->
+        <!-- ==================== -->
+        <div class="ui container">
+        <div class="ui vertical segment" id="statistics-segment">
+            <div class="ui middle aligned stackable grid container">
+                
+                <div class="row" style="display:inline-block"><br></div>
+                <div class="row" style="display:inline-block">
+                    <div class="ui middle aligned stackable grid container">
+                        <div class="center aligned column">
+                            <h1>{{statiticTitle}}</h1>
+                            <h1>{{statiticSubTitle}}</h1>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== -->
+                <!-- Statistics Row Div   -->
+                <!-- ==================== -->
+
+                <div class="row" id="statistics-row">
                     <div class="center aligned column">
+                        <div class="ui {{ statisticCount }} statistics">
+                            {{#each statistic}}
+                                <div class="statistic">
+                                    <div class="value">
+                                        {{this.value}} 
+                                    </div>
+                                    <div class="label">
+                                        {{this.label}}
+                                    </div>
+                                </div>
+                            {{/each}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="ui vertical white stripe segment">
+            <h4 class="ui horizontal header divider">
+                <a href="#">Popular Banks</a>
+            </h4>
+
+            <div class="row">
+                <div class="center aligned column">
+                    <div class="ui three wide fluid cards">
+
                         <div class="ui raised card">
                             <div class="content">
                                 <div class="header">Project Timeline</div>
@@ -106,326 +217,232 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <br>
-                <div class="row"> 
-                    <div class="center aligned column">
-                        <div class="actions">
-                            <div class="extra content" align="center">
-                                <button class="ui center aligned blue button">Copy IFSC</button>
+                            <div class="extra content">
+                                <button class="ui center aligned red button">Join Project</button>
                             </div>
                         </div>
-                        <br>
-                        <br>
-                    </div>
-                </div>
-            </div>
 
-            <!-- ==================== -->
-            <!--   Statistics title   -->
-            <!-- ==================== -->
-            
-            <div class="ui vertical stripe segment" id="statistics-segment">
-                <div class="ui middle aligned stackable grid container">
-                    <div class="row">
-                        <div class="ui middle aligned stackable grid container">
-                            <div class="center aligned column">
-                                <h1>{{statiticTitle}}</h1>
-                                <h1>{{statiticSubTitle}}</h1>
+
+                        <div class="ui card">
+                            <div class="content">
+                                <div class="header">Project Timeline</div>
                             </div>
-                        </div>
-                    </div>
-
-                    <!-- ==================== -->
-                    <!-- Statistics Row Div   -->
-                    <!-- ==================== -->
-                    
-                    <div class="row" id="statistics-row">
-                        <div class="center aligned column">
-                            <div class="ui {{ statisticCount }} statistics">
-                                {{#each statistic}}
-                                <div class="statistic">
-                                    <div class="value">
-                                        {{this.value}} 
-                                    </div>
-                                    <div class="label">
-                                        {{this.label}}
-                                    </div>
-                                </div>
-                                {{/each}}
-                            </div>
-                        </div>
-                    </div>
-                    </div>
-                    </div>
-
-                    
-                    <h4 class="ui horizontal header divider">
-                        <a href="#">Case Studies</a>
-                    </h4>
-                    
-                    <div class="row">
-                        <div class="center aligned column">
-                            <div class="ui three wide fluid cards">
-
-                                <div class="ui raised card">
-                                    <div class="content">
-                                        <div class="header">Project Timeline</div>
-                                    </div>
-                                    <div class="content">
-                                        <h4 class="ui sub header">Activity</h4>
-                                        <div class="ui small feed">
-                                            <div class="event">
-                                                <div class="content">
-                                                    <div class="summary">
-                                                        <a>Elliot Fu</a> added <a>Jenny Hess</a> to the project
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="event">
-                                                <div class="content">
-                                                    <div class="summary">
-                                                        <a>Stevie Feliciano</a> was added as an <a>Administrator</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="event">
-                                                <div class="content">
-                                                    <div class="summary">
-                                                        <a>Helen Troy</a> added two pictures
-                                                    </div>
-                                                </div>
+                            <div class="content">
+                                <h4 class="ui sub header">Activity</h4>
+                                <div class="ui small feed">
+                                    <div class="event">
+                                        <div class="content">
+                                            <div class="summary">
+                                                <a>Elliot Fu</a> added <a>Jenny Hess</a> to the project
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="extra content">
-                                        <button class="ui center aligned red button">Join Project</button>
-                                    </div>
-                                </div>
-
-
-                                <div class="ui card">
-                                    <div class="content">
-                                        <div class="header">Project Timeline</div>
-                                    </div>
-                                    <div class="content">
-                                        <h4 class="ui sub header">Activity</h4>
-                                        <div class="ui small feed">
-                                            <div class="event">
-                                                <div class="content">
-                                                    <div class="summary">
-                                                        <a>Elliot Fu</a> added <a>Jenny Hess</a> to the project
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="event">
-                                                <div class="content">
-                                                    <div class="summary">
-                                                        <a>Stevie Feliciano</a> was added as an <a>Administrator</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="event">
-                                                <div class="content">
-                                                    <div class="summary">
-                                                        <a>Helen Troy</a> added two pictures
-                                                    </div>
-                                                </div>
+                                    <div class="event">
+                                        <div class="content">
+                                            <div class="summary">
+                                                <a>Stevie Feliciano</a> was added as an <a>Administrator</a>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="extra content">
-                                        <button class="ui button">Join Project</button>
-                                    </div>
-                                </div>
-
-                                <div class="ui raised card">
-                                    <div class="content">
-                                        <div class="header">Project Timeline</div>
-                                    </div>
-                                    <div class="content">
-                                        <h4 class="ui sub header">Activity</h4>
-                                        <div class="ui small feed">
-                                            <div class="event">
-                                                <div class="content">
-                                                    <div class="summary">
-                                                        <a>Elliot Fu</a> added <a>Jenny Hess</a> to the project
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="event">
-                                                <div class="content">
-                                                    <div class="summary">
-                                                        <a>Stevie Feliciano</a> was added as an <a>Administrator</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="event">
-                                                <div class="content">
-                                                    <div class="summary">
-                                                        <a>Helen Troy</a> added two pictures
-                                                    </div>
-                                                </div>
+                                    <div class="event">
+                                        <div class="content">
+                                            <div class="summary">
+                                                <a>Helen Troy</a> added two pictures
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="extra content">
-                                        <button class="ui center aligned red button">Join Project</button>
-                                    </div>
                                 </div>
-
-
-                                <div class="ui card">
-                                    <div class="content">
-                                        <div class="header">Project Timeline</div>
-                                    </div>
-                                    <div class="content">
-                                        <h4 class="ui sub header">Activity</h4>
-                                        <div class="ui small feed">
-                                            <div class="event">
-                                                <div class="content">
-                                                    <div class="summary">
-                                                        <a>Elliot Fu</a> added <a>Jenny Hess</a> to the project
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="event">
-                                                <div class="content">
-                                                    <div class="summary">
-                                                        <a>Stevie Feliciano</a> was added as an <a>Administrator</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="event">
-                                                <div class="content">
-                                                    <div class="summary">
-                                                        <a>Helen Troy</a> added two pictures
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="extra content">
-                                        <button class="ui button">Join Project</button>
-                                    </div>
-                                </div>
-
-                                <div class="ui raised card">
-                                    <div class="content">
-                                        <div class="header">Project Timeline</div>
-                                    </div>
-                                    <div class="content">
-                                        <h4 class="ui sub header">Activity</h4>
-                                        <div class="ui small feed">
-                                            <div class="event">
-                                                <div class="content">
-                                                    <div class="summary">
-                                                        <a>Elliot Fu</a> added <a>Jenny Hess</a> to the project
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="event">
-                                                <div class="content">
-                                                    <div class="summary">
-                                                        <a>Stevie Feliciano</a> was added as an <a>Administrator</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="event">
-                                                <div class="content">
-                                                    <div class="summary">
-                                                        <a>Helen Troy</a> added two pictures
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="extra content">
-                                        <button class="ui center aligned red button">Join Project</button>
-                                    </div>
-                                </div>
-
-
-                                <div class="ui card">
-                                    <div class="content">
-                                        <div class="header">Project Timeline</div>
-                                    </div>
-                                    <div class="content">
-                                        <h4 class="ui sub header">Activity</h4>
-                                        <div class="ui small feed">
-                                            <div class="event">
-                                                <div class="content">
-                                                    <div class="summary">
-                                                        <a>Elliot Fu</a> added <a>Jenny Hess</a> to the project
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="event">
-                                                <div class="content">
-                                                    <div class="summary">
-                                                        <a>Stevie Feliciano</a> was added as an <a>Administrator</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="event">
-                                                <div class="content">
-                                                    <div class="summary">
-                                                        <a>Helen Troy</a> added two pictures
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="extra content">
-                                        <button class="ui button">Join Project</button>
-                                    </div>
-                                </div>
-
+                            </div>
+                            <div class="extra content">
+                                <button class="ui button">Join Project</button>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
 
-
-            <div class="ui vertical stripe segment">
-                <div class="ui text container">
-                    <h3 class="ui header">What is IFSC?</h3>
-                    <p>The Indian Financial System Code (IFS Code or IFSC) is an alphanumeric code that facilitates electronic funds transfer in India.</p> 
-                    
-                    <p>IFSC uniquely identifies each bank branch participating in the two main Payment and settlement systems in India: the Real Time Gross Settlement (RTGS) and the National Electronic Fund Transfer (NEFT) systems.
-</p>
-                </div>
-            </div>
-
-            <div class="ui inverted vertical footer segment">
-                <div class="ui container">
-                    <div class="ui stackable inverted divided equal height stackable grid">
-                        <div class="three wide column">
-                            <h4 class="ui inverted header">About</h4>
-                            <div class="ui inverted link list">
-                                <a href="#" class="item">Sitemap</a>
-                                <a href="#" class="item">Contact Us</a>
-                                <a href="#" class="item">Religious Ceremonies</a>
-                                <a href="#" class="item">Gazebo Plans</a>
+                        <div class="ui raised card">
+                            <div class="content">
+                                <div class="header">Project Timeline</div>
+                            </div>
+                            <div class="content">
+                                <h4 class="ui sub header">Activity</h4>
+                                <div class="ui small feed">
+                                    <div class="event">
+                                        <div class="content">
+                                            <div class="summary">
+                                                <a>Elliot Fu</a> added <a>Jenny Hess</a> to the project
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="event">
+                                        <div class="content">
+                                            <div class="summary">
+                                                <a>Stevie Feliciano</a> was added as an <a>Administrator</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="event">
+                                        <div class="content">
+                                            <div class="summary">
+                                                <a>Helen Troy</a> added two pictures
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="extra content">
+                                <button class="ui center aligned red button">Join Project</button>
                             </div>
                         </div>
-                        <div class="three wide column">
-                            <h4 class="ui inverted header">Services</h4>
-                            <div class="ui inverted link list">
-                                <a href="#" class="item">Banana Pre-Order</a>
-                                <a href="#" class="item">DNA FAQ</a>
-                                <a href="#" class="item">How To Access</a>
-                                <a href="#" class="item">Favorite X-Men</a>
+
+
+                        <div class="ui card">
+                            <div class="content">
+                                <div class="header">Project Timeline</div>
+                            </div>
+                            <div class="content">
+                                <h4 class="ui sub header">Activity</h4>
+                                <div class="ui small feed">
+                                    <div class="event">
+                                        <div class="content">
+                                            <div class="summary">
+                                                <a>Elliot Fu</a> added <a>Jenny Hess</a> to the project
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="event">
+                                        <div class="content">
+                                            <div class="summary">
+                                                <a>Stevie Feliciano</a> was added as an <a>Administrator</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="event">
+                                        <div class="content">
+                                            <div class="summary">
+                                                <a>Helen Troy</a> added two pictures
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="extra content">
+                                <button class="ui button">Join Project</button>
                             </div>
                         </div>
-                        <div class="seven wide column">
-                            <h4 class="ui inverted header">Footer Header</h4>
-                            <p>Extra space for a call to action inside the footer that could help re-engage users.</p>
+
+                        <div class="ui raised card">
+                            <div class="content">
+                                <div class="header">Project Timeline</div>
+                            </div>
+                            <div class="content">
+                                <h4 class="ui sub header">Activity</h4>
+                                <div class="ui small feed">
+                                    <div class="event">
+                                        <div class="content">
+                                            <div class="summary">
+                                                <a>Elliot Fu</a> added <a>Jenny Hess</a> to the project
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="event">
+                                        <div class="content">
+                                            <div class="summary">
+                                                <a>Stevie Feliciano</a> was added as an <a>Administrator</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="event">
+                                        <div class="content">
+                                            <div class="summary">
+                                                <a>Helen Troy</a> added two pictures
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="extra content">
+                                <button class="ui center aligned red button">Join Project</button>
+                            </div>
                         </div>
+
+
+                        <div class="ui card">
+                            <div class="content">
+                                <div class="header">Project Timeline</div>
+                            </div>
+                            <div class="content">
+                                <h4 class="ui sub header">Activity</h4>
+                                <div class="ui small feed">
+                                    <div class="event">
+                                        <div class="content">
+                                            <div class="summary">
+                                                <a>Elliot Fu</a> added <a>Jenny Hess</a> to the project
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="event">
+                                        <div class="content">
+                                            <div class="summary">
+                                                <a>Stevie Feliciano</a> was added as an <a>Administrator</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="event">
+                                        <div class="content">
+                                            <div class="summary">
+                                                <a>Helen Troy</a> added two pictures
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="extra content">
+                                <button class="ui button">Join Project</button>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
+
+        <div class="ui vertical stripe white segment">
+            <div class="row" style="display:inline-block"><br></div>
+            <div class="ui text container">
+                <h3 class="ui middle aligned header" align="center">What is IFSC?</h3>
+                <p>The Indian Financial System Code (IFS Code or IFSC) is an alphanumeric code that facilitates electronic funds transfer in India.</p> 
+
+                <p>IFSC uniquely identifies each bank branch participating in the two main Payment and settlement systems in India: the Real Time Gross Settlement (RTGS) and the National Electronic Fund Transfer (NEFT) systems.
+                </p>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+
+<div class="ui inverted vertical footer segment">
+    <div class="ui container">
+        <div class="ui stackable inverted divided equal height stackable grid">
+            <div class="three wide column">
+                <h4 class="ui inverted header">About</h4>
+                <div class="ui inverted link list">
+                    <a href="#" class="item">Sitemap</a>
+                    <a href="#" class="item">Contact Us</a>
+                </div>
+            </div>
+            <div class="three wide column">
+                <h4 class="ui inverted header">Services</h4>
+                <div class="ui inverted link list">
+                    <a href="#" class="item">Banana Pre-Order</a>
+                    <a href="#" class="item">DNA FAQ</a>
+                    <a href="#" class="item">How To Access</a>
+                    <a href="#" class="item">Favorite X-Men</a>
+                </div>
+            </div>
+            <div class="seven wide column">
+                <h4 class="ui inverted header">Footer Header</h4>
+                <p>Extra space for a call to action inside the footer that could help re-engage users.</p>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
