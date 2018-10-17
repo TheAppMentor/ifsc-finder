@@ -78,6 +78,7 @@ function processFindCityDiv(selectedBankName,selectedCity){
             $('.ui.dropdown').replaceWith(myObj.div_dropdown)
             
             $('.ui.dropdown').dropdown({
+                placeHolder:"Search Bank Branch"
                 onChange: function(value, text, $selectedItem) {
                     let selectedBranch = text
                     let selectedBankName = xmlhttp.getResponseHeader("bankName")
