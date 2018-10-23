@@ -156,6 +156,7 @@ export class BankCollection {
     }
 
     constructor(){
+        this.loadDataBasesWithDataFromFile()
     }
 
     getAllBankNames() : Promise<Array<string>> {

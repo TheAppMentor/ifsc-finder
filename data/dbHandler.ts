@@ -57,18 +57,6 @@ export class BankDB {
                     Promise.resolve(true)
                 })
                 .then(() => {
-                    console.log("We have Initializing the Databases..")
-                    bankNamesModel.find((err,values) => {
-                        console.log("We have found tbanks.... : " + values.length)
-                    })
-                    bankBranchDetailModel.find((err,values) => {
-                        console.log("We have found tbanks.... : " + values.length)
-                    })
-                    bankBranchDetailModel.find({name : "DENA BANK"},function(err,results){
-                        console.log("We Found " + results.length + " DENA BANK Branches") 
-                    })
-                })
-                .then(() => {
                     connectedToDB = true
                     console.log("We have connected to the DB and loaded all the data ... ")
                     resolve()

@@ -14,6 +14,7 @@ var BankCollection = /** @class */ (function () {
         this.bankNameToFileMap = {};
         this.dataStore = new dbHandler_1.BankDB();
         this._allBankNames = Array();
+        this.loadDataBasesWithDataFromFile();
     }
     BankCollection.prototype.getAllBranchesCount = function (bankName) {
         if (bankName === void 0) { bankName = ""; }

@@ -22,6 +22,23 @@ var allBankNamesArr = ["PlaceHolder1","PlaceHolder2"]
 
 var allSetReadyToLaunch : Boolean = false
 
+
+bankColl.getAllBranchesCount()
+    .then((totalCountAllBranches : number) => {
+        totalNumberOfBankBranchesInDB = totalCountAllBranches
+    }).then(() => {
+        bankColl.getAllBankNamesCount().then((totalBanksCount : number) =>{
+            totalNumberOfBanksInDB = totalBanksCount
+        })
+    }).then(() => {
+        bankColl.getAllBankNames().then((allBankNames : [string]) =>{
+            allBankNamesArr = allBankNames 
+        }) 
+    }).then(() => {
+        allSetReadyToLaunch = true
+    })
+
+/*
 bankColl.hydrateBankCollection("./data/ifsc_codes_all_clean.csv")
     .then(() : Promise<boolean> => {
         return bankColl.loadDataBasesWithDataFromFile()
@@ -41,10 +58,9 @@ bankColl.hydrateBankCollection("./data/ifsc_codes_all_clean.csv")
     }).then(() => {
         allSetReadyToLaunch = true
     })
-
+*/
 
 var appStep = "find_bank";
-
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
