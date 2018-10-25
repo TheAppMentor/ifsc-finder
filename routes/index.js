@@ -14,43 +14,33 @@ var bankColl = new BankCollection_1.BankCollection();
 var dom_gen = new DOM_Generator();
 var totalNumberOfBankBranchesInDB;
 var totalNumberOfBanksInDB;
-var allBankNamesArr = ["PlaceHolder1", "PlaceHolder2"];
+var allBankNamesArr = [];
+var popularBankNamesArr = ["ICICI BANK LIMITED", "HDFC BANK", "STATE BANK OF INDIA", "CANARA BANK"];
 var allSetReadyToLaunch = false;
+bankColl.getAllBankNames().then(function (allBankNames) {
+    console.log("Step 3 : Done.");
+    console.log("We now have all bank... " + allBankNames);
+    allBankNamesArr = allBankNames;
+});
 bankColl.getAllBranchesCount()
     .then(function (totalCountAllBranches) {
+    console.log("Step 1 : Done.");
     totalNumberOfBankBranchesInDB = totalCountAllBranches;
 }).then(function () {
     bankColl.getAllBankNamesCount().then(function (totalBanksCount) {
+        console.log("Step 2 : Done.");
         totalNumberOfBanksInDB = totalBanksCount;
     });
 }).then(function () {
     bankColl.getAllBankNames().then(function (allBankNames) {
+        console.log("Step 3 : Done.");
+        console.log("We now have all bank... " + allBankNames);
         allBankNamesArr = allBankNames;
     });
 }).then(function () {
+    console.log("Step x : Done.");
     allSetReadyToLaunch = true;
 });
-/*
-bankColl.hydrateBankCollection("./data/ifsc_codes_all_clean.csv")
-    .then(() : Promise<boolean> => {
-        return bankColl.loadDataBasesWithDataFromFile()
-    }).then(() => {
-        bankColl.getAllBranchesCount()
-            .then((totalCountAllBranches : number) => {
-                totalNumberOfBankBranchesInDB = totalCountAllBranches
-            })
-    }).then(() => {
-        bankColl.getAllBankNamesCount().then((totalBanksCount : number) =>{
-            totalNumberOfBanksInDB = totalBanksCount
-        })
-    }).then(() => {
-        bankColl.getAllBankNames().then((allBankNames : [string]) =>{
-            allBankNamesArr = allBankNames
-        })
-    }).then(() => {
-        allSetReadyToLaunch = true
-    })
-*/
 var appStep = "find_bank";
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -75,7 +65,122 @@ router.get('/', function (req, res, next) {
             statiticSubTitle: "India"
         });
     }
+    /*
+     if (_.isEmpty(req.query)){
+         res.render('index', {
+             title: 'IFSC Search',
+             processStep : "findBank",
+             dropDownPlaceHolderText : "Search Bank Name",
+             stepStatus : [
+                 {title : "Find Bank", status : "active", description :  "Enter Bank Name"},
+                 {title : "Find City", status : "disabled", description : "Enter Bank Location"},
+                 {title : "Find Branch", status : "disabled", description : "Enter Bank Branch"}],
+             allBankNames : allBankNamesArr,
+             statistic: [{label : "Banks", value: totalNumberOfBanksInDB},{label : "Bank Branches", value: totalNumberOfBankBranchesInDB}],
+             statisticCount : "two",
+             statiticTitle : "All Banks",
+             statiticSubTitle : "India"
+         });
+     }
+ */
 });
+router.get('/getBanks/', function (req, res, next) {
+    var query = req.query;
+    console.log("Returning a response.... " + JSON.stringify(query));
+    console.log("Query is " + query.q);
+    var matchedBanks = _.filter(allBankNamesArr, function (eachValue) {
+        if (_.includes(_.toLower(eachValue), _.toLower(query.q)) == true) {
+            return eachValue;
+        }
+    });
+    var matchedPopularBanks = _.filter(popularBankNamesArr, function (eachValue) {
+        if (_.includes(_.toLower(eachValue), _.toLower(query.q)) == true) {
+            return eachValue;
+        }
+    });
+    var resp = {};
+    resp['results'] = [];
+    var queryReturnedResults = matchedBanks.length > 0 ? true : false;
+    resp["success"] = queryReturnedResults;
+    // Build Popular Banks Category
+    var popularBanksCat = {};
+    popularBanksCat['name'] = "Popular Banks";
+    //Build Popular bank Items
+    var popBankItems = _.map(matchedPopularBanks, function (eachPopBank) {
+        var popItem = {};
+        popItem['title'] = eachPopBank;
+        return popItem;
+    });
+    popularBanksCat['results'] = popBankItems;
+    // If we have found a match, Then dont show popular banks.
+    if (matchedBanks.length > 1) {
+        resp['results'].push(popularBanksCat);
+    }
+    // Build Popular Banks Category
+    var allBanksCat = {};
+    allBanksCat['name'] = "All Banks";
+    // Build resp for all banks that match the search
+    var allBankItems = _.map(matchedBanks, function (eachBank) {
+        var bankItem = {};
+        bankItem['title'] = eachBank;
+        return bankItem;
+    });
+    allBanksCat['results'] = allBankItems;
+    resp['results'].push(allBanksCat);
+    console.log("Resp 1 is : " + resp);
+    res.json(resp);
+    var resp1 = {
+        "results": {
+            "category1": {
+                "name": "Popular Banks",
+                "results": [
+                    {
+                        "title": "HDFC Bank",
+                    },
+                    {
+                        "title": "ICICI Bank",
+                    }
+                ]
+            },
+            "category2": {
+                "name": "All Banks",
+                "results": [
+                    {
+                        "title": "Abudaya Bull Crap bank",
+                    },
+                    {
+                        "title": "Abudaya Bull Crap bank",
+                    },
+                    {
+                        "title": "Abudaya Bull Crap bank",
+                    },
+                    {
+                        "title": "Abudaya Bull Crap bank",
+                    },
+                    {
+                        "title": "Abudaya Bull Crap bank",
+                    },
+                ]
+            }
+        },
+    };
+    res.json(resp1);
+});
+/*
+fields: {
+  categories      : 'results',     // array of categories (category view)
+  categoryName    : 'name',        // name of category (category view)
+  categoryResults : 'results',     // array of results (category view)
+  description     : 'description', // result description
+  image           : 'image',       // result image
+  price           : 'price',       // result price
+  results         : 'results',     // array of results (standard)
+  title           : 'title',       // result title
+  action          : 'action',      // "view more" object name
+  actionText      : 'text',        // "view more" text
+  actionURL       : 'url'          // "view more" url
+}
+*/
 // For Bank Name : Get all locations
 router.get('/getLocations/', function (req, res, next) {
     var bankName = req.query.bankName;

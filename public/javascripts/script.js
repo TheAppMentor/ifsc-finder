@@ -26,6 +26,92 @@ $(document)
                         processFindBankDiv(text)
                     }                    
                 })
+    
+
+        $("#findBankSearchField.ui.search")
+            .search({
+                type          : 'category',
+                apiSettings: {
+                    url: "/getBanks/?q={query}"
+                },
+
+                minCharacters : 1,
+
+                onResponse : function(theresponse) {
+                    // here you modify theresponse object,
+                    // then you return the modified version.
+                    console.log("The Response is " + theresponse)
+                    return theresponse
+                },
+                fields: {
+                    categories      : 'results',     // array of categories (category view)
+                    categoryName    : 'name',        // name of category (category view)
+                    categoryResults : 'results',     // array of results (category view)
+                    description     : 'description', // result description
+                    //image           : 'image',       // result image
+                    //price           : 'price',       // result price
+                    results         : 'results',     // array of results (standard)
+                    title           : 'title',       // result title
+                    action          : 'action',      // "view more" object name
+                    //actionText      : 'text',        // "view more" text
+                    //actionURL       : 'url'          // "view more" url
+                },
+                onSelect(result, response) {
+                    alert("Yippee");
+                    return response
+                }
+            });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  jQuery(document).ready(function($) {
+    var alterClass = function() {
+      var ww = document.body.clientWidth;
+      if (ww < 400) {
+        $("#bankSearchField.ui.search")
+          .removeClass("huge")
+          .addClass("medium");
+        $("#locationSearchField.ui.search")
+          .removeClass("huge")
+          .addClass("medium");
+        $("#branchSearchField.ui.search")
+          .removeClass("huge")
+          .addClass("medium");
+      } else if (ww >= 401) {
+        $("#bankSearchField.ui.search")
+          .addClass("huge")
+          .removeClass("medium");
+        
+        $("#locationSearchField.ui.search")
+          .addClass("huge")
+          .removeClass("medium");
+        
+        $("#branchSearchField.ui.search")
+          .addClass("huge")
+          .removeClass("medium");
+      }
+    };
+    $(window).resize(function() {
+      alterClass();
+    });
+    //Fire it when the page first loads:
+    alterClass();
+  });
+    
     });
 
 
@@ -139,4 +225,25 @@ function processFindBranchDiv(selectedBank,selectedCity,selectedBranch){
     xmlhttp.setRequestHeader("branchName", selectedBranch)
 
     xmlhttp.send();
+}
+
+
+function fetchAllBankNames(){
+
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var myObj = JSON.parse(this.responseText);
+            console.log("Got back JSON object.. " + JSON.stringify(myObj)) 
+           console.log("Cat Bef " + categoryContent1) 
+            categoryContent1 = myObj
+            //return myObj 
+           console.log("Cat aft" + categoryContent1) 
+        }
+    }
+        let fullPath = window.location.search.substring(1); 
+        let finalPath = "/getBanks/"
+        
+        xmlhttp.open("GET", finalPath, true);
+        xmlhttp.send();
 }
