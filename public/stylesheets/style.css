@@ -115,14 +115,13 @@
 .ui.search .prompt {  
   //background-color : black;
   text-align : center;
-  
 }
 
 .ui.vertical.stripeShort {
   padding: 5em 0em;
 }
 
-.ui.vertical.adStripe {
+.ui.inverted.vertical.adStripe {
   padding: 3em 0em;
   background-color : #2224261a;
 }

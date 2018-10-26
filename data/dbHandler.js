@@ -204,12 +204,32 @@ var BankDB = /** @class */ (function () {
             // I am using the in-efficinet regex method to make the find case-insensive.. check out the link above for a more optimizes soln.
             // DRY vioation.... !!!! 
             bankBranchDetailModel.find({ name: { $regex: new RegExp(bankName, "i") } }, function (err, results) {
+                var cityObjects = results.map(function (eachRec) {
+                    return { city: eachRec.city, state: eachRec.state };
+                });
+                var uniqCityObjects = _.uniqBy(cityObjects, 'city');
+                var sortedUniqueCityObjects = _.sortBy(uniqCityObjects, ['city']);
+                resolve(sortedUniqueCityObjects);
+            }).catch(function (err) {
+                console.log("Unable to find branch details : " + err);
+            });
+        });
+    };
+    //Old Implementation, without the state object.. thing..
+    BankDB.prototype.getAllCityNamesForBank_OLD = function (bankName) {
+        return new Promise(function (resolve, reject) {
+            //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb
+            // I am using the in-efficinet regex method to make the find case-insensive.. check out the link above for a more optimizes soln.
+            // DRY vioation.... !!!! 
+            bankBranchDetailModel.find({ name: { $regex: new RegExp(bankName, "i") } }, function (err, results) {
                 var cityNames = results.map(function (eachRec) {
                     return eachRec.city;
                 });
                 var uniqCityNames = _.uniq(cityNames);
                 var sortedUniqueCityNames = _.sortBy(uniqCityNames);
                 resolve(sortedUniqueCityNames);
+            }).catch(function (err) {
+                console.log("Unable to find branch details : " + err);
             });
         });
     };
@@ -241,6 +261,24 @@ var BankDB = /** @class */ (function () {
     };
     //Prashanth : Scope for optimiztion ehre.. here you query the db for list of branch names etc. U can just get the cout here and only and pass it to the caller... why make another call.. just to get the counts. Or even better.. have some kind of metadata store.. that is created each time you the db with new data from RBI.
     BankDB.prototype.getAllBranchNamesForBankNameInCity = function (bankName, cityName) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            _this.getAllBranchesForBankNameInCity(bankName, cityName)
+                .then(function (branchDetailsArr) {
+                var branchObjects = branchDetailsArr.map(function (eachRec) {
+                    var tempRec = {};
+                    tempRec['branch'] = eachRec.branch;
+                    tempRec['address'] = eachRec.address;
+                    return tempRec;
+                });
+                resolve(branchObjects);
+            }).catch(function (err) {
+                reject("Error ! : DB Handler.ts : getCountOfBranchesBankNameInCity : " + err);
+            });
+        });
+    };
+    //Prashanth : Scope for optimiztion ehre.. here you query the db for list of branch names etc. U can just get the cout here and only and pass it to the caller... why make another call.. just to get the counts. Or even better.. have some kind of metadata store.. that is created each time you the db with new data from RBI.
+    BankDB.prototype.getAllBranchNamesForBankNameInCity_OLD = function (bankName, cityName) {
         var _this = this;
         return new Promise(function (resolve, reject) {
             _this.getAllBranchesForBankNameInCity(bankName, cityName)

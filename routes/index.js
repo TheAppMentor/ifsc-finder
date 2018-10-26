@@ -17,11 +17,6 @@ var totalNumberOfBanksInDB;
 var allBankNamesArr = [];
 var popularBankNamesArr = ["ICICI BANK LIMITED", "HDFC BANK", "STATE BANK OF INDIA", "CANARA BANK"];
 var allSetReadyToLaunch = false;
-bankColl.getAllBankNames().then(function (allBankNames) {
-    console.log("Step 3 : Done.");
-    console.log("We now have all bank... " + allBankNames);
-    allBankNamesArr = allBankNames;
-});
 bankColl.getAllBranchesCount()
     .then(function (totalCountAllBranches) {
     console.log("Step 1 : Done.");
@@ -41,10 +36,22 @@ bankColl.getAllBranchesCount()
     console.log("Step x : Done.");
     allSetReadyToLaunch = true;
 });
+bankColl.getAllBankNames().then(function (allBankNames) {
+    console.log("Step 3 : Done.");
+    console.log("We now have all bank... " + allBankNames);
+    allBankNamesArr = allBankNames;
+});
 var appStep = "find_bank";
 /* GET home page. */
 router.get('/', function (req, res, next) {
     //TODO : Check the allSetReadyToLaunch variable, if we are not yet ready. Show a an appropriate page. 
+    if (allBankNamesArr.length == 0) {
+        bankColl.getAllBankNames().then(function (allBankNames) {
+            console.log("Step 3 : Done.");
+            console.log("We now have all bank... " + allBankNames);
+            allBankNamesArr = allBankNames;
+        });
+    }
     var bankName = req.query.bankName;
     var cityName = req.query.cityName;
     var branchName = req.query.branchName;
@@ -181,9 +188,55 @@ fields: {
   actionURL       : 'url'          // "view more" url
 }
 */
+router.get('/getLocationList/', function (req, res, next) {
+    var bankName = req.query.bankName;
+    var searchInput = req.query.searchInput;
+    console.log("Returning a response.... " + JSON.stringify(bankName));
+    console.log("Returning a response.... " + JSON.stringify(searchInput));
+    bankColl.getAllCityNamesForBank(bankName).then(function (allCityNames) {
+        //TODO : Prashanth u can send the search query also to the MongoDB.. remember this is the search bar that gives u the user input.
+        console.log("Fetched all city names " + JSON.stringify(allCityNames));
+        var matchedCityNames = _.filter(allCityNames, function (eachValue) {
+            if (_.includes(_.toLower(eachValue.city), _.toLower(searchInput)) == true) {
+                return eachValue;
+            }
+        });
+        //Form the response.
+        var resp = {};
+        resp['results'] = matchedCityNames;
+        var queryReturnedResults = matchedCityNames.length > 0 ? true : false;
+        resp["success"] = queryReturnedResults;
+        //Matching City Names
+        console.log("Returning Response : " + JSON.stringify(resp));
+        return res.json(resp);
+    });
+});
+router.get('/getBranchList/', function (req, res, next) {
+    var bankName = req.query.bankName;
+    var locationName = req.query.locationName;
+    var searchInput = req.query.searchInput;
+    bankColl.getAllBranchNamesForBankNameInCity(bankName, locationName).then(function (branchNameArr) {
+        //TODO : Prashanth u can send the search query also to the MongoDB.. remember this is the search bar that gives u the user input.
+        var matchedBranchObjects = _.filter(branchNameArr, function (eachValue) {
+            if (_.includes(_.toLower(eachValue.branch), _.toLower(searchInput)) == true) {
+                return eachValue;
+            }
+        });
+        //Form the response.
+        var resp = {};
+        resp['results'] = matchedBranchObjects;
+        var queryReturnedResults = matchedBranchObjects.length > 0 ? true : false;
+        resp["success"] = queryReturnedResults;
+        //Matching City Names
+        console.log("Returning Response : " + JSON.stringify(resp));
+        return res.json(resp);
+    });
+});
 // For Bank Name : Get all locations
 router.get('/getLocations/', function (req, res, next) {
     var bankName = req.query.bankName;
+    console.log("The bank Name is : " + bankName);
+    //res.json({message : bankName})
     bankColl.getAllCityNamesForBank(bankName).then(function (allCityNames) {
         var statistics_div = dom_gen.getDivForStatistics({
             statistic: [

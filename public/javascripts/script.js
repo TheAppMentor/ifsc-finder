@@ -26,7 +26,6 @@ $(document)
                         processFindBankDiv(text)
                     }                    
                 })
-    
 
         $("#findBankSearchField.ui.search")
             .search({
@@ -34,12 +33,8 @@ $(document)
                 apiSettings: {
                     url: "/getBanks/?q={query}"
                 },
-
                 minCharacters : 1,
-
                 onResponse : function(theresponse) {
-                    // here you modify theresponse object,
-                    // then you return the modified version.
                     console.log("The Response is " + theresponse)
                     return theresponse
                 },
@@ -57,13 +52,53 @@ $(document)
                     //actionURL       : 'url'          // "view more" url
                 },
                 onSelect(result, response) {
-                    alert("Yippee");
+                    console.log("Result is : " + JSON.stringify(result))
+                    console.log("Response is : " + JSON.stringify(response))
+                    console.log("Response is : " + result.title)
+                  
+                    $("#findBankSearchField.ui.search").data("selectedBank",result.title)
+                   
+                    var tag = document.createElement("script");
+                    tag.src = "javascripts/searchCity.js";
+                    document.getElementsByTagName("head")[0].appendChild(tag);
+                    
+                    $('html, body').animate({ scrollTop: $('#findLocationSegment').offset().top }, 'slow');
+                    
                     return response
                 }
             });
 
+/*
+        $("#findLocationSearchField.ui.search")
+            .search({
+                apiSettings: {
+                    let selectedBank = $("#findBankSearchField.ui.search").data("selectedBank")
+                    url: "/getLocationList/?bankName=" + selectedBank + "&searchInput={query}"
+                },
+                minCharacters : 1,
+                onResponse : function(theresponse) {
+                    console.log("The Response is " + theresponse)
+                    return theresponse
+                },
+                fields: {
+                    description     : 'state', // result description
+                    //image           : 'image',       // result image
+                    //price           : 'price',       // result price
+                    results         : 'results',     // array of results (standard)
+                    title           : 'city',       // result title
+                    action          : 'action',      // "view more" object name
+                    //actionText      : 'text',        // "view more" text
+                    //actionURL       : 'url'          // "view more" url
+                },
+                onSelect(result, response) {
+                    console.log("Result is : " + result)
+                    console.log("Response is : " + response)
+                    //findLocationsForBank(result)
+                    return response
+                }
+            });
 
-
+*/
 
 
 
@@ -113,6 +148,29 @@ $(document)
   });
     
     });
+
+
+
+function findLocationsForBank(selectedBankName){
+
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var myObj = JSON.parse(this.responseText);
+            console.log("WE got back a locations list.... " + JSON.stringify(myObj))
+        }                   
+    }
+    
+    let fullPath = window.location.search.substring(1); 
+    let finalPath = "/getLocationList/?" + fullPath + '&bankName=' + selectedBankName //TODO Modify this to fetch bank name from the request header.
+    console.log("Final Path is ... : " + finalPath)
+    xmlhttp.open("GET", finalPath, true);
+    //xmlhttp.setRequestHeader("bankName", selectedBankName)
+    xmlhttp.send();
+
+    $('html, body').animate({ scrollTop: $('#findLocationSegment').offset().top }, 'slow');
+}
+
 
 
 function processFindBankDiv(selectedBankName){

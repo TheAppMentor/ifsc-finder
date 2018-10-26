@@ -224,23 +224,49 @@ export class BankDB {
         })
     }
 
-    getAllCityNamesForBank(bankName : string) : Promise<Array<string>>{
+    getAllCityNamesForBank(bankName : string) : Promise<Array<any>>{
 
         return new Promise((resolve,reject) => {
             //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb
             // I am using the in-efficinet regex method to make the find case-insensive.. check out the link above for a more optimizes soln.
             // DRY vioation.... !!!! 
+            
             bankBranchDetailModel.find({name : { $regex : new RegExp(bankName, "i") } },function(err,results){
-                var cityNames = results.map(eachRec => {
-                    return eachRec.city
+                var cityObjects = results.map(eachRec => {
+                    return {city : eachRec.city, state : eachRec.state}
                 })
-                var uniqCityNames = _.uniq(cityNames)
-                let sortedUniqueCityNames = _.sortBy(uniqCityNames)
-                resolve(sortedUniqueCityNames)
+                
+                var uniqCityObjects = _.uniqBy(cityObjects,'city')
+                let sortedUniqueCityObjects = _.sortBy(uniqCityObjects, ['city'])
+                resolve(sortedUniqueCityObjects)
+            
+            }).catch((err) => {
+                console.log("Unable to find branch details : " + err)
             })
         })
     }
 
+    //Old Implementation, without the state object.. thing..
+    getAllCityNamesForBank_OLD(bankName : string) : Promise<Array<string>>{
+
+        return new Promise((resolve,reject) => {
+            //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb
+            // I am using the in-efficinet regex method to make the find case-insensive.. check out the link above for a more optimizes soln.
+            // DRY vioation.... !!!! 
+            
+            bankBranchDetailModel.find({name : { $regex : new RegExp(bankName, "i") } },function(err,results){
+                var cityNames = results.map(eachRec => {
+                    return eachRec.city
+                })
+                
+                var uniqCityNames = _.uniq(cityNames)
+                let sortedUniqueCityNames = _.sortBy(uniqCityNames)
+                resolve(sortedUniqueCityNames)
+            }).catch((err) => {
+                console.log("Unable to find branch details : " + err)
+            })
+        })
+    }
 
 
     getAllDistrictNamesForBank(bankName : string) : Promise<Array<string>>{
@@ -275,9 +301,26 @@ export class BankDB {
         })
     }
 
+    //Prashanth : Scope for optimiztion ehre.. here you query the db for list of branch names etc. U can just get the cout here and only and pass it to the caller... why make another call.. just to get the counts. Or even better.. have some kind of metadata store.. that is created each time you the db with new data from RBI.
+    getAllBranchNamesForBankNameInCity(bankName : string, cityName : string) : Promise<Array<any>> {
+        return new Promise((resolve : any, reject : any) => {
+            this.getAllBranchesForBankNameInCity(bankName,cityName)   
+                .then((branchDetailsArr : Array<BankBranchDetail>) => {
+                    var branchObjects = branchDetailsArr.map(eachRec => {
+                        var tempRec = {}
+                        tempRec['branch'] = eachRec.branch
+                        tempRec['address'] = eachRec.address 
+                        return tempRec 
+                    }) 
+                    resolve(branchObjects)
+                }).catch((err) => {
+                    reject("Error ! : DB Handler.ts : getCountOfBranchesBankNameInCity : "  + err)    
+                }) 
+        })
+    }
 
     //Prashanth : Scope for optimiztion ehre.. here you query the db for list of branch names etc. U can just get the cout here and only and pass it to the caller... why make another call.. just to get the counts. Or even better.. have some kind of metadata store.. that is created each time you the db with new data from RBI.
-    getAllBranchNamesForBankNameInCity(bankName : string, cityName : string) : Promise<Array<string>> {
+    getAllBranchNamesForBankNameInCity_OLD(bankName : string, cityName : string) : Promise<Array<string>> {
         return new Promise((resolve : any, reject : any) => {
             this.getAllBranchesForBankNameInCity(bankName,cityName)   
                 .then((branchDetailsArr : Array<BankBranchDetail>) => {
