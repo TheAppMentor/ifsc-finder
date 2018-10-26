@@ -16,7 +16,7 @@
 <div class="pusher">
 
     <!-- Black segment at the top of the page...... -->
-    <div class="ui inverted vertical masthead center aligned basic segment" style="background-image: url('/images/bg1.jpg'); background-size: cover; background-position: center center;">
+    <div class="ui inverted vertical masthead center aligned basic segment" style="background-image: url('/images/bg.jpg'); background-size: cover; background-position: center center;">
 
         <div class="ui container">
             <div class="ui large secondary inverted pointing menu">
@@ -74,12 +74,16 @@
         </div>
     </div>
 
+    <!-- AD Block Begin-->
     <div class="ui mobile hidden vertical stripe  segment">
         <div class="ui centered large rectangle test ad" data-text="Large Rectangle"></div>
     </div>
-
-    <div class="ui raised segments" id="findLocationSegment">
-        <div class="ui vertical stripeShort segment">
+    
+    <div class="ui mobile only centered mobile leaderboard test ad" data-text="Mobile Banner" id="mobileOnlyBannerAd"></div>
+    <!-- AD Block End-->
+    
+    <div class="ui raised segments">
+        <div class="ui vertical stripeShort segment" id="findLocationSegment">
             <div class="ui grid container">
                 <div class="row">
                     <div class="one wide left column"></div>
@@ -100,6 +104,15 @@
                     <div class="one wide right column"></div>
                 </div>
             </div>
+
+            <!-- AD Block Begin-->
+            <div class="ui mobile hidden vertical stripe  segment">
+                <div class="ui centered large rectangle test ad" data-text="Large Rectangle"></div>
+            </div>
+
+            <div class="ui mobile only centered mobile leaderboard test ad" data-text="Mobile Banner" id="mobileOnlyBannerAd"></div>
+            <!-- AD Block End-->
+
         </div>
 
 
@@ -127,30 +140,18 @@
                     <div class="one wide right column"></div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <div class="ui vertical raised adStripe segment">
-        <div class="ui mobile hidden centered large rectangle test ad" data-text="Large Rectangle"></div>
-    </div>
-
-    <div class="ui blue hidden inverted vertical stripe segment" id="showResultSegment">
-        <div class="ui grid container">
-            <div class="row">
-                <div class="one wide left column"></div>
-                <div class="fourteen wide center aligned column">
-                    <div class="ui stripe segment">
-                        <h2>ICICI Bank Limited </h2>
-                        <p>Bangalore Branch</p>
-                        <h1>IFSC : ABC000090909</h1>
-                        <h4>Address</h4>
-                        <p>38/10 St Johns Road, Sivan Chetty Garden P.O.</p>
-                        <p>Bangalore - 560042</p>
-                    </div>
-                    <div class="one wide right column"></div>
-                </div>
+        
+            <!-- AD Block Begin-->
+            <div class="ui mobile hidden vertical stripe  segment">
+                <div class="ui centered large rectangle test ad" data-text="Large Rectangle"></div>
             </div>
+
+            <div class="ui mobile only centered mobile leaderboard test ad" data-text="Mobile Banner" id="mobileOnlyBannerAd"></div>
+            <!-- AD Block End-->
         </div>
+    </div>
+
+    <div class="ui blue hidden inverted vertical stripe segment" id="showResultSegment" style="display:none">
     </div>
 </div>
 

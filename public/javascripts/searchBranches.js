@@ -47,10 +47,7 @@ function getDivFinalResult(bankName,locationName,branchName){
             console.log("WE got back a locations list.... " + JSON.stringify(myObj))
             
             document.getElementById('showResultSegment').outerHTML = myObj.div_finaResults 
-            //$("#findBranchSearchField.ui.search").removeClass('hidden');
-            
-            //document.getElementsByTagName("head")[0].appendChild(tag);
-            
+           //document.getElementsByClassName('pusher')[0].append($(myObj.div_finaResults))
             
             $('html, body').animate({ scrollTop: $('#showResultSegment').offset().top }, 'slow');
             
