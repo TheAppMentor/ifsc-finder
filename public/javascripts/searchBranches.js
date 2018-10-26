@@ -21,6 +21,10 @@ $("#findBranchSearchField.ui.search")
         onSelect(result, response) {
             console.log("Find Branch Result is : " + JSON.stringify(result))
             console.log("Find Response is : " + JSON.stringify(response))
+
+            $('html, body').animate({ scrollTop: $('#showResultSegment').offset().top }, 'slow');
+            $("#findBranchSearchField.ui.search").data("selectedBranch",result.branch)
+            
             //findLocationsForBank(result)
 
             //$("#findLocationSearchField.ui.search").data("selectedLocation",result.title)
