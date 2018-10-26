@@ -6,6 +6,7 @@ let dropdown_template
 let modal_template 
 let steps_template
 let dropdown_branch 
+let results_segment 
 
 fs.readFile('./templates/statistics.hbs', function read(err, data) {
         if (err) {throw err;}
@@ -31,6 +32,12 @@ fs.readFile('./templates/branch-dropdown.hbs', function read(err, data) {
         if (err) {throw err;}
         dropdown_branch = handlebars.compile(data.toString())
     })
+
+fs.readFile('./templates/results_segment.hbs', function read(err, data) {
+        if (err) {throw err;}
+        results_segment = handlebars.compile(data.toString())
+    })
+
 class DOM_Generator{
     
     constructor(){
@@ -54,6 +61,10 @@ class DOM_Generator{
     
     getDivForModal(data) {
         return modal_template(data)
+    }
+
+    getDivForResults(data) {
+        return results_segment(data)
     }
 }
 

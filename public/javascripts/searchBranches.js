@@ -22,18 +22,47 @@ $("#findBranchSearchField.ui.search")
             console.log("Find Branch Result is : " + JSON.stringify(result))
             console.log("Find Response is : " + JSON.stringify(response))
 
-            $('html, body').animate({ scrollTop: $('#showResultSegment').offset().top }, 'slow');
+
             $("#findBranchSearchField.ui.search").data("selectedBranch",result.branch)
-            
-            //findLocationsForBank(result)
 
-            //$("#findLocationSearchField.ui.search").data("selectedLocation",result.title)
+            let bankName = $("#findBankSearchField.ui.search").data("selectedBank") 
+            let locationName = $("#findLocationSearchField.ui.search").data("selectedLocation") 
+            let branchName = $("#findBranchSearchField.ui.search").data("selectedBranch") 
 
-            //var tag = document.createElement("script");
-            //tag.src = "javascripts/searchBranches.js";
-            //document.getElementsByTagName("head")[0].appendChild(tag);
-            
+            //Generate div for Results
+            let results_div = getDivFinalResult(bankName,locationName,branchName)
             
             return response
         }
     });
+
+
+function getDivFinalResult(bankName,locationName,branchName){
+
+    var xmlhttp = new XMLHttpRequest();
+
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var myObj = JSON.parse(this.responseText);
+            console.log("WE got back a locations list.... " + JSON.stringify(myObj))
+            
+            document.getElementById('showResultSegment').outerHTML = myObj.div_finaResults 
+            //$("#findBranchSearchField.ui.search").removeClass('hidden');
+            
+            //document.getElementsByTagName("head")[0].appendChild(tag);
+            
+            
+            $('html, body').animate({ scrollTop: $('#showResultSegment').offset().top }, 'slow');
+            
+            console.log("Search field talking.. i have made a div called .. " + results_div)
+        }                   
+    }
+
+    let finalPath = "/getDomForResults/?bankName=" + $("#findBankSearchField.ui.search").data("selectedBank") + "&locationName=" + $("#findLocationSearchField.ui.search").data("selectedLocation") + "&branchName=" +  $("#findBranchSearchField.ui.search").data("selectedBranch")
+
+    console.log("Final Path is ... : " + finalPath)
+
+    xmlhttp.open("GET", finalPath, true);
+    xmlhttp.send();
+
+}

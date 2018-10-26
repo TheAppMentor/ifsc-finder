@@ -265,6 +265,26 @@ router.get('/getLocations/', function (req, res, next) {
         console.log("ERROR! : index.ts : /cities/ => Finding City Name Name " + err);
     });
 });
+// Generate DOM for final results 
+router.get('/getDomForResults/', function (req, res, next) {
+    var bankName = req.query.bankName;
+    var cityName = req.query.cityName;
+    var branchName = req.query.branchName;
+    console.log("Index.ts : getDomForResults bankName, cityName , branchName" + bankName, cityName, branchName);
+    bankColl.getBranchesDetailsForBankInCityWithBranchName(bankName, cityName, branchName).then(function (branchNameArr) {
+        var fetchedBranch = _.first(branchNameArr);
+        var results_div = dom_gen.getDivForResults({
+            bankName: fetchedBranch.name,
+            bankBranch: fetchedBranch.branch,
+            ifsc: fetchedBranch.ifsc,
+            address: fetchedBranch.address,
+            city: fetchedBranch.city,
+            state: fetchedBranch.state
+        });
+        console.log("I am returning the Results div ... " + results_div);
+        res.json({ div_finaResults: results_div });
+    });
+});
 router.get('/getBranches/', function (req, res, next) {
     var bankName = req.query.bankName;
     var cityName = req.query.cityName;

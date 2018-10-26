@@ -383,6 +383,54 @@ router.get('/getLocations/', function(req, res, next) {
 });
 
 
+
+
+// Generate DOM for final results 
+router.get('/getDomForResults/', function(req, res, next) {
+
+    let bankName = req.query.bankName 
+    let cityName = req.query.cityName
+    let branchName = req.query.branchName
+   
+    console.log("Index.ts : getDomForResults bankName, cityName , branchName" + bankName, cityName, branchName)
+
+    bankColl.getBranchesDetailsForBankInCityWithBranchName(bankName,cityName,branchName).then((branchNameArr: Array<BankBranchDetail>) => {
+        
+        var fetchedBranch = _.first(branchNameArr)
+        
+        var results_div = dom_gen.getDivForResults({
+            bankName : fetchedBranch.name,
+            bankBranch : fetchedBranch.branch,
+            ifsc : fetchedBranch.ifsc,
+            address : fetchedBranch.address,
+            city : fetchedBranch.city,
+            state : fetchedBranch.state
+        }) 
+
+        console.log("I am returning the Results div ... " + results_div)
+        res.json({div_finaResults : results_div})
+    })
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 router.get('/getBranches/', function(req, res, next) {
 
     let bankName = req.query.bankName 
