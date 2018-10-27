@@ -1,5 +1,5 @@
 
-<div class="ui blue hidden inverted vertical stripe segment" id="showResultSegment">
+<div class="ui hidden vertical stripe segment" id="showResultSegment" style="background-color:#25BEA0">
     <div class="ui grid container">
         <div class="row">
             <div class="one wide left column"></div>
@@ -7,8 +7,9 @@
                 <div class="ui stripe segment">
                     <h2>{{bankName}}</h2>
                     <p>{{bankBranch}}</p>
+                    <h4 style="color:gray">IFSC</h4>
                     <h1 id="ifsc-code">{{ifsc}}</h1>
-                    <h4>Address</h4>
+                    <h4 style="color:gray">Address</h4>
                     <p>{{address}}</p>
                     <p>{{city}} - {{state}}</p>
                 </div>
@@ -16,7 +17,7 @@
 
                 <div class="row"> 
                     <div class="center aligned column">
-                        <button class="ui center aligned wide blue button" id="button-copy-ifsc" data-clipboard-target="#ifsc-code">Copy IFSC</button>
+                        <button class="ui center aligned wide button" id="button-copy-ifsc" data-clipboard-target="#ifsc-code" style="background-color:#11a0f3;color:#ffffff">Copy IFSC</button>
                     </div>
                 </div>
 

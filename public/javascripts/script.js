@@ -81,7 +81,8 @@ $(document)
                     document.getElementsByTagName("head")[0].appendChild(tag);
 
                     document.getElementById('findLocationSegment').outerHTML = myObj.div_locationSearch
-
+                    document.getElementById('findLocationFindBranchGroupSeg').setAttribute("style", "display:block")
+                    
                     //Scroll to the newly inserted segment
                     $('html, body').animate({ scrollTop: $('#findLocationSegment').offset().top }, 'slow');
                 }

@@ -1,41 +1,38 @@
-@import url('https://fonts.googleapis.com/css?family=Nixie+One');
-
+@import url('https://fonts.googleapis.com/css?family=Days+One');
 
 body {
-  font-family: Nixie One;
+  font-family: Days One;
 }
 
 .ui.header {
-  font-family: Nixie One;
+  font-family: Days One;
+    color: white;
 }
+
+
 h1, h2, h3, h4, h5, title {
-  font-family: Nixie One;
+  font-family: Days One;
 }
-
-
 .hidden.menu {
   display: none;
 }
 .masthead.segment {
-  min-height: 700px;
-  padding: 1em 0em;
+    min-height: 700px;
+    padding: 1em 0em;
+    background-color: #fff293;
+    background-image: linear-gradient(315deg, #fff293 0%, #ffe884 74%);
 }
+
 .masthead .logo.item img {
   margin-right: 1em;
 }
 .masthead .ui.menu .ui.button {
   margin-left: 0.5em;
 }
-.masthead h1.ui.header {
-  margin-top: 2em;
-  margin-bottom: 0em;
-  font-size: 4em;
-  font-weight: normal;
-}
 .masthead h2 {
   font-size: 1.7em;
   font-weight: normal;
-  font-family: Nixie One;
+  font-family: Days One;
 }
 
 .ui.vertical.stripe {
@@ -64,8 +61,7 @@ h1, h2, h3, h4, h5, title {
     border-bottom-width: 0px;
     border-left-width: 0px;
     border-right-width: 0px;
-    -webkit-box-shadow: 0px;
-    box-shadow: 0px;
+    box-shadow: 0 0px 0px 0 rgba(34,36,38,0);
 }
 
 .quote.stripe.segment .grid .column {
@@ -95,16 +91,8 @@ h1, h2, h3, h4, h5, title {
   .masthead.segment {
     min-height: 350px;
   }
-  .masthead h1.ui.header {
-    font-size: 2em;
-    margin-top: 1.5em;
-  }
-  .masthead h2 {
-    margin-top: 0.5em;
-    font-size: 1.5em;
-  }
-}
-.ui.large.secondary.inverted.pointing.menu{
+  
+  .ui.large.secondary.inverted.pointing.menu{
   border: none;
 }
 
@@ -123,17 +111,17 @@ h1, h2, h3, h4, h5, title {
 .masthead .ui.menu .ui.button {
   margin-left: 0.5em;
 }
-.masthead h1.ui.header {
-  margin-top: 1em;
-  margin-bottom: 0em;
-  font-size: 4em;
-  font-weight: normal;
-}
 .masthead h2 {
   font-size: 1.7em;
   font-weight: normal;
+    color : #374252;
 }
 
+.masthead h3 {
+  font-size: 1.7em;
+  font-weight: normal;
+    color : #374252;
+}
 .ui.grid>.row{
     padding-top: 3rem;
     padding-bottom : 3rem;
@@ -165,7 +153,7 @@ ui.segment{
 
 .ui.vertical.adStripe.segment {
   padding: 1em 0em;
-  background-color : #2224261a;
+  background-color : #f7f8fa;
   border-bottom: 0px
 }
 
@@ -224,10 +212,18 @@ ui.segment{
     min-height: 350px;
   }
   .masthead h1.ui.header {
-    font-size: 2em;
+    font-size: 4em;
     margin-top: 1em;
+    color : white;  
+}
+
+  .masthead h1 {
+    margin-top: 0.5em;
+    font-size: 1.5em;
+    color : white;  
   }
-  .masthead h2 {
+
+.masthead h2 {
     margin-top: 0.5em;
     font-size: 1.5em;
   }
@@ -235,6 +231,12 @@ ui.segment{
 .ui.large.secondary.inverted.pointing.menu {
   border: none;
 }
+
+.ui.header.large {
+font-size: 10em;
+color : green;
+}
+
 
 /* Mobile */
 

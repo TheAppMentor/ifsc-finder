@@ -16,10 +16,10 @@
 <div class="pusher">
 
     <!-- Black segment at the top of the page...... -->
-    <div class="ui inverted vertical masthead center aligned basic segment" style="background-image: url('/images/bg.jpg'); background-size: cover; background-position: center center;">
+    <div class="ui masthead center aligned basic segment" style="background-color: #FBBC09; background-image: linear-gradient(315deg, #FBBC09;0%, #FACC43 74%); background-size: cover; background-position: center center;">
 
         <div class="ui container">
-            <div class="ui large secondary inverted pointing menu">
+            <div class="ui large secondary inverted pointing menu" style="border-width: 0px;">
                 <a class="toc item">
                     <i class="sidebar icon"></i>
                 </a>
@@ -42,10 +42,10 @@
                 <div class="one wide left column"></div>
                 <div class="fourteen wide column">
                     <div class="ui center aligned stackable container">
-                        <h1 class="ui inverted header">
+                        <h1 class="ui header large" style="font-size: 5em">
                             IFSC Finder 
                         </h1>
-                        <h2>Find Bank IFSC in 3 easy steps</h2>
+                        <h3>Find Bank IFSC in 3 easy steps</h2>
                         <div class="row"><br><br><br></div>
 
                         <!-- ==================== -->
@@ -53,7 +53,7 @@
                         <!-- ==================== -->
                         <div class="ui large fluid search" id="findBankSearchField"> 
                             <div class="ui icon input">
-                                <input class="prompt" type="text" placeholder="Search Bank Name Here">
+                                <input class="prompt" type="text" placeholder="Search Bank Name">
                                 <i class="search icon"></i>
                             </div>
                             <div class="results"></div>
@@ -78,7 +78,7 @@
 
 
 
-    <div class="ui raised segments">
+    <div class="ui raised segments" id="findLocationFindBranchGroupSeg" style="display:none">
         <!-- Find Location Segment -->
         <div class="ui vertical stripeShort segment" id="findLocationSegment" style="display:none">
         </div>
@@ -88,11 +88,11 @@
         </div>
     </div>
 
-    <div class="ui blue hidden inverted vertical stripe segment" id="showResultSegment" style="display:none">
+    <div class="ui hidden vertical stripe segment" id="showResultSegment" style="display:none; background-color:#374252">
     </div>
 </div>
 
-<div class="ui inverted vertical footer segment">
+<div class="ui inverted vertical footer segment" style="background-color:#374353">
     <div class="ui container">
         <div class="ui stackable inverted divided equal height stackable grid">
             <div class="seven wide column">
