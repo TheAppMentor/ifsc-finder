@@ -20,11 +20,41 @@
                 },
                 onSelect(result, response) {
 
-                    $('html, body').animate({ scrollTop: $('#findBranchSegment').offset().top }, 'slow');
-                    $("#findLocationSearchField.ui.search").data("selectedLocation",result.city)
+                    let selectedLocation = result.city 
+                    let selectedBank = $("#findBankSearchField.ui.search").data("selectedBank")
 
+                    $("#findLocationSearchField.ui.search").data("selectedLocation",selectedLocation)
+                    updateDomForBranchSearch(selectedBank,selectedLocation)
+                }
+            });
+
+
+
+        function updateDomForBranchSearch(bankName,locationName){
+
+            var xmlhttp = new XMLHttpRequest();
+
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    
+                    var myObj = JSON.parse(this.responseText);
+                    
+                    // Insert New JS for city Search
                     var tag = document.createElement("script");
                     tag.src = "javascripts/searchBranches.js";
                     document.getElementsByTagName("head")[0].appendChild(tag);
+
+                    document.getElementById('findBranchSegment').outerHTML = myObj.div_branchSearch
+
+                    //Scroll to the newly inserted segment
+                    $('html, body').animate({ scrollTop: $('#findBranchSegment').offset().top }, 'slow');
                 }
-            });
+            }
+
+            let finalPath = "/getDomForBranchSearch/?bankName=" + bankName + "&locationName=" + locationName  
+
+            console.log("Final Path is ... : " + finalPath)
+
+            xmlhttp.open("GET", finalPath, true);
+            xmlhttp.send();
+        }

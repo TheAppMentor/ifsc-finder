@@ -7,6 +7,9 @@ let modal_template
 let steps_template
 let dropdown_branch 
 let results_segment 
+let locationSearch_segment 
+let branchSearch_segment
+
 
 fs.readFile('./templates/statistics.hbs', function read(err, data) {
         if (err) {throw err;}
@@ -38,6 +41,16 @@ fs.readFile('./templates/results_segment.hbs', function read(err, data) {
         results_segment = handlebars.compile(data.toString())
     })
 
+fs.readFile('./templates/location_search.hbs', function read(err, data) {
+        if (err) {throw err;}
+        locationSearch_segment = handlebars.compile(data.toString())
+    })
+
+fs.readFile('./templates/branch_search.hbs', function read(err, data) {
+        if (err) {throw err;}
+        branchSearch_segment = handlebars.compile(data.toString())
+    })
+
 class DOM_Generator{
     
     constructor(){
@@ -66,6 +79,15 @@ class DOM_Generator{
     getDivForResults(data) {
         return results_segment(data)
     }
+    
+    getDivForLocationSearch(data) {
+        return locationSearch_segment(data)
+    }
+    
+    getDivForBranchSearch(data) {
+        return branchSearch_segment(data)
+    }
+
 }
 
 module.exports = DOM_Generator;

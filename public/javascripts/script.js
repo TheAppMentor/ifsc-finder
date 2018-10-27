@@ -55,20 +55,77 @@ $(document)
                     console.log("Result is : " + JSON.stringify(result))
                     console.log("Response is : " + JSON.stringify(response))
                     console.log("Response is : " + result.title)
-                  
-                    $("#findBankSearchField.ui.search").data("selectedBank",result.title)
-                   
-                    var tag = document.createElement("script");
-                    tag.src = "javascripts/searchCity.js";
-                    document.getElementsByTagName("head")[0].appendChild(tag);
-                    
-                    $('html, body').animate({ scrollTop: $('#findLocationSegment').offset().top }, 'slow');
-                    
+                        
+                    let bankName = result.title
+
+                    $("#findBankSearchField.ui.search").data("selectedBank",bankName)
+                    updateDomForLocationSearch(bankName)
+
                     return response
                 }
             });
 
-/*
+
+        function updateDomForLocationSearch(bankName){
+
+            var xmlhttp = new XMLHttpRequest();
+
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    
+                    var myObj = JSON.parse(this.responseText);
+                    
+                    // Insert New JS for city Search
+                    var tag = document.createElement("script");
+                    tag.src = "javascripts/searchCity.js";
+                    document.getElementsByTagName("head")[0].appendChild(tag);
+
+                    document.getElementById('findLocationSegment').outerHTML = myObj.div_locationSearch
+
+                    //Scroll to the newly inserted segment
+                    $('html, body').animate({ scrollTop: $('#findLocationSegment').offset().top }, 'slow');
+                }
+            }
+
+            let finalPath = "/getDomForLocationSearch/?bankName=" + bankName 
+
+            console.log("Final Path is ... : " + finalPath)
+
+            xmlhttp.open("GET", finalPath, true);
+            xmlhttp.send();
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        /*
         $("#findLocationSearchField.ui.search")
             .search({
                 apiSettings: {
@@ -82,18 +139,18 @@ $(document)
                 },
                 fields: {
                     description     : 'state', // result description
-                    //image           : 'image',       // result image
-                    //price           : 'price',       // result price
+                        //image           : 'image',       // result image
+                        //price           : 'price',       // result price
                     results         : 'results',     // array of results (standard)
                     title           : 'city',       // result title
                     action          : 'action',      // "view more" object name
-                    //actionText      : 'text',        // "view more" text
-                    //actionURL       : 'url'          // "view more" url
+                        //actionText      : 'text',        // "view more" text
+                        //actionURL       : 'url'          // "view more" url
                 },
                 onSelect(result, response) {
                     console.log("Result is : " + result)
                     console.log("Response is : " + response)
-                    //findLocationsForBank(result)
+//findLocationsForBank(result)
                     return response
                 }
             });
@@ -113,41 +170,41 @@ $(document)
 
 
 
-  jQuery(document).ready(function($) {
+jQuery(document).ready(function($) {
     var alterClass = function() {
-      var ww = document.body.clientWidth;
-      if (ww < 400) {
-        $("#bankSearchField.ui.search")
-          .removeClass("huge")
-          .addClass("medium");
-        $("#locationSearchField.ui.search")
-          .removeClass("huge")
-          .addClass("medium");
-        $("#branchSearchField.ui.search")
-          .removeClass("huge")
-          .addClass("medium");
-      } else if (ww >= 401) {
-        $("#bankSearchField.ui.search")
-          .addClass("huge")
-          .removeClass("medium");
-        
-        $("#locationSearchField.ui.search")
-          .addClass("huge")
-          .removeClass("medium");
-        
-        $("#branchSearchField.ui.search")
-          .addClass("huge")
-          .removeClass("medium");
-      }
+        var ww = document.body.clientWidth;
+        if (ww < 400) {
+            $("#bankSearchField.ui.search")
+                .removeClass("huge")
+                .addClass("medium");
+            $("#locationSearchField.ui.search")
+                .removeClass("huge")
+                .addClass("medium");
+            $("#branchSearchField.ui.search")
+                .removeClass("huge")
+                .addClass("medium");
+        } else if (ww >= 401) {
+            $("#bankSearchField.ui.search")
+                .addClass("huge")
+                .removeClass("medium");
+
+            $("#locationSearchField.ui.search")
+                .addClass("huge")
+                .removeClass("medium");
+
+            $("#branchSearchField.ui.search")
+                .addClass("huge")
+                .removeClass("medium");
+        }
     };
     $(window).resize(function() {
-      alterClass();
+        alterClass();
     });
     //Fire it when the page first loads:
     alterClass();
-  });
-    
-    });
+});
+
+});
 
 
 
@@ -160,7 +217,7 @@ function findLocationsForBank(selectedBankName){
             console.log("WE got back a locations list.... " + JSON.stringify(myObj))
         }                   
     }
-    
+
     let fullPath = window.location.search.substring(1); 
     let finalPath = "/getLocationList/?" + fullPath + '&bankName=' + selectedBankName //TODO Modify this to fetch bank name from the request header.
     console.log("Final Path is ... : " + finalPath)
@@ -213,14 +270,14 @@ function processFindCityDiv(selectedBankName,selectedCity){
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             $('.ui.dropdown').removeClass("loading")
-           
+
             var myObj = JSON.parse(this.responseText);
 
             document.getElementById('steps-div').outerHTML = myObj.div_steps
             document.getElementById('statistics-segment').innerHTML = myObj.div_stats
-            
+
             $('.ui.dropdown').replaceWith(myObj.div_dropdown)
-            
+
             $('.ui.dropdown').dropdown({
                 placeHolder:"Search Bank Branch",
                 onChange: function(value, text, $selectedItem) {
@@ -293,15 +350,15 @@ function fetchAllBankNames(){
         if (this.readyState == 4 && this.status == 200) {
             var myObj = JSON.parse(this.responseText);
             console.log("Got back JSON object.. " + JSON.stringify(myObj)) 
-           console.log("Cat Bef " + categoryContent1) 
+            console.log("Cat Bef " + categoryContent1) 
             categoryContent1 = myObj
             //return myObj 
-           console.log("Cat aft" + categoryContent1) 
+            console.log("Cat aft" + categoryContent1) 
         }
     }
-        let fullPath = window.location.search.substring(1); 
-        let finalPath = "/getBanks/"
-        
-        xmlhttp.open("GET", finalPath, true);
-        xmlhttp.send();
+    let fullPath = window.location.search.substring(1); 
+    let finalPath = "/getBanks/"
+
+    xmlhttp.open("GET", finalPath, true);
+    xmlhttp.send();
 }

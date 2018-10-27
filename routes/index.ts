@@ -384,6 +384,48 @@ router.get('/getLocations/', function(req, res, next) {
 
 
 
+// Generate DOM for final results 
+router.get('/getDomForLocationSearch/', function(req, res, next) {
+
+    let bankName = req.query.bankName 
+
+    console.log("Index.ts : getDomForLocationSearch bankName, cityName , branchName" + bankName)
+
+    var locationSearch_div = dom_gen.getDivForLocationSearch({
+        bankName : bankName,
+        segmentID : "findLocationSegment",
+        searchFieldID : "findLocationSearchField",
+        descriptionText : "Enter your bank Location (City/Town/Village)"
+    })
+
+    console.log("I am returning the Results div ... " + locationSearch_div)
+    res.json({div_locationSearch : locationSearch_div})
+});
+
+
+// Generate DOM for final results 
+router.get('/getDomForBranchSearch/', function(req, res, next) {
+
+    let bankName = req.query.bankName 
+    let locationName = req.query.locationName 
+
+    console.log("Index.ts : getDomForLocationSearch bankName, cityName , branchName" + bankName)
+
+    var branchSearch_div = dom_gen.getDivForBranchSearch({
+        bankName : bankName,
+        locationName : locationName,
+        segmentID : "findBranchSegment",
+        searchFieldID : "findBranchSearchField",
+        descriptionText : "Choose your branch"
+    })
+
+    console.log("I am returning the Results div ... " + branchSearch_div)
+    res.json({div_branchSearch : branchSearch_div})
+});
+
+
+
+
 
 // Generate DOM for final results 
 router.get('/getDomForResults/', function(req, res, next) {

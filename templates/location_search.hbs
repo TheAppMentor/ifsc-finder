@@ -1,0 +1,31 @@
+<div class="ui vertical stripeShort segment" id="findLocationSegment">
+
+    <div class="ui mobile hidden vertical adStripe segment">
+        <div class="ui centered large rectangle test ad" data-text="Large Rectangle"></div>
+    </div>
+
+    <div class="ui mobile only vertical adStripe segment">
+        <div class="ui centered mobile leaderboard test ad" data-text="Mobile Banner" id="mobileOnlyBannerAd"></div>
+    </div>
+
+
+    <div class="ui grid container">
+        <div class="row">
+            <div class="one wide left column"></div>
+            <div class="fourteen wide center aligned column">
+                <div class="ui stripe segment">
+                    <h1>{{bankName}}</h1>
+                    <p>{{descriptionText}}</p>
+                </div>
+                <div class="ui huge fluid search" id="{{searchFieldID}}">
+                    <div class="ui icon input">
+                        <input class="prompt" type="text" placeholder="Enter Bank Location ">
+                        <i class="search icon"></i>
+                    </div>
+                    <div class="results"></div>
+                </div>
+            </div>
+            <div class="one wide right column"></div>
+        </div>
+    </div>
+</div>

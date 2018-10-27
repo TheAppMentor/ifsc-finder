@@ -44,7 +44,6 @@ function getDivFinalResult(bankName,locationName,branchName){
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             var myObj = JSON.parse(this.responseText);
-            console.log("WE got back a locations list.... " + JSON.stringify(myObj))
             
             document.getElementById('showResultSegment').outerHTML = myObj.div_finaResults 
            //document.getElementsByClassName('pusher')[0].append($(myObj.div_finaResults))
