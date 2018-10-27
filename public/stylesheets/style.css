@@ -1,3 +1,18 @@
+@import url('https://fonts.googleapis.com/css?family=Nixie+One');
+
+
+body {
+  font-family: Nixie One;
+}
+
+.ui.header {
+  font-family: Nixie One;
+}
+h1, h2, h3, h4, h5, title {
+  font-family: Nixie One;
+}
+
+
 .hidden.menu {
   display: none;
 }
@@ -20,6 +35,7 @@
 .masthead h2 {
   font-size: 1.7em;
   font-weight: normal;
+  font-family: Nixie One;
 }
 
 .ui.vertical.stripe {
