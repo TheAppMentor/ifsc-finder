@@ -2,17 +2,25 @@
 <div class="ui blue hidden inverted vertical stripe segment" id="showResultSegment">
     <div class="ui grid container">
         <div class="row">
-            <div class="three wide left column"></div>
-            <div class="ten wide center aligned column">
+            <div class="one wide left column"></div>
+            <div class="fourteen wide center aligned column">
                 <div class="ui stripe segment">
                     <h2>{{bankName}}</h2>
                     <p>{{bankBranch}}</p>
-                    <h1>{{ifsc}}</h1>
+                    <h1 id="ifsc-code">{{ifsc}}</h1>
                     <h4>Address</h4>
                     <p>{{address}}</p>
                     <p>{{city}} - {{state}}</p>
                 </div>
-                <div class="three wide right column"></div>
+
+
+                <div class="row"> 
+                    <div class="center aligned column">
+                        <button class="ui center aligned wide blue button" id="button-copy-ifsc" data-clipboard-target="#ifsc-code">Copy IFSC</button>
+                    </div>
+                </div>
+
+                <div class="one wide right column"></div>
             </div>
         </div>
     </div>

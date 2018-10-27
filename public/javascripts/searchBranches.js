@@ -46,11 +46,10 @@ function getDivFinalResult(bankName,locationName,branchName){
             var myObj = JSON.parse(this.responseText);
             
             document.getElementById('showResultSegment').outerHTML = myObj.div_finaResults 
-           //document.getElementsByClassName('pusher')[0].append($(myObj.div_finaResults))
             
             $('html, body').animate({ scrollTop: $('#showResultSegment').offset().top }, 'slow');
-            
-            console.log("Search field talking.. i have made a div called .. " + results_div)
+
+            new ClipboardJS('#button-copy-ifsc');
         }                   
     }
 
