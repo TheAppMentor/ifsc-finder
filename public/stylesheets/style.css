@@ -111,23 +111,37 @@
   font-weight: normal;
 }
 
+.ui.grid>.row{
+    padding-top: 3rem;
+    padding-bottom : 3rem;
+}
+
+.ui.segments>.segment {
+    border-top: 0px
+}
+.ui.vertical.segment {
+    border-bottom: 0px
+}
 
 .ui.search .prompt {  
-  //background-color : black;
+  background-color : clear;
   text-align : center;
 }
 
 .ui.vertical.stripeShort {
-  padding: 5em 0em;
+  padding: 1em 0em;
+  border-bottom: 0px
+  border-top: 0px
 }
 
-.ui.inverted.vertical.adStripe {
-  padding: 3em 0em;
+.ui.vertical.adStripe.segment {
+  padding: 1em 0em;
   background-color : #2224261a;
+  border-bottom: 0px
 }
 
 .ui.vertical.stripe {
-  padding: 8em 0em;
+  padding: 1em 0em;
 }
 .ui.vertical.stripe h3 {
   font-size: 2em;
