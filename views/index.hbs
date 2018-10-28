@@ -2,14 +2,12 @@
 <div class="ui large top fixed hidden menu">
     <div class="ui container">
         <a href="#" class="active item" id="home-button">Home</a>
-        <a class="item">About</a>
     </div>
 </div>
 
 <!-- Sidebar Menu -->
 <div class="ui vertical inverted sidebar menu">
     <a href="#" class="active item" id="home-button">Home</a>
-    <a class="item">About</a>
 </div>
 
 <!-- Page Contents -->
@@ -24,7 +22,6 @@
                     <i class="sidebar icon"></i>
                 </a>
                 <a href="#" class="active item" id="home-button">Home</a>
-                <a class="item">About</a>
             </div>
         </div>
 
@@ -40,7 +37,7 @@
                 <div class="one wide column"></div>
             </div>
 
-            <div class="row">
+            <div class="row" style="padding-top: 3rem;">
                 <div class="one wide left column"></div>
                 <div class="fourteen wide column">
                     <div class="ui center aligned stackable container">
@@ -55,7 +52,7 @@
                         <!-- ==================== -->
                         <div class="ui large fluid search" id="findBankSearchField"> 
                             <div class="ui icon input">
-                                <input class="prompt" type="text" placeholder="Search Bank Name">
+                                <input class="prompt" type="text" placeholder="Search Bank Name" style="text-align: center;">
                                 <i class="search icon"></i>
                             </div>
                             <div class="results"></div>
@@ -70,20 +67,110 @@
         </div>
     </div>
 
+
+
+
+
+
+
+
+
+    <!-- Info Div -->
+
+    <div class="ui grid container">
+        <div class="row">
+
+            <div class="ui inverted one wide left column"> </div>
+
+            <div class="ui fourteen wide column">
+                <div class="ui vertical stripe segment" id="infoDivSearchBank" style="display:block">
+                    <div class="ui vertical stripe segment">
+                        <div class="ui two column stackable center aligned grid">
+                            <div class="middle aligned row">
+                                <div class="ui seven wide column">
+                                    <h2 style="color: darkgray">Popular Banks</h2>
+                                    <div class="ui list">
+                                        <div class="item">State Bank of India (SBI)</div>
+                                        <div class="item">Canara Bank</div>
+                                        <div class="item">ICICI Bank</div>
+                                        <div class="item">HDFC Bank</div>
+                                    </div>
+                                </div>
+                                <div class="ui vertical divider"></div>
+                                <div class="ui seven wide column ">
+                                    <h2 style="color: darkgray">Banks in India</h2>
+                                    <div class="ui statistic">
+                                        <div class="value">
+                                          1.5 Lakh
+                                        </div>
+                                        <div class="label">
+                                           Bank Branches Found 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+            <div class="ui inverted one wide right column"> </div>
+        </div>
+       
+        <div class="ui divider"> </div>
+
+        <div class="row">
+            <div class="ui one wide left column"> </div>
+            <div class="ui fourteen wide column">
+                <div class="ui center aligned text container">
+                    <h2 style="color: darkgray">
+                        What is IFSC? 
+                    </h2>
+   
+                    <p>
+                    The Indian Financial System Code (IFS Code or IFSC) is an alphanumeric code that facilitates electronic funds transfer in India.
+                    </p>
+                    <p>IFSC uniquely identifies each bank branch participating in the two main Payment and settlement systems in India: <i><b>Real Time Gross Settlement (RTGS) </i></b> and <i>National Electronic Fund Transfer (NEFT)</i>.
+                    </p> 
+                </div>
+            </div>
+            <div class="ui one wide right column"> </div>
+        </div>
+    
+        <div class="ui divider"> </div>
+    </div>
+
+
+
+
+
+
+
+    
     <!-- AD Block Begin-->
+    <!-- 
     <div class="ui mobile hidden vertical stripe  segment">
         <div class="ui centered large rectangle test ad" data-text="Large Rectangle"></div>
     </div>
-    
+    --> 
     <!-- div class="ui mobile only centered mobile leaderboard test ad" data-text="Mobile Banner" id="mobileOnlyBannerAd"></div> -->
     <!-- AD Block End-->
-
-
 
     <div class="ui raised segments" id="findLocationFindBranchGroupSeg" style="display:none">
         <!-- Find Location Segment -->
         <div class="ui vertical stripeShort segment" id="findLocationSegment" style="display:none">
         </div>
+
+
+
+
+
+
+
+
+
+
+
+
 
         <!-- Find Branch Segment -->
         <div class="ui white vertical stripe segment" id="findBranchSegment" style="display:none">

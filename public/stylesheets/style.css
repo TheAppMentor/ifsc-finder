@@ -17,7 +17,6 @@ h1, h2, h3, h4, h5, title {
   display: none;
 }
 .masthead.segment {
-    min-height: 700px;
     padding: 1em 0em;
     background-color: #fff293;
     background-image: linear-gradient(315deg, #fff293 0%, #ffe884 74%);
@@ -122,6 +121,7 @@ h1, h2, h3, h4, h5, title {
   font-weight: normal;
     color : #374252;
 }
+
 .ui.grid>.row{
     padding-top: 3rem;
     padding-bottom : 3rem;
