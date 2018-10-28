@@ -45,7 +45,8 @@
                     document.getElementsByTagName("head")[0].appendChild(tag);
 
                     document.getElementById('findBranchSegment').outerHTML = myObj.div_branchSearch
-
+                    document.getElementById('infoDivShowingBranchSearch').outerHTML = myObj.div_info
+                    
                     //Scroll to the newly inserted segment
                     $('html, body').animate({ scrollTop: $('#findBranchSegment').offset().top }, 'slow');
                 }

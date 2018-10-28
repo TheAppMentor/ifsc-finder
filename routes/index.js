@@ -275,8 +275,11 @@ router.get('/getDomForLocationSearch/', function (req, res, next) {
         searchFieldID: "findLocationSearchField",
         descriptionText: "Enter your bank Location (City/Town/Village)"
     });
+    var info_div = dom_gen.getDivForInfoLocationSearch({
+        bankName: bankName,
+    });
     console.log("I am returning the Results div ... " + locationSearch_div);
-    res.json({ div_locationSearch: locationSearch_div });
+    res.json({ div_locationSearch: locationSearch_div, div_info: info_div });
 });
 // Generate DOM for final results 
 router.get('/getDomForBranchSearch/', function (req, res, next) {
@@ -290,8 +293,11 @@ router.get('/getDomForBranchSearch/', function (req, res, next) {
         searchFieldID: "findBranchSearchField",
         descriptionText: "Choose your branch"
     });
+    var info_div = dom_gen.getDivForInfoBranchSearch({
+        bankName: bankName,
+    });
     console.log("I am returning the Results div ... " + branchSearch_div);
-    res.json({ div_branchSearch: branchSearch_div });
+    res.json({ div_branchSearch: branchSearch_div, div_info: info_div });
 });
 // Generate DOM for final results 
 router.get('/getDomForResults/', function (req, res, next) {

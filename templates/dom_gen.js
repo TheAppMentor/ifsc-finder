@@ -9,7 +9,8 @@ let dropdown_branch
 let results_segment 
 let locationSearch_segment 
 let branchSearch_segment
-
+let infoDiv_LocationSearch 
+let infoDiv_BranchSearch
 
 fs.readFile('./templates/statistics.hbs', function read(err, data) {
         if (err) {throw err;}
@@ -51,6 +52,16 @@ fs.readFile('./templates/branch_search.hbs', function read(err, data) {
         branchSearch_segment = handlebars.compile(data.toString())
     })
 
+fs.readFile('./templates/info_findLocation.hbs', function read(err, data) {
+        if (err) {throw err;}
+        infoDiv_LocationSearch = handlebars.compile(data.toString())
+    })
+
+fs.readFile('./templates/info_findBranches.hbs', function read(err, data) {
+        if (err) {throw err;}
+        infoDiv_BranchSearch = handlebars.compile(data.toString())
+    })
+
 class DOM_Generator{
     
     constructor(){
@@ -88,6 +99,13 @@ class DOM_Generator{
         return branchSearch_segment(data)
     }
 
+    getDivForInfoLocationSearch(data) {
+        return infoDiv_LocationSearch(data)
+    }
+
+    getDivForInfoBranchSearch(data) {
+        return infoDiv_BranchSearch(data)
+    }
 }
 
 module.exports = DOM_Generator;

@@ -81,6 +81,10 @@ $(document)
                     document.getElementsByTagName("head")[0].appendChild(tag);
 
                     document.getElementById('findLocationSegment').outerHTML = myObj.div_locationSearch
+                   
+                    //Add the InfoDiv
+                    document.getElementById('infoDivShowingLocationSearch').outerHTML = myObj.div_info
+
                     document.getElementById('findLocationFindBranchGroupSeg').setAttribute("style", "display:block")
                     
                     //Scroll to the newly inserted segment
