@@ -157,6 +157,11 @@ ui.segment{
   border-top: 0px
 }
 
+#amazon_ad{
+  padding: 3.2em 0em;
+}
+
+
 .ui.vertical.adStripe.segment {
   padding: 1em 0em;
   background-color : #f7f8fa;

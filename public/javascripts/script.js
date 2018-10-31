@@ -88,7 +88,7 @@ $(document)
                     document.getElementById('findLocationFindBranchGroupSeg').setAttribute("style", "display:block")
                     
                     //Scroll to the newly inserted segment
-                    $('html, body').animate({ scrollTop: $('#findLocationSegment').offset().top }, 'slow');
+                    $('html, body').animate({ scrollTop: $('#divider_findLocation').offset().top }, 'slow');
                 }
             }
 
