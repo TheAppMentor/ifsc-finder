@@ -277,7 +277,6 @@ router.get('/getDomForLocationSearch/', function (req, res, next) {
     });
     var info_div = dom_gen.getDivForInfoLocationSearch({
         bankName: bankName,
-        locationCount: "Random Number"
     });
     console.log("I am returning the Results div ... " + locationSearch_div);
     res.json({ div_locationSearch: locationSearch_div, div_info: info_div });

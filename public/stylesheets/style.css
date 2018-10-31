@@ -157,10 +157,6 @@ ui.segment{
   border-top: 0px
 }
 
-.ui.inverted.vertical.adStripe.segment {
-    background: #f7f8fa;
-}
-
 .ui.vertical.adStripe.segment {
   padding: 1em 0em;
   background-color : #f7f8fa;
