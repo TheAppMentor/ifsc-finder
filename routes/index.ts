@@ -398,8 +398,11 @@ router.get('/getDomForLocationSearch/', function(req, res, next) {
         descriptionText : "Enter your bank Location (City/Town/Village)"
     })
 
+
     var info_div = dom_gen.getDivForInfoLocationSearch({
         bankName : bankName,
+        locationCount : "Random Number" 
+    
     }) 
     
     console.log("I am returning the Results div ... " + locationSearch_div)
