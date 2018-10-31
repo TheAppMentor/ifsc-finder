@@ -3,7 +3,7 @@
                 apiSettings: {
                     url: "/getLocationList/?bankName=" + $("#findBankSearchField.ui.search").data("selectedBank") + "&searchInput={query}"
                 },
-                minCharacters : 1,
+                minCharacters : 3,
                 onResponse : function(theresponse) {
                     console.log("The Response is " + theresponse)
                     return theresponse
