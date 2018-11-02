@@ -171,15 +171,7 @@ var BankDB = /** @class */ (function () {
                 var bankNames = results.map(function (eachRec) {
                     return eachRec.name;
                 });
-                console.log("Resolving with : ", bankNames);
                 resolve(bankNames);
-                //var uniqbankNames = _.uniq(bankNames)
-                //let sortedUniqueBankNames = _.sortBy(uniqbankNames)
-                //console.log("Unique sorted names are... " + sortedUniqueBankNames)
-                //
-                //
-                //:w
-                //resolve(sortedUniqueBankNames)
             });
         });
     };
@@ -187,7 +179,6 @@ var BankDB = /** @class */ (function () {
         return new Promise(function (resolve, reject) {
             //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb
             // I am using the in-efficinet regex method to make the find case-insensive.. check out the link above for a more optimizes soln.
-            console.log("DB Handler : getAllStateNamesForBank ==> " + bankName);
             bankBranchDetailModel.find({ name: { $regex: new RegExp(bankName, "i") } }, function (err, results) {
                 var stateNames = results.map(function (eachRec) {
                     return eachRec.state;
@@ -203,6 +194,8 @@ var BankDB = /** @class */ (function () {
             //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb
             // I am using the in-efficinet regex method to make the find case-insensive.. check out the link above for a more optimizes soln.
             // DRY vioation.... !!!! 
+            var explainResults = bankBranchDetailModel.find({ name: { $regex: new RegExp(bankName, "i") } }).explain();
+            console.log("EXPLAIN RESULTS ARE : " + (explainResults.executionTimeMillis));
             bankBranchDetailModel.find({ name: { $regex: new RegExp(bankName, "i") } }, function (err, results) {
                 var cityObjects = results.map(function (eachRec) {
                     return { city: eachRec.city, state: eachRec.state };
@@ -297,10 +290,7 @@ var BankDB = /** @class */ (function () {
             //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb
             // I am using the in-efficinet regex method to make the find case-insensive.. check out the link above for a more optimizes soln.
             // DRY vioation.... !!!! 
-            console.log("Database Boy Talking : => " + bankName + " " + cityName + " " + branchName + " ");
             bankBranchDetailModel.find({ name: { $regex: new RegExp(bankName, "i") }, city: { $regex: new RegExp(cityName, "i") }, branch: { $regex: new RegExp(branchName, "i") } }, function (err, results) {
-                console.log("Database boy => Resolving With results : " + results);
-                console.log("Database Boy => Error is " + err);
                 resolve(results);
             });
         });
@@ -326,8 +316,6 @@ var BankDB = /** @class */ (function () {
                 city: { $regex: new RegExp(cityName, "i") }
                 //district : { $regex : new RegExp(districtName, "i") },
             }, function (err, results) {
-                console.log("Found the following reuslts... " + results);
-                console.log("Count .... " + results.length);
                 resolve(results);
             });
         });

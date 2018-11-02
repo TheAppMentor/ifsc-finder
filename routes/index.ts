@@ -54,23 +54,23 @@ var appStep = "find_bank";
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-//TODO : Check the allSetReadyToLaunch variable, if we are not yet ready. Show a an appropriate page. 
+    //TODO : Check the allSetReadyToLaunch variable, if we are not yet ready. Show a an appropriate page. 
+    console.log("Request Received | Route : / | query : " + JSON.stringify(req.query))
 
-if (allBankNamesArr.length == 0){
+    if (allBankNamesArr.length == 0){
 
-bankColl.getAllBankNames().then((allBankNames : [string]) =>{
-    console.log("Step 3 : Done.")
-    console.log("We now have all bank... " + allBankNames)
-    allBankNamesArr = allBankNames 
-}) 
-
-}
-
+        bankColl.getAllBankNames().then((allBankNames : [string]) =>{
+            console.log("Step 3 : Done.")
+            console.log("We now have all bank... " + allBankNames)
+            allBankNamesArr = allBankNames 
+        }) 
+    }
 
     let bankName = req.query.bankName 
     let cityName = req.query.cityName
     let branchName = req.query.branchName
 
+    //TODO : ALl this is waste with the new look app.. clean this up.
     if (_.isEmpty(req.query)){
         res.render('index', { 
             title: 'IFSC Search', 
@@ -87,34 +87,14 @@ bankColl.getAllBankNames().then((allBankNames : [string]) =>{
             statiticSubTitle : "India" 
         });
     }
-    
-   /* 
-    if (_.isEmpty(req.query)){
-        res.render('index', { 
-            title: 'IFSC Search', 
-            processStep : "findBank",
-            dropDownPlaceHolderText : "Search Bank Name", 
-            stepStatus : [
-                {title : "Find Bank", status : "active", description :  "Enter Bank Name"},
-                {title : "Find City", status : "disabled", description : "Enter Bank Location"},
-                {title : "Find Branch", status : "disabled", description : "Enter Bank Branch"}],
-            allBankNames : allBankNamesArr,
-            statistic: [{label : "Banks", value: totalNumberOfBanksInDB},{label : "Bank Branches", value: totalNumberOfBankBranchesInDB}],
-            statisticCount : "two",
-            statiticTitle : "All Banks", 
-            statiticSubTitle : "India" 
-        });
-    }
-*/
-
 });
 
 router.get('/getBanks/', function(req, res, next) {
     
     let query = req.query
-    console.log("Returning a response.... " + JSON.stringify(query))
-    
-    console.log("Query is " + query.q)
+
+    console.log("Request Received | Route : /getBanks | query : " + JSON.stringify(query))
+
     let matchedBanks = _.filter(allBankNamesArr, (eachValue) => {
         if (_.includes(_.toLower(eachValue), _.toLower(query.q)) == true){
             return eachValue
@@ -166,96 +146,9 @@ router.get('/getBanks/', function(req, res, next) {
 
     resp['results'].push(allBanksCat)
 
-    console.log("Resp 1 is : " + resp)
+    console.log("Response Sent | Route : /getBanks | query : " + JSON.stringify(query) + " | Results : " + JSON.stringify(resp))
     res.json(resp)
-    
-    var resp1 = {
-  "results": {
-    "category1": {
-      "name": "Popular Banks",
-      "results": [
-        {
-          "title": "HDFC Bank",
-          //"url": "/optional/url/on/click",
-          //"image": "optional-image.jpg",
-          //"price": "Optional Price",
-          //"description": "Optional Description"
-        },
-        {
-          "title": "ICICI Bank",
-          //"url": "/optional/url/on/click",
-          //"image": "optional-image.jpg",
-          //"price": "Optional Price",
-          //"description": "Optional Description"
-        }
-      ]
-    },
-    "category2": {
-      "name": "All Banks",
-      "results": [
-        {
-          "title": "Abudaya Bull Crap bank",
-        },
-        {
-          "title": "Abudaya Bull Crap bank",
-          //"url": "/optional/url/on/click",
-          //"image": "optional-image.jpg",
-          //"price": "Optional Price",
-          //"description": "Optional Description"
-        },
-        {
-          "title": "Abudaya Bull Crap bank",
-          //"url": "/optional/url/on/click",
-          //"image": "optional-image.jpg",
-          //"price": "Optional Price",
-          //"description": "Optional Description"
-        },
-        {
-          "title": "Abudaya Bull Crap bank",
-          //"url": "/optional/url/on/click",
-          //"image": "optional-image.jpg",
-          //"price": "Optional Price",
-          //"description": "Optional Description"
-        },
-        {
-          "title": "Abudaya Bull Crap bank",
-          //"url": "/optional/url/on/click",
-          //"image": "optional-image.jpg",
-          //"price": "Optional Price",
-          //"description": "Optional Description"
-        },
-      ]
-    }
-  },
-  // optional action below results
-  //"action": {
-  //  "url": '/path/to/results',
-  //  "text": "View all 202 results"
-  //}
-}
-    
-    
-    res.json(resp1)
 })
-
-/*
-fields: {
-  categories      : 'results',     // array of categories (category view)
-  categoryName    : 'name',        // name of category (category view)
-  categoryResults : 'results',     // array of results (category view)
-  description     : 'description', // result description
-  image           : 'image',       // result image
-  price           : 'price',       // result price
-  results         : 'results',     // array of results (standard)
-  title           : 'title',       // result title
-  action          : 'action',      // "view more" object name
-  actionText      : 'text',        // "view more" text
-  actionURL       : 'url'          // "view more" url
-}
-*/
-
-
-
 
 
 
@@ -263,8 +156,8 @@ router.get('/getLocationList/', function(req, res, next) {
 
     let bankName = req.query.bankName 
     let searchInput = req.query.searchInput
-    console.log("Returning a response.... " + JSON.stringify(bankName))
-    console.log("Returning a response.... " + JSON.stringify(searchInput))
+    
+    console.log("Request Received | Route : /getLocationList | query : " + JSON.stringify(req.query))
     
     bankColl.getAllCityNamesForBank(bankName).then((allCityNames : [any]) => {
     //TODO : Prashanth u can send the search query also to the MongoDB.. remember this is the search bar that gives u the user input.
@@ -284,7 +177,7 @@ router.get('/getLocationList/', function(req, res, next) {
         resp["success"] = queryReturnedResults
 
         //Matching City Names
-        console.log("Returning Response : " + JSON.stringify(resp))
+        console.log("Response Sent | Route : /getLocationList | query : " + JSON.stringify(req.query) +  ": Results : " + JSON.stringify(resp))
         return res.json(resp)
     })
 })
@@ -389,8 +282,8 @@ router.get('/getDomForLocationSearch/', function(req, res, next) {
 
     let bankName = req.query.bankName 
 
-    console.log("Index.ts : getDomForLocationSearch bankName, cityName , branchName" + bankName)
-
+    console.log("Request Received | Route : /getDomForLocationSearch | query : " + JSON.stringify(req.query))
+    
     var locationSearch_div = dom_gen.getDivForLocationSearch({
         bankName : bankName,
         segmentID : "findLocationSegment",
@@ -402,7 +295,7 @@ router.get('/getDomForLocationSearch/', function(req, res, next) {
         bankName : bankName,
     }) 
     
-    console.log("I am returning the Results div ... " + locationSearch_div)
+    console.log("Response Sent | Route : /getDomForLocationSearch | query : " + JSON.stringify(req.query) + " : Results : DIV_Location Search")
     res.json({div_locationSearch : locationSearch_div, div_info : info_div})
 });
 
@@ -413,7 +306,7 @@ router.get('/getDomForBranchSearch/', function(req, res, next) {
     let bankName = req.query.bankName 
     let locationName = req.query.locationName 
 
-    console.log("Index.ts : getDomForLocationSearch bankName, cityName , branchName" + bankName)
+    console.log("Request Received | Route : /getDomForBranchSearch | query : " + JSON.stringify(req.query))
 
     var branchSearch_div = dom_gen.getDivForBranchSearch({
         bankName : bankName,
@@ -427,12 +320,9 @@ router.get('/getDomForBranchSearch/', function(req, res, next) {
         bankName : bankName,
     }) 
     
-    console.log("I am returning the Results div ... " + branchSearch_div)
+    console.log("Response Sent | Route : /getDomForBranchSearch | query : " + JSON.stringify(req.query) + " : Results : DIV_Branch Search")
     res.json({div_branchSearch : branchSearch_div, div_info : info_div})
 });
-
-
-
 
 
 // Generate DOM for final results 
@@ -442,7 +332,7 @@ router.get('/getDomForResults/', function(req, res, next) {
     let cityName = req.query.cityName
     let branchName = req.query.branchName
    
-    console.log("Index.ts : getDomForResults bankName, cityName , branchName" + bankName, cityName, branchName)
+    console.log("Request Received | Route : /getDomForResults | query : " + JSON.stringify(req.query))
 
     bankColl.getBranchesDetailsForBankInCityWithBranchName(bankName,cityName,branchName).then((branchNameArr: Array<BankBranchDetail>) => {
         
@@ -457,7 +347,7 @@ router.get('/getDomForResults/', function(req, res, next) {
             state : fetchedBranch.state
         }) 
 
-        console.log("I am returning the Results div ... " + results_div)
+        console.log("Response Sent | Route : /getDomForBranchSearch | query : " + JSON.stringify(req.query) + " : Results : DIV_FINAL_Results")
         res.json({div_finaResults : results_div})
     })
 });
