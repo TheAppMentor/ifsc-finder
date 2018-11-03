@@ -23,6 +23,11 @@ var popularBankNamesArr = ["ICICI BANK LIMITED","HDFC BANK","STATE BANK OF INDIA
 
 var allSetReadyToLaunch : Boolean = false
 
+// DONT need to do this.. bank coll anyway reloads the db..
+//bankColl.loadDataBasesWithDataFromFile()
+
+/*
+
 bankColl.getAllBranchesCount()
     .then((totalCountAllBranches : number) => {
         console.log("Step 1 : Done.")
@@ -43,7 +48,7 @@ bankColl.getAllBranchesCount()
         allSetReadyToLaunch = true
     })
 
-
+*/
 bankColl.getAllBankNames().then((allBankNames : [string]) =>{
     console.log("Step 3 : Done.")
     console.log("We now have all bank... " + allBankNames)

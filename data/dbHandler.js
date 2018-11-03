@@ -4,6 +4,7 @@ var BankBranchDetail_1 = require("../model/BankBranchDetail");
 var fs = require('fs-extra-promise');
 var Promise = require("bluebird");
 var mongoose = require('mongoose');
+var decompress = require('decompress');
 var _ = require('lodash');
 var db = mongoose.connection;
 mongoose.Promise = require('bluebird');
@@ -11,9 +12,39 @@ mongoose.Promise = require('bluebird');
 var bankNamesSchema = new mongoose.Schema({
     name: String
 });
+// Creating a Schema 
+var bankMetaDataSchema = new mongoose.Schema({
+    bankName: String,
+    branchCount: String,
+    locationCount: String,
+    stateCount: String,
+    isPopular: String
+});
 // Creating a Bank Model
 var bankNamesModel = mongoose.model("BankName", bankNamesSchema);
+var bankMetaDataModel = mongoose.model("bankMetaData", bankMetaDataSchema);
 var bankBranchDetailModel = mongoose.model("BankBranchDetail", BankBranchDetail_1.BankBranchDetailSchema);
+var allahabadBankModel = mongoose.model("allahabadBankModel", BankBranchDetail_1.BankBranchDetailSchema);
+var andhraBankModel = mongoose.model("andhraBankModel", BankBranchDetail_1.BankBranchDetailSchema);
+var axisBankModel = mongoose.model("axisBankModel", BankBranchDetail_1.BankBranchDetailSchema);
+var bankOfBarodaBobModel = mongoose.model("bankOfBarodaBobModel", BankBranchDetail_1.BankBranchDetailSchema);
+var bankOfIndiaBoiModel = mongoose.model("bankOfIndiaBoiModel", BankBranchDetail_1.BankBranchDetailSchema);
+var canaraBankModel = mongoose.model("canaraBankModel", BankBranchDetail_1.BankBranchDetailSchema);
+var centralBankOfIndiaModel = mongoose.model("centralBankOfIndiaModel", BankBranchDetail_1.BankBranchDetailSchema);
+var corporationBankModel = mongoose.model("corporationBankModel", BankBranchDetail_1.BankBranchDetailSchema);
+var hdfcBankModel = mongoose.model("hdfcBankModel", BankBranchDetail_1.BankBranchDetailSchema);
+var iciciBankLimitedModel = mongoose.model("iciciBankLimitedModel", BankBranchDetail_1.BankBranchDetailSchema);
+var idbiBankModel = mongoose.model("idbiBankModel", BankBranchDetail_1.BankBranchDetailSchema);
+var indianBankModel = mongoose.model("indianBankModel", BankBranchDetail_1.BankBranchDetailSchema);
+var indianOverseasBankIobModel = mongoose.model("indianOverseasBankIobModel", BankBranchDetail_1.BankBranchDetailSchema);
+var orientalBankOfCommerceModel = mongoose.model("orientalBankOfCommerceModel", BankBranchDetail_1.BankBranchDetailSchema);
+var otherBanksModel = mongoose.model("otherBanksModel", BankBranchDetail_1.BankBranchDetailSchema);
+var punjabNationalBankPnbModel = mongoose.model("punjabNationalBankPnbModel", BankBranchDetail_1.BankBranchDetailSchema);
+var stateBankOfIndiaSbiModel = mongoose.model("stateBankOfIndiaSbiModel", BankBranchDetail_1.BankBranchDetailSchema);
+var syndicateBankModel = mongoose.model("syndicateBankModel", BankBranchDetail_1.BankBranchDetailSchema);
+var ucoBankModel = mongoose.model("ucoBankModel", BankBranchDetail_1.BankBranchDetailSchema);
+var unionBankBankModel = mongoose.model("unionBankBankModel", BankBranchDetail_1.BankBranchDetailSchema);
+var yesBankModel = mongoose.model("yesBankModel", BankBranchDetail_1.BankBranchDetailSchema);
 var connectedToDB = false;
 var appConfigOptions = loadConfigFile();
 function loadConfigFile() {
@@ -23,42 +54,205 @@ function loadConfigFile() {
     var reloadAllDB = fileContents['reloadAllDB'];
     return fileContents;
 }
+// TODO DOnt do this.. you have the popular banks tagged in the Meta Data.. fetch it from that.. Hard coding this will make all kind of shitty dependencies.
+var popularBanks = ["ALLAHABAD BANK", "ANDHRA BANK", "AXIS BANK", "BANK OF BARODA (BOB)", "BANK OF INDIA (BOI)", "CANARA BANK", "CENTRAL BANK OF INDIA", "CORPORATION BANK", "HDFC BANK", "ICICI BANK LIMITED", "IDBI BANK", "INDIAN BANK", "INDIAN OVERSEAS BANK (IOB)", "ORIENTAL BANK OF COMMERCE", "PUNJAB NATIONAL BANK (PNB)", "STATE BANK OF INDIA (SBI)", "SYNDICATE BANK", "UCO BANK", "UNION BANK OF INDIA", "YES BANK",];
+function getModelForBankName(bankName) {
+    switch (bankName) {
+        case "ALLAHABAD BANK": {
+            return allahabadBankModel;
+            break;
+        }
+        case "ANDHRA BANK": {
+            return andhraBankModel;
+            break;
+        }
+        case "AXIS BANK": {
+            return axisBankModel;
+            break;
+        }
+        case "BANK OF BARODA (BOB)": {
+            return bankOfBarodaBobModel;
+            break;
+        }
+        case "BANK OF INDIA (BOI)": {
+            return bankOfIndiaBoiModel;
+            break;
+        }
+        case "CANARA BANK": {
+            return canaraBankModel;
+            break;
+        }
+        case "CENTRAL BANK OF INDIA": {
+            return centralBankOfIndiaModel;
+            break;
+        }
+        case "CORPORATION BANK": {
+            return corporationBankModel;
+            break;
+        }
+        case "HDFC BANK": {
+            return hdfcBankModel;
+            break;
+        }
+        case "ICICI BANK LIMITED": {
+            return iciciBankLimitedModel;
+            break;
+        }
+        case "IDBI BANK": {
+            return idbiBankModel;
+            break;
+        }
+        case "INDIAN BANK": {
+            return indianBankModel;
+            break;
+        }
+        case "INDIAN OVERSEAS BANK (IOB)": {
+            return indianOverseasBankIobModel;
+            break;
+        }
+        case "ORIENTAL BANK OF COMMERCE": {
+            return orientalBankOfCommerceModel;
+            break;
+        }
+        case "PUNJAB NATIONAL BANK (PNB)": {
+            return punjabNationalBankPnbModel;
+            break;
+        }
+        case "STATE BANK OF INDIA (SBI)": {
+            return stateBankOfIndiaSbiModel;
+            break;
+        }
+        case "SYNDICATE BANK": {
+            return syndicateBankModel;
+            break;
+        }
+        case "UCO BANK": {
+            return ucoBankModel;
+            break;
+        }
+        case "UNION BANK OF INDIA": {
+            return unionBankBankModel;
+            break;
+        }
+        case "YES BANK": {
+            return yesBankModel;
+            break;
+        }
+        default:
+            null;
+    }
+}
 var BankDB = /** @class */ (function () {
     function BankDB() {
     }
     BankDB.prototype.connectoToDBAndLoadData = function (bankCollection) {
-        var _this = this;
         return new Promise(function (resolve, reject) {
             //mongodb://heroku_ptln6dnj:vi22d3nuk65m1ktjqrtjalvnku@ds111492.mlab.com:11492/heroku_ptln6dnj
-            //mongoose.connect('mongodb://localhost/bankDetailsColl')
+            //mongoose.connect('mongodb://localhost/localtest')
             mongoose.connect('mongodb://heroku_ptln6dnj:vi22d3nuk65m1ktjqrtjalvnku@ds111492.mlab.com:11492/heroku_ptln6dnj')
                 .then(function () {
-                console.log("We have logged in... to the DB..");
-                if (appConfigOptions["reloadBankDetailsDB"] == true) {
-                    bankBranchDetailModel.collection.drop(); // Drop old data before writing
-                    return _this.loadDBWithBankBankCollection(bankCollection);
+                // Check if app config requires us to reload the DB.
+                if (appConfigOptions["reloadBankDetailsDB"] == false) {
+                    console.log("NO DB RELOAD : Config reloadBankDetailsDB == " + appConfigOptions["reloadBankDetailsDB"]);
+                    return Promise.resolve(true);
                 }
-                console.log("User has chose not to load reloadBankDetailsDB");
-                Promise.resolve(true);
-            })
-                .then(function () {
-                if (appConfigOptions["reloadBankNamesDB"] == true) {
-                    return new Promise(function (resolve, reject) {
-                        bankNamesModel.collection.drop(); // Drop old data before writing
-                        _this.loadBankNamesDB(bankCollection);
-                        resolve(true);
+                return new Promise(function (resolve, reject) {
+                    //  ===========       Start DB Reload ============ //
+                    decompress('./Split_Records.zip', 'dist')
+                        .then(function (unzipComplete) {
+                        // Load Meta Data 
+                        if (unzipComplete == true) {
+                            // Load Bank MetaData Table 
+                            var bankMetaData = fs.readJsonSync("./dist/Split_Records/BankMetaData.json");
+                            var allMetaDataModels = _.map(bankMetaData, function (eachBankRec) {
+                                var tempModel = new bankMetaDataModel({
+                                    bankName: eachBankRec["bankName"],
+                                    branchCount: eachBankRec["branchCount"],
+                                    locationCount: eachBankRec["locationCount"],
+                                    stateCount: eachBankRec["stateCount"],
+                                    isPopular: eachBankRec["isPopular"]
+                                });
+                                return tempModel;
+                            });
+                            bankMetaDataModel.collection.drop(); // Drop old data before writing
+                            bankMetaDataModel.insertMany(allMetaDataModels)
+                                .then(function (docs) {
+                                console.log("<============= INSERT DONE !!! ============>");
+                                console.log("Doc Count : " + docs.length);
+                                resolve(true);
+                            })
+                                .catch(function (err) {
+                                reject("Error !! : Writing Meta Data " + err);
+                            });
+                        }
+                    }).then(function () {
+                        // Make DB for Other Banks
+                        return new Promise(function (resolve, reject) {
+                            var otherBankData = fs.readJsonSync("./dist/Split_Records/otherBanks.json");
+                            var allBankDocs = _.map(otherBankData, function (eachBankRec) {
+                                var tempBankDetail = new otherBanksModel({
+                                    name: eachBankRec["name"],
+                                    ifsc: eachBankRec["ifsc"],
+                                    micr: eachBankRec["micr"],
+                                    branch: eachBankRec["branch"],
+                                    address: eachBankRec["address"],
+                                    contact: eachBankRec["contact"],
+                                    city: eachBankRec["city"],
+                                    district: eachBankRec["district"],
+                                    state: eachBankRec["state"]
+                                });
+                                return tempBankDetail;
+                            });
+                            otherBanksModel.collection.drop();
+                            otherBanksModel.insertMany(allBankDocs)
+                                .then(function (docs) {
+                                console.log("<============= INSERT Other Bank Details !!! ============>");
+                                console.log("Doc Count : " + docs.length);
+                                resolve(true);
+                            })
+                                .catch(function (err) {
+                                console.log("Error !! : Writing Other Bank Data " + err);
+                            });
+                        });
+                    }).then(function () {
+                        // Make DB for Popular Banks
+                        return new Promise(function (resolve, reject) {
+                            console.log("<============= Startin with POP BANKS =============>");
+                            console.log("Popular banks are : " + popularBanks);
+                            _.map(popularBanks, function (eachPopBank) {
+                                var currentModel = getModelForBankName(eachPopBank);
+                                var fileName = "./dist/Split_Records/" + _.camelCase(eachPopBank) + ".json";
+                                var popBankData = fs.readJsonSync(fileName);
+                                var allBankDocs = _.map(popBankData, function (eachBankRec) {
+                                    var tempBankDetail = new currentModel({
+                                        name: eachBankRec["name"],
+                                        ifsc: eachBankRec["ifsc"],
+                                        micr: eachBankRec["micr"],
+                                        branch: eachBankRec["branch"],
+                                        address: eachBankRec["address"],
+                                        contact: eachBankRec["contact"],
+                                        city: eachBankRec["city"],
+                                        district: eachBankRec["district"],
+                                        state: eachBankRec["state"]
+                                    });
+                                    return tempBankDetail;
+                                });
+                                currentModel.collection.drop();
+                                currentModel.insertMany(allBankDocs)
+                                    .then(function (docs) {
+                                    console.log("<============= INSERT " + eachPopBank + "!!! ============>");
+                                    console.log("Doc Count : " + docs.length);
+                                })
+                                    .catch(function (err) {
+                                    console.log("Error !! : Writing Other Bank Data " + err);
+                                });
+                            });
+                        });
                     });
-                }
-                console.log("User has chose not to load bank Names DB");
-                Promise.resolve(true);
-            })
-                .then(function () {
-                connectedToDB = true;
-                console.log("We have connected to the DB and loaded all the data ... ");
-                resolve();
-            })
-                .catch(function (err) {
-                console.log("We Have an Error connecting to Mongoose DB.");
+                    resolve(true);
+                });
+            }).catch(function (err) {
+                console.log("We Have an Error connecting to Mongoose DB." + err);
             });
         });
     };

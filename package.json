@@ -14,6 +14,7 @@
         "clipboard": "^2.0.1",
         "cookie-parser": "~1.4.3",
         "debug": "~2.6.9",
+        "decompress": "^4.2.0",
         "dialogflow-fulfillment": "^0.5.0",
         "express": "~4.16.0",
         "express-handlebars": "^3.0.0",
@@ -36,7 +37,8 @@
         "semantic-ui": "^2.4.0",
         "symbol-tree": "^3.2.2",
         "tree-model": "^1.0.7",
-        "typescript": "^2.9.2"
+        "typescript": "^2.9.2",
+        "unzip": "^0.1.11"
     },
     "devDependencies": {
         "@types/node": "^10.11.6",

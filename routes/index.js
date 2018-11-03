@@ -17,25 +17,31 @@ var totalNumberOfBanksInDB;
 var allBankNamesArr = [];
 var popularBankNamesArr = ["ICICI BANK LIMITED", "HDFC BANK", "STATE BANK OF INDIA", "CANARA BANK"];
 var allSetReadyToLaunch = false;
+// DONT need to do this.. bank coll anyway reloads the db..
+//bankColl.loadDataBasesWithDataFromFile()
+/*
+
 bankColl.getAllBranchesCount()
-    .then(function (totalCountAllBranches) {
-    console.log("Step 1 : Done.");
-    totalNumberOfBankBranchesInDB = totalCountAllBranches;
-}).then(function () {
-    bankColl.getAllBankNamesCount().then(function (totalBanksCount) {
-        console.log("Step 2 : Done.");
-        totalNumberOfBanksInDB = totalBanksCount;
-    });
-}).then(function () {
-    bankColl.getAllBankNames().then(function (allBankNames) {
-        console.log("Step 3 : Done.");
-        console.log("We now have all bank... " + allBankNames);
-        allBankNamesArr = allBankNames;
-    });
-}).then(function () {
-    console.log("Step x : Done.");
-    allSetReadyToLaunch = true;
-});
+    .then((totalCountAllBranches : number) => {
+        console.log("Step 1 : Done.")
+        totalNumberOfBankBranchesInDB = totalCountAllBranches
+    }).then(() => {
+        bankColl.getAllBankNamesCount().then((totalBanksCount : number) =>{
+            console.log("Step 2 : Done.")
+            totalNumberOfBanksInDB = totalBanksCount
+        })
+    }).then(() => {
+        bankColl.getAllBankNames().then((allBankNames : [string]) =>{
+            console.log("Step 3 : Done.")
+            console.log("We now have all bank... " + allBankNames)
+            allBankNamesArr = allBankNames
+        })
+    }).then(() => {
+        console.log("Step x : Done.")
+        allSetReadyToLaunch = true
+    })
+
+*/
 bankColl.getAllBankNames().then(function (allBankNames) {
     console.log("Step 3 : Done.");
     console.log("We now have all bank... " + allBankNames);
