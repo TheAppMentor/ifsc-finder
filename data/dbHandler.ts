@@ -189,7 +189,6 @@ export class BankDB {
                         decompress('./Split_Records.zip', 'dist')
                             .then((unzipComplete : boolean) => {  // Load Bank Meta Data
                                 // Load Meta Data 
-                                if (unzipComplete == true) {
                                     // Load Bank MetaData Table 
 
                                     let bankMetaData = fs.readJsonSync("./dist/Split_Records/BankMetaData.json")
@@ -216,7 +215,6 @@ export class BankDB {
                                         .catch((err) => {
                                             reject("Error !! : Writing Meta Data " + err) 
                                         })
-                                }
                             }).then(() : Promise<boolean> => {    // Load Other Bank Details
                                 // Make DB for Other Banks
                                 return new Promise((resolve : any, reject : any) => {

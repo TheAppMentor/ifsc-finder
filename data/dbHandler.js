@@ -160,30 +160,28 @@ var BankDB = /** @class */ (function () {
                     decompress('./Split_Records.zip', 'dist')
                         .then(function (unzipComplete) {
                         // Load Meta Data 
-                        if (unzipComplete == true) {
-                            // Load Bank MetaData Table 
-                            var bankMetaData = fs.readJsonSync("./dist/Split_Records/BankMetaData.json");
-                            var allMetaDataModels = _.map(bankMetaData, function (eachBankRec) {
-                                var tempModel = new bankMetaDataModel({
-                                    bankName: eachBankRec["bankName"],
-                                    branchCount: eachBankRec["branchCount"],
-                                    locationCount: eachBankRec["locationCount"],
-                                    stateCount: eachBankRec["stateCount"],
-                                    isPopular: eachBankRec["isPopular"]
-                                });
-                                return tempModel;
+                        // Load Bank MetaData Table 
+                        var bankMetaData = fs.readJsonSync("./dist/Split_Records/BankMetaData.json");
+                        var allMetaDataModels = _.map(bankMetaData, function (eachBankRec) {
+                            var tempModel = new bankMetaDataModel({
+                                bankName: eachBankRec["bankName"],
+                                branchCount: eachBankRec["branchCount"],
+                                locationCount: eachBankRec["locationCount"],
+                                stateCount: eachBankRec["stateCount"],
+                                isPopular: eachBankRec["isPopular"]
                             });
-                            bankMetaDataModel.collection.drop(); // Drop old data before writing
-                            bankMetaDataModel.insertMany(allMetaDataModels)
-                                .then(function (docs) {
-                                console.log("<============= BANK META DATA INSERT COMPLETE !!! ============>");
-                                console.log("Doc Count : " + docs.length);
-                                resolve(true);
-                            })
-                                .catch(function (err) {
-                                reject("Error !! : Writing Meta Data " + err);
-                            });
-                        }
+                            return tempModel;
+                        });
+                        bankMetaDataModel.collection.drop(); // Drop old data before writing
+                        bankMetaDataModel.insertMany(allMetaDataModels)
+                            .then(function (docs) {
+                            console.log("<============= BANK META DATA INSERT COMPLETE !!! ============>");
+                            console.log("Doc Count : " + docs.length);
+                            resolve(true);
+                        })
+                            .catch(function (err) {
+                            reject("Error !! : Writing Meta Data " + err);
+                        });
                     }).then(function () {
                         // Make DB for Other Banks
                         return new Promise(function (resolve, reject) {
