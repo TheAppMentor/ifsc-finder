@@ -185,11 +185,7 @@ export class BankDB {
                         console.log("NO DB RELOAD : Config reloadBankDetailsDB == "  + appConfigOptions["reloadBankDetailsDB"])
                         return Promise.resolve(true)
                     }
-                    
-                    
-                    return new Promise((resolve : any, reject : any) => {
-
-                        //  ===========       Start DB Reload ============ //
+                    return new Promise((resolve : any, reject : any) => { //  ===========       Start DB Reload ============ //
                         decompress('./Split_Records.zip', 'dist')
                             .then((unzipComplete : boolean) => {  // Load Bank Meta Data
                                 // Load Meta Data 
@@ -213,7 +209,7 @@ export class BankDB {
 
                                     bankMetaDataModel.insertMany(allMetaDataModels)
                                         .then((docs) => {
-                                            console.log("<============= INSERT DONE !!! ============>")
+                                            console.log("<============= BANK META DATA INSERT COMPLETE !!! ============>")
                                             console.log("Doc Count : " + docs.length)
                                             resolve(true)
                                         })
@@ -306,6 +302,7 @@ export class BankDB {
                 }).catch((err) => {
                     console.log("We Have an Error connecting to Mongoose DB." + err)
                 })
+            resolve(true)
         })
     }
 
@@ -378,6 +375,19 @@ export class BankDB {
         })
     }
 
+
+    getBankMetaData() : Promise<Array<string>>{
+
+        return new Promise((resolve,reject) => {
+
+            bankMetaDataModel.find((err,values) => {
+                resolve(values) 
+            }).catch((err) => {
+                reject("BANK DB : getBankMetaData : Unable to fetch metadata : " + err)
+            })
+        })
+    } 
+            
     getAllBankNames() : Promise<Array<string>>{
         return new Promise((resolve,reject) => {
             //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb
@@ -457,6 +467,32 @@ export class BankDB {
         })
     }
 
+    
+    getAllCityNamesForBankMatchingQueryString(bankName : string, queryString : string): Promise<Array<any>>{
+
+        return new Promise((resolve,reject) => {
+            let finalBankName = _.upperCase(bankName)
+            let finalQueryString = _.upperCase(queryString)
+            let model = getModelForBankName(finalBankName)
+
+           console.log("DB HANDLER TALKING>... NEW METHOD>>>> : " + finalBankName, finalQueryString, model);
+            
+            model.find({name : finalBankName, city : {$regex : new RegExp(finalQueryString) }},function(err,results){
+               console.log("results are :  " + results) 
+                var cityObjects = results.map(eachRec => {
+                    return {city : eachRec.city, state : eachRec.state}
+                })
+
+                var uniqCityObjects = _.uniqBy(cityObjects,'city')
+                let sortedUniqueCityObjects = _.sortBy(uniqCityObjects, ['city'])
+                resolve(sortedUniqueCityObjects)
+            }).catch((err) => {
+                console.log("Unable to find branch details : " + err)
+            })
+        })
+    }
+    
+    
     getAllCityNamesForBank(bankName : string) : Promise<Array<any>>{
 
         return new Promise((resolve,reject) => {
@@ -537,6 +573,41 @@ export class BankDB {
         })
     }
 
+
+    getAllBranchNamesForBankNameInCityMatchingQueryString(bankName : string, cityName : string, queryString : string) : Promise<Array<any>> {
+
+        return new Promise((resolve,reject) => {
+            let finalBankName = _.upperCase(bankName)
+            let finalCityName = cityName
+            var finalQueryString = _.upperCase(queryString) 
+           
+            var finalRegEx = new RegExp(finalQueryString) 
+            
+            if (finalQueryString == ""){
+             finalRegEx = new RegExp("[A-Z]") 
+            }
+            
+            let model = getModelForBankName(finalBankName)
+
+            console.log("DB HANDLER TALKING>... NEW METHOD FOR BRANCH NAME >>> >>>> : " + finalBankName, finalCityName, finalQueryString, model);
+
+            model.find({name : finalBankName, city : finalCityName, branch : {$regex : finalRegEx}},function(err,results){
+                console.log("results are :  " + results) 
+
+                var branchObjects = results.map(eachRec => {
+                    var tempRec = {}
+                    tempRec['branch'] = eachRec.branch
+                    tempRec['address'] = eachRec.address 
+                    return tempRec 
+                }) 
+                resolve(branchObjects)
+            }).catch((err) => {
+                reject("Error ! : DB Handler.ts : getCountOfBranchesBankNameInCity : "  + err)    
+            }) 
+
+        })
+    }
+
     //Prashanth : Scope for optimiztion ehre.. here you query the db for list of branch names etc. U can just get the cout here and only and pass it to the caller... why make another call.. just to get the counts. Or even better.. have some kind of metadata store.. that is created each time you the db with new data from RBI.
     getAllBranchNamesForBankNameInCity(bankName : string, cityName : string) : Promise<Array<any>> {
         return new Promise((resolve : any, reject : any) => {
@@ -577,7 +648,9 @@ export class BankDB {
             // I am using the in-efficinet regex method to make the find case-insensive.. check out the link above for a more optimizes soln.
             // DRY vioation.... !!!! 
 
-            bankBranchDetailModel.find({name : { $regex : new RegExp(bankName, "i") } , city : { $regex : new RegExp(cityName, "i") }, branch : { $regex : new RegExp(branchName, "i")}},function(err,results){
+            let model = getModelForBankName(bankName)
+
+            model.find({name : { $regex : new RegExp(bankName, "i") } , city : { $regex : new RegExp(cityName, "i") }, branch : { $regex : new RegExp(branchName, "i")}},function(err,results){
                 resolve(results)
             })
         })
@@ -610,55 +683,4 @@ export class BankDB {
         })
 
     }
-
 }
-
-/*
-db.on('error',console.error.bind(console, 'connection error:'));
-
-db.on('open',function(){
-
-    let appConfigOptions = loadConfigFile()
-    let bankCollection = new BankCollection()
-
-    bankCollection.hydrateBankCollection("../data/ifsc_codes_all_clean.csv")
-        .then((isBankNamesDBLoaded : boolean) : Promise<boolean> => {
-            if (appConfigOptions["reloadBankDetailsDB"] == true){
-
-                bankBranchDetailModel.collection.drop() // Drop old data before writing
-                return loadDBWithBankBankCollection(bankCollection)
-            }
-            console.log("User has chose not to load reloadBankDetailsDB")
-            Promise.resolve(true)
-
-        })
-        .then((isBankCollHydrated : boolean) : Promise<boolean>  =>  {
-            if (appConfigOptions["reloadBankNamesDB"] == true){
-                return new Promise((resolve : any, reject : any) => {
-                    if (isBankCollHydrated = true) {
-                        bankNamesModel.collection.drop() // Drop old data before writing
-                        loadBankNamesDB(bankCollection)
-                        resolve(true)
-                    }
-                })
-            }
-            console.log("User has chose not to load bank Names DB")
-            Promise.resolve(true)
-        })
-        .then(() => {
-            console.log("We have Initializing the Databases..")
-            bankNamesModel.find((err,values) => {
-                console.log("We have found tbanks.... : " + values.length)
-            })
-            bankBranchDetailModel.find((err,values) => {
-                console.log("We have found tbanks.... : " + values.length)
-            })
-            bankBranchDetailModel.find({name : "DENA BANK"},function(err,results){
-                console.log("We Found " + results.length + " DENA BANK Branches") 
-            })
-        })
-        .then(() => {
-            connectedToDB = true
-        })
-});
- */

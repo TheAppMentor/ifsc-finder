@@ -16,7 +16,8 @@ export interface IHash {
     [details: string] : string;
 } 
 
-let theBank = new BankCollection("../data/ifsc_codes_all_clean.csv")
+//let theBank = new BankCollection("../data/ifsc_codes_all_clean.csv")
+let theBank = new BankCollection()
 
 console.log("We have now created a Bank Collection")
 

@@ -33,6 +33,7 @@ $(document)
                 apiSettings: {
                     url: "/getBanks/?q={query}"
                 },
+                selectFirstResult : true,
                 minCharacters : 1,
                 onResponse : function(theresponse) {
                     console.log("The Response is " + theresponse)

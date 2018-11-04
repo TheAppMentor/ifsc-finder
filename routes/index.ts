@@ -16,44 +16,55 @@ var DOM_Generator = require('../templates/dom_gen')
 let bankColl = new BankCollection()
 let dom_gen = new DOM_Generator()
 
-var totalNumberOfBankBranchesInDB
+var totalNumberOfBankBranchesInDB = "1.5 L"
 var totalNumberOfBanksInDB 
 var allBankNamesArr = [] 
-var popularBankNamesArr = ["ICICI BANK LIMITED","HDFC BANK","STATE BANK OF INDIA","CANARA BANK"] 
+var popularBankNamesArr = [] 
 
 var allSetReadyToLaunch : Boolean = false
+var bankMetaData = []
 
-// DONT need to do this.. bank coll anyway reloads the db..
-//bankColl.loadDataBasesWithDataFromFile()
-
-/*
-
-bankColl.getAllBranchesCount()
-    .then((totalCountAllBranches : number) => {
-        console.log("Step 1 : Done.")
-        totalNumberOfBankBranchesInDB = totalCountAllBranches
-    }).then(() => {
-        bankColl.getAllBankNamesCount().then((totalBanksCount : number) =>{
-            console.log("Step 2 : Done.")
-            totalNumberOfBanksInDB = totalBanksCount
-        })
-    }).then(() => {
-        bankColl.getAllBankNames().then((allBankNames : [string]) =>{
-            console.log("Step 3 : Done.")
-            console.log("We now have all bank... " + allBankNames)
-            allBankNamesArr = allBankNames 
-        }) 
-    }).then(() => {
-        console.log("Step x : Done.")
-        allSetReadyToLaunch = true
+bankColl.loadDataBasesWithDataFromFile()
+    .then(() : Promise<Array<string>> => {
+        // Load Meta Data table into memory. This is pretty small and can be stored in memory (Later may be in the cache)
+        // db.statebankofindiasbimodels.find({city : /BENGA/}).count()
+        return bankColl.getBankMetaData()
     })
+    
+    .then((metaData : Array<any>) : Promise<Array<string>> => {
+        bankMetaData = metaData
+        totalNumberOfBanksInDB = bankMetaData.length
+        return Promise.resolve(metaData)
+    })
+    
+    .then((metaData : Array<any>) => {
+        // Get List of all popular banks. (From Meta Data Table)
 
-*/
-bankColl.getAllBankNames().then((allBankNames : [string]) =>{
-    console.log("Step 3 : Done.")
-    console.log("We now have all bank... " + allBankNames)
-    allBankNamesArr = allBankNames 
-}) 
+        popularBankNamesArr = _.reduce(bankMetaData,(result,value, key) => {
+            //TODO change this to a boolean.. right now its a string.
+            if (value.isPopular == 'true') {
+                result.push(value.bankName)
+                return result        
+            }
+            return result
+        },[])
+
+        return Promise.resolve(metaData)
+    })
+    
+    .then((metaData : Array<any>) => {
+       console.log("Processing For Popular Bank Names :  " + metaData.length) 
+        allBankNamesArr = _.map(bankMetaData, (eachBankRec) => {
+            return eachBankRec.bankName
+        })
+        return Promise.resolve()
+    })
+    
+    .then(() => {
+        allSetReadyToLaunch = true
+        console.log("All bank Name are : "  + allBankNamesArr)
+        console.log("Popular bank names arr : "  + popularBankNamesArr)
+    })
 
 var appStep = "find_bank";
 
@@ -163,22 +174,23 @@ router.get('/getLocationList/', function(req, res, next) {
     let searchInput = req.query.searchInput
     
     console.log("Request Received | Route : /getLocationList | query : " + JSON.stringify(req.query))
-    
-    bankColl.getAllCityNamesForBank(bankName).then((allCityNames : [any]) => {
+    bankColl.getAllCityNamesForBankMatchingQueryString(bankName,searchInput).then((allCityNames : [any]) => {
+    //bankColl.getAllCityNamesForBank(bankName).then((allCityNames : [any]) => {
     //TODO : Prashanth u can send the search query also to the MongoDB.. remember this is the search bar that gives u the user input.
 
+    /*
         console.log("Fetched all city names " + JSON.stringify(allCityNames))
         let matchedCityNames = _.filter(allCityNames, (eachValue) => {
             if (_.includes(_.toLower(eachValue.city), _.toLower(searchInput)) == true){
                 return eachValue
             } 
         }) 
-      
+     */ 
         //Form the response.
         var resp = {}
-        resp['results'] = matchedCityNames 
+        resp['results'] = allCityNames 
         
-        let queryReturnedResults = matchedCityNames.length > 0 ? true : false 
+        let queryReturnedResults = allCityNames.length > 0 ? true : false 
         resp["success"] = queryReturnedResults
 
         //Matching City Names
@@ -194,20 +206,13 @@ router.get('/getBranchList/', function(req, res, next) {
     let locationName = req.query.locationName 
     let searchInput = req.query.searchInput
     
-    bankColl.getAllBranchNamesForBankNameInCity(bankName,locationName).then((branchNameArr: Array<string>) => {
-
-    //TODO : Prashanth u can send the search query also to the MongoDB.. remember this is the search bar that gives u the user input.
-        let matchedBranchObjects = _.filter(branchNameArr, (eachValue) => {
-            if (_.includes(_.toLower(eachValue.branch), _.toLower(searchInput)) == true){
-                return eachValue
-            } 
-        }) 
+    bankColl.getAllBranchNamesForBankNameInCityMatchingQueryString(bankName,locationName,searchInput).then((branchNameArr: Array<string>) => {
 
         //Form the response.
         var resp = {}
-        resp['results'] = matchedBranchObjects  
+        resp['results'] = branchNameArr 
         
-        let queryReturnedResults = matchedBranchObjects.length > 0 ? true : false 
+        let queryReturnedResults = branchNameArr.length > 0 ? true : false 
         resp["success"] = queryReturnedResults
 
         //Matching City Names
@@ -344,7 +349,7 @@ router.get('/getDomForResults/', function(req, res, next) {
         var fetchedBranch = _.first(branchNameArr)
         
         var results_div = dom_gen.getDivForResults({
-            bankName : fetchedBranch.name,
+            bankName : fetchedBranch.bankName,
             bankBranch : fetchedBranch.branch,
             ifsc : fetchedBranch.ifsc,
             address : fetchedBranch.address,
@@ -466,20 +471,6 @@ router.get('/getBranchDetails/', function(req, res, next) {
 
 });
 
-
-
-/* GET home page. */
-/*
-router.get('/loadDB', function(req, res, next) {
-    bankColl.hydrateBankCollection("./data/ifsc_codes_all_clean.csv").then(() : Promise<boolean> => {
-        return bankColl.loadDataBasesWithDataFromFile()
-    }).then(() : Promise<Array<string>> => {
-        return bankColl.getAllStateNamesForBank("DenA BanK")
-    }).then((matchedStates : Array<string>) => {
-        res.render('index', { title: matchedStates.toString() });
-    })
-});
- */
 
 router.get('/allBankNames', function(req, res, next) {
     bankColl.getAllBankNames().then((bankList : Array<string>) => {

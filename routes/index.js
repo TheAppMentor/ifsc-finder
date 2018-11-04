@@ -12,40 +12,46 @@ var dialogflow_responseParser_1 = require("../model/dialogflow-responseParser");
 var DOM_Generator = require('../templates/dom_gen');
 var bankColl = new BankCollection_1.BankCollection();
 var dom_gen = new DOM_Generator();
-var totalNumberOfBankBranchesInDB;
+var totalNumberOfBankBranchesInDB = "1.5 L";
 var totalNumberOfBanksInDB;
 var allBankNamesArr = [];
-var popularBankNamesArr = ["ICICI BANK LIMITED", "HDFC BANK", "STATE BANK OF INDIA", "CANARA BANK"];
+var popularBankNamesArr = [];
 var allSetReadyToLaunch = false;
-// DONT need to do this.. bank coll anyway reloads the db..
-//bankColl.loadDataBasesWithDataFromFile()
-/*
-
-bankColl.getAllBranchesCount()
-    .then((totalCountAllBranches : number) => {
-        console.log("Step 1 : Done.")
-        totalNumberOfBankBranchesInDB = totalCountAllBranches
-    }).then(() => {
-        bankColl.getAllBankNamesCount().then((totalBanksCount : number) =>{
-            console.log("Step 2 : Done.")
-            totalNumberOfBanksInDB = totalBanksCount
-        })
-    }).then(() => {
-        bankColl.getAllBankNames().then((allBankNames : [string]) =>{
-            console.log("Step 3 : Done.")
-            console.log("We now have all bank... " + allBankNames)
-            allBankNamesArr = allBankNames
-        })
-    }).then(() => {
-        console.log("Step x : Done.")
-        allSetReadyToLaunch = true
-    })
-
-*/
-bankColl.getAllBankNames().then(function (allBankNames) {
-    console.log("Step 3 : Done.");
-    console.log("We now have all bank... " + allBankNames);
-    allBankNamesArr = allBankNames;
+var bankMetaData = [];
+bankColl.loadDataBasesWithDataFromFile()
+    .then(function () {
+    // Load Meta Data table into memory. This is pretty small and can be stored in memory (Later may be in the cache)
+    // db.statebankofindiasbimodels.find({city : /BENGA/}).count()
+    return bankColl.getBankMetaData();
+})
+    .then(function (metaData) {
+    bankMetaData = metaData;
+    totalNumberOfBanksInDB = bankMetaData.length;
+    return Promise.resolve(metaData);
+})
+    .then(function (metaData) {
+    // Get List of all popular banks. (From Meta Data Table)
+    popularBankNamesArr = _.reduce(bankMetaData, function (result, value, key) {
+        //TODO change this to a boolean.. right now its a string.
+        if (value.isPopular == 'true') {
+            result.push(value.bankName);
+            return result;
+        }
+        return result;
+    }, []);
+    return Promise.resolve(metaData);
+})
+    .then(function (metaData) {
+    console.log("Processing For Popular Bank Names :  " + metaData.length);
+    allBankNamesArr = _.map(bankMetaData, function (eachBankRec) {
+        return eachBankRec.bankName;
+    });
+    return Promise.resolve();
+})
+    .then(function () {
+    allSetReadyToLaunch = true;
+    console.log("All bank Name are : " + allBankNamesArr);
+    console.log("Popular bank names arr : " + popularBankNamesArr);
 });
 var appStep = "find_bank";
 /* GET home page. */
@@ -130,18 +136,21 @@ router.get('/getLocationList/', function (req, res, next) {
     var bankName = req.query.bankName;
     var searchInput = req.query.searchInput;
     console.log("Request Received | Route : /getLocationList | query : " + JSON.stringify(req.query));
-    bankColl.getAllCityNamesForBank(bankName).then(function (allCityNames) {
+    bankColl.getAllCityNamesForBankMatchingQueryString(bankName, searchInput).then(function (allCityNames) {
+        //bankColl.getAllCityNamesForBank(bankName).then((allCityNames : [any]) => {
         //TODO : Prashanth u can send the search query also to the MongoDB.. remember this is the search bar that gives u the user input.
-        console.log("Fetched all city names " + JSON.stringify(allCityNames));
-        var matchedCityNames = _.filter(allCityNames, function (eachValue) {
-            if (_.includes(_.toLower(eachValue.city), _.toLower(searchInput)) == true) {
-                return eachValue;
-            }
-        });
+        /*
+            console.log("Fetched all city names " + JSON.stringify(allCityNames))
+            let matchedCityNames = _.filter(allCityNames, (eachValue) => {
+                if (_.includes(_.toLower(eachValue.city), _.toLower(searchInput)) == true){
+                    return eachValue
+                }
+            })
+         */
         //Form the response.
         var resp = {};
-        resp['results'] = matchedCityNames;
-        var queryReturnedResults = matchedCityNames.length > 0 ? true : false;
+        resp['results'] = allCityNames;
+        var queryReturnedResults = allCityNames.length > 0 ? true : false;
         resp["success"] = queryReturnedResults;
         //Matching City Names
         console.log("Response Sent | Route : /getLocationList | query : " + JSON.stringify(req.query) + ": Results : " + JSON.stringify(resp));
@@ -152,17 +161,11 @@ router.get('/getBranchList/', function (req, res, next) {
     var bankName = req.query.bankName;
     var locationName = req.query.locationName;
     var searchInput = req.query.searchInput;
-    bankColl.getAllBranchNamesForBankNameInCity(bankName, locationName).then(function (branchNameArr) {
-        //TODO : Prashanth u can send the search query also to the MongoDB.. remember this is the search bar that gives u the user input.
-        var matchedBranchObjects = _.filter(branchNameArr, function (eachValue) {
-            if (_.includes(_.toLower(eachValue.branch), _.toLower(searchInput)) == true) {
-                return eachValue;
-            }
-        });
+    bankColl.getAllBranchNamesForBankNameInCityMatchingQueryString(bankName, locationName, searchInput).then(function (branchNameArr) {
         //Form the response.
         var resp = {};
-        resp['results'] = matchedBranchObjects;
-        var queryReturnedResults = matchedBranchObjects.length > 0 ? true : false;
+        resp['results'] = branchNameArr;
+        var queryReturnedResults = branchNameArr.length > 0 ? true : false;
         resp["success"] = queryReturnedResults;
         //Matching City Names
         console.log("Returning Response : " + JSON.stringify(resp));
@@ -245,7 +248,7 @@ router.get('/getDomForResults/', function (req, res, next) {
     bankColl.getBranchesDetailsForBankInCityWithBranchName(bankName, cityName, branchName).then(function (branchNameArr) {
         var fetchedBranch = _.first(branchNameArr);
         var results_div = dom_gen.getDivForResults({
-            bankName: fetchedBranch.name,
+            bankName: fetchedBranch.bankName,
             bankBranch: fetchedBranch.branch,
             ifsc: fetchedBranch.ifsc,
             address: fetchedBranch.address,
@@ -329,18 +332,6 @@ router.get('/getBranchDetails/', function (req, res, next) {
         console.log("ERROR! : index.ts : /branches/ => Finding branch Name " + err);
     });
 });
-/* GET home page. */
-/*
-router.get('/loadDB', function(req, res, next) {
-    bankColl.hydrateBankCollection("./data/ifsc_codes_all_clean.csv").then(() : Promise<boolean> => {
-        return bankColl.loadDataBasesWithDataFromFile()
-    }).then(() : Promise<Array<string>> => {
-        return bankColl.getAllStateNamesForBank("DenA BanK")
-    }).then((matchedStates : Array<string>) => {
-        res.render('index', { title: matchedStates.toString() });
-    })
-});
- */
 router.get('/allBankNames', function (req, res, next) {
     bankColl.getAllBankNames().then(function (bankList) {
         console.log("All Bank Names are : " + bankList);

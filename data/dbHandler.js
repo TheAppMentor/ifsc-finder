@@ -157,7 +157,6 @@ var BankDB = /** @class */ (function () {
                     return Promise.resolve(true);
                 }
                 return new Promise(function (resolve, reject) {
-                    //  ===========       Start DB Reload ============ //
                     decompress('./Split_Records.zip', 'dist')
                         .then(function (unzipComplete) {
                         // Load Meta Data 
@@ -177,7 +176,7 @@ var BankDB = /** @class */ (function () {
                             bankMetaDataModel.collection.drop(); // Drop old data before writing
                             bankMetaDataModel.insertMany(allMetaDataModels)
                                 .then(function (docs) {
-                                console.log("<============= INSERT DONE !!! ============>");
+                                console.log("<============= BANK META DATA INSERT COMPLETE !!! ============>");
                                 console.log("Doc Count : " + docs.length);
                                 resolve(true);
                             })
@@ -254,6 +253,7 @@ var BankDB = /** @class */ (function () {
             }).catch(function (err) {
                 console.log("We Have an Error connecting to Mongoose DB." + err);
             });
+            resolve(true);
         });
     };
     BankDB.prototype.loadBankNamesDB = function (bankCollection) {
@@ -310,6 +310,15 @@ var BankDB = /** @class */ (function () {
             });
             Promise.all(promises).then(function () {
                 resolve(true);
+            });
+        });
+    };
+    BankDB.prototype.getBankMetaData = function () {
+        return new Promise(function (resolve, reject) {
+            bankMetaDataModel.find(function (err, values) {
+                resolve(values);
+            }).catch(function (err) {
+                reject("BANK DB : getBankMetaData : Unable to fetch metadata : " + err);
             });
         });
     };
@@ -383,6 +392,25 @@ var BankDB = /** @class */ (function () {
             });
         });
     };
+    BankDB.prototype.getAllCityNamesForBankMatchingQueryString = function (bankName, queryString) {
+        return new Promise(function (resolve, reject) {
+            var finalBankName = _.upperCase(bankName);
+            var finalQueryString = _.upperCase(queryString);
+            var model = getModelForBankName(finalBankName);
+            console.log("DB HANDLER TALKING>... NEW METHOD>>>> : " + finalBankName, finalQueryString, model);
+            model.find({ name: finalBankName, city: { $regex: new RegExp(finalQueryString) } }, function (err, results) {
+                console.log("results are :  " + results);
+                var cityObjects = results.map(function (eachRec) {
+                    return { city: eachRec.city, state: eachRec.state };
+                });
+                var uniqCityObjects = _.uniqBy(cityObjects, 'city');
+                var sortedUniqueCityObjects = _.sortBy(uniqCityObjects, ['city']);
+                resolve(sortedUniqueCityObjects);
+            }).catch(function (err) {
+                console.log("Unable to find branch details : " + err);
+            });
+        });
+    };
     BankDB.prototype.getAllCityNamesForBank = function (bankName) {
         return new Promise(function (resolve, reject) {
             //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb
@@ -446,6 +474,31 @@ var BankDB = /** @class */ (function () {
             });
         });
     };
+    BankDB.prototype.getAllBranchNamesForBankNameInCityMatchingQueryString = function (bankName, cityName, queryString) {
+        return new Promise(function (resolve, reject) {
+            var finalBankName = _.upperCase(bankName);
+            var finalCityName = cityName;
+            var finalQueryString = _.upperCase(queryString);
+            var finalRegEx = new RegExp(finalQueryString);
+            if (finalQueryString == "") {
+                finalRegEx = new RegExp("[A-Z]");
+            }
+            var model = getModelForBankName(finalBankName);
+            console.log("DB HANDLER TALKING>... NEW METHOD FOR BRANCH NAME >>> >>>> : " + finalBankName, finalCityName, finalQueryString, model);
+            model.find({ name: finalBankName, city: finalCityName, branch: { $regex: finalRegEx } }, function (err, results) {
+                console.log("results are :  " + results);
+                var branchObjects = results.map(function (eachRec) {
+                    var tempRec = {};
+                    tempRec['branch'] = eachRec.branch;
+                    tempRec['address'] = eachRec.address;
+                    return tempRec;
+                });
+                resolve(branchObjects);
+            }).catch(function (err) {
+                reject("Error ! : DB Handler.ts : getCountOfBranchesBankNameInCity : " + err);
+            });
+        });
+    };
     //Prashanth : Scope for optimiztion ehre.. here you query the db for list of branch names etc. U can just get the cout here and only and pass it to the caller... why make another call.. just to get the counts. Or even better.. have some kind of metadata store.. that is created each time you the db with new data from RBI.
     BankDB.prototype.getAllBranchNamesForBankNameInCity = function (bankName, cityName) {
         var _this = this;
@@ -484,7 +537,8 @@ var BankDB = /** @class */ (function () {
             //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb
             // I am using the in-efficinet regex method to make the find case-insensive.. check out the link above for a more optimizes soln.
             // DRY vioation.... !!!! 
-            bankBranchDetailModel.find({ name: { $regex: new RegExp(bankName, "i") }, city: { $regex: new RegExp(cityName, "i") }, branch: { $regex: new RegExp(branchName, "i") } }, function (err, results) {
+            var model = getModelForBankName(bankName);
+            model.find({ name: { $regex: new RegExp(bankName, "i") }, city: { $regex: new RegExp(cityName, "i") }, branch: { $regex: new RegExp(branchName, "i") } }, function (err, results) {
                 resolve(results);
             });
         });
@@ -517,52 +571,3 @@ var BankDB = /** @class */ (function () {
     return BankDB;
 }());
 exports.BankDB = BankDB;
-/*
-db.on('error',console.error.bind(console, 'connection error:'));
-
-db.on('open',function(){
-
-    let appConfigOptions = loadConfigFile()
-    let bankCollection = new BankCollection()
-
-    bankCollection.hydrateBankCollection("../data/ifsc_codes_all_clean.csv")
-        .then((isBankNamesDBLoaded : boolean) : Promise<boolean> => {
-            if (appConfigOptions["reloadBankDetailsDB"] == true){
-
-                bankBranchDetailModel.collection.drop() // Drop old data before writing
-                return loadDBWithBankBankCollection(bankCollection)
-            }
-            console.log("User has chose not to load reloadBankDetailsDB")
-            Promise.resolve(true)
-
-        })
-        .then((isBankCollHydrated : boolean) : Promise<boolean>  =>  {
-            if (appConfigOptions["reloadBankNamesDB"] == true){
-                return new Promise((resolve : any, reject : any) => {
-                    if (isBankCollHydrated = true) {
-                        bankNamesModel.collection.drop() // Drop old data before writing
-                        loadBankNamesDB(bankCollection)
-                        resolve(true)
-                    }
-                })
-            }
-            console.log("User has chose not to load bank Names DB")
-            Promise.resolve(true)
-        })
-        .then(() => {
-            console.log("We have Initializing the Databases..")
-            bankNamesModel.find((err,values) => {
-                console.log("We have found tbanks.... : " + values.length)
-            })
-            bankBranchDetailModel.find((err,values) => {
-                console.log("We have found tbanks.... : " + values.length)
-            })
-            bankBranchDetailModel.find({name : "DENA BANK"},function(err,results){
-                console.log("We Found " + results.length + " DENA BANK Branches")
-            })
-        })
-        .then(() => {
-            connectedToDB = true
-        })
-});
- */
