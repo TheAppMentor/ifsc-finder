@@ -121,7 +121,7 @@ router.get('/getBanks/', function (req, res, next) {
     });
     allBanksCat['results'] = allBankItems;
     resp['results'].push(allBanksCat);
-    console.log("Response Sent | Route : /getBanks | query : " + JSON.stringify(query) + " | Results : " + JSON.stringify(resp));
+    console.log("Response Sent | Route : /getBanks | query : " + JSON.stringify(query) + " | Results : Somethign was sent");
     res.json(resp);
 });
 router.get('/getLocationList/', function (req, res, next) {
@@ -145,7 +145,7 @@ router.get('/getLocationList/', function (req, res, next) {
         var queryReturnedResults = allCityNames.length > 0 ? true : false;
         resp["success"] = queryReturnedResults;
         //Matching City Names
-        console.log("Response Sent | Route : /getLocationList | query : " + JSON.stringify(req.query) + ": Results : " + JSON.stringify(resp));
+        console.log("Response Sent | Route : /getLocationList | query : " + JSON.stringify(req.query) + ": Results : Something Was Sent");
         return res.json(resp);
     });
 });
