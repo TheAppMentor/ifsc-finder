@@ -183,7 +183,6 @@ export class BankDB {
                 .then(() : Promise<boolean> => {
                     // Check if app config requires us to reload the DB.
                     if (appConfigOptions["reloadBankDetailsDB"] == false) {
-                        console.log("NO DB RELOAD : Config reloadBankDetailsDB == "  + appConfigOptions["reloadBankDetailsDB"])
                         return Promise.resolve(true)
                     }
                     return new Promise((resolve : any, reject : any) => { //  ===========       Start DB Reload ============ //
@@ -209,8 +208,6 @@ export class BankDB {
 
                                     bankMetaDataModel.insertMany(allMetaDataModels)
                                         .then((docs) => {
-                                            console.log("<============= BANK META DATA INSERT COMPLETE !!! ============>")
-                                            console.log("Doc Count : " + docs.length)
                                             resolve(true)
                                         })
                                         .catch((err) => {
@@ -243,8 +240,6 @@ export class BankDB {
                                     otherBanksModel.insertMany(allBankDocs)
 
                                         .then((docs) => {
-                                            console.log("<============= INSERT Other Bank Details !!! ============>")
-                                            console.log("Doc Count : " + docs.length)
                                             resolve(true)
                                         })
                                         .catch((err) => {
@@ -256,7 +251,6 @@ export class BankDB {
                                 return new Promise((resolve : any, reject : any) => {
 
                                     console.log("<============= Startin with POP BANKS =============>")
-                                    console.log("Popular banks are : " + popularBanks)
 
                                     _.map(popularBanks,(eachPopBank) => {
 
@@ -286,8 +280,6 @@ export class BankDB {
                                         currentModel.insertMany(allBankDocs)
 
                                             .then((docs) => {
-                                                console.log("<============= INSERT " + eachPopBank +  "!!! ============>")
-                                                console.log("Doc Count : " + docs.length)
                                             })
                                             .catch((err) => {
                                                 console.log("Error !! : Writing Other Bank Data " + err) 
@@ -333,7 +325,6 @@ export class BankDB {
 
     private loadDBWithBankBankCollection(bankCollection : BankCollection) : Promise<boolean> {
         return new Promise((resolve : any, reject : any) => {
-            console.log("loadDBWithBankBankCollection => Started")
 
             const promises =  bankCollection.allBankNames.map(eachBankName => {
                 return new Promise((resolve:any,reject:any) => {
@@ -358,7 +349,6 @@ export class BankDB {
 
                             bankBranchDetailModel.collection.insert(bankDetailObj,(err,branchDetail) => {
                                 if (err){
-                                    console.log("We have an error saving Bank Name")
                                     reject()
                                 }
                                 resolve(true)
@@ -474,10 +464,8 @@ export class BankDB {
             let finalQueryString = queryString.toUpperCase()
             let model = getModelForBankName(finalBankName)
 
-           console.log("DB HANDLER TALKING>... NEW METHOD>>>> : " + finalBankName, finalQueryString, model);
             
             model.find({name : finalBankName, city : {$regex : new RegExp(finalQueryString) }},function(err,results){
-               console.log("results are :  " + results) 
                 var cityObjects = results.map(eachRec => {
                     return {city : eachRec.city, state : eachRec.state}
                 })
@@ -500,7 +488,6 @@ export class BankDB {
             // DRY vioation.... !!!! 
 
             let explainResults = bankBranchDetailModel.find({name : { $regex : new RegExp(bankName, "i") } }).explain()
-            console.log("EXPLAIN RESULTS ARE : " + (explainResults.executionTimeMillis))
 
             bankBranchDetailModel.find({name : { $regex : new RegExp(bankName, "i") } },function(err,results){
                 var cityObjects = results.map(eachRec => {
@@ -512,7 +499,6 @@ export class BankDB {
                 resolve(sortedUniqueCityObjects)
 
             }).catch((err) => {
-                console.log("Unable to find branch details : " + err)
             })
         })
     }
@@ -588,10 +574,8 @@ export class BankDB {
             
             let model = getModelForBankName(finalBankName)
 
-            console.log("DB HANDLER TALKING>... NEW METHOD FOR BRANCH NAME >>> >>>> : " + finalBankName, finalCityName, finalQueryString, model);
 
             model.find({name : finalBankName, city : finalCityName, branch : {$regex : finalRegEx}},function(err,results){
-                console.log("results are :  " + results) 
 
                 var branchObjects = results.map(eachRec => {
                     var tempRec = {}

@@ -53,7 +53,6 @@ bankColl.loadDataBasesWithDataFromFile()
     })
     
     .then((metaData : Array<any>) : Promise<boolean> => {
-       console.log("Processing For Popular Bank Names :  " + metaData.length) 
         allBankNamesArr = _.map(bankMetaData, (eachBankRec) => {
             return eachBankRec.bankName
         })
@@ -63,8 +62,6 @@ bankColl.loadDataBasesWithDataFromFile()
     .then((preProcessingComplete : boolean) => {
         if (preProcessingComplete == true) {
             allSetReadyToLaunch = true
-            console.log("All bank Name are : "  + allBankNamesArr)
-            console.log("Popular bank names arr : "  + popularBankNamesArr)
         }
     })
 
@@ -74,15 +71,6 @@ var appStep = "find_bank";
 router.get('/', function(req, res, next) {
     //TODO : Check the allSetReadyToLaunch variable, if we are not yet ready. Show a an appropriate page. 
     console.log("Request Received | Route : / | query : " + JSON.stringify(req.query))
-
-    if (allBankNamesArr.length == 0){
-
-        bankColl.getAllBankNames().then((allBankNames : [string]) =>{
-            console.log("Step 3 : Done.")
-            console.log("We now have all bank... " + allBankNames)
-            allBankNamesArr = allBankNames 
-        }) 
-    }
 
     let bankName = req.query.bankName 
     let cityName = req.query.cityName
@@ -432,7 +420,6 @@ router.get('/getBranchDetails/', function(req, res, next) {
     bankColl.getBranchesDetailsForBankInCityWithBranchName(bankName,cityName,branchName).then((branchNameArr: Array<BankBranchDetail>) => {
 
         var fetchedBranch = _.first(branchNameArr)
-        console.log("Fetched Branch is..." + fetchedBranch) 
 
         var statistics_div = dom_gen.getDivForStatistics( 
             {

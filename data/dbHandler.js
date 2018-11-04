@@ -154,7 +154,6 @@ var BankDB = /** @class */ (function () {
                 .then(function () {
                 // Check if app config requires us to reload the DB.
                 if (appConfigOptions["reloadBankDetailsDB"] == false) {
-                    console.log("NO DB RELOAD : Config reloadBankDetailsDB == " + appConfigOptions["reloadBankDetailsDB"]);
                     return Promise.resolve(true);
                 }
                 return new Promise(function (resolve, reject) {
@@ -176,8 +175,6 @@ var BankDB = /** @class */ (function () {
                         bankMetaDataModel.collection.drop(); // Drop old data before writing
                         bankMetaDataModel.insertMany(allMetaDataModels)
                             .then(function (docs) {
-                            console.log("<============= BANK META DATA INSERT COMPLETE !!! ============>");
-                            console.log("Doc Count : " + docs.length);
                             resolve(true);
                         })
                             .catch(function (err) {
@@ -204,8 +201,6 @@ var BankDB = /** @class */ (function () {
                             otherBanksModel.collection.drop();
                             otherBanksModel.insertMany(allBankDocs)
                                 .then(function (docs) {
-                                console.log("<============= INSERT Other Bank Details !!! ============>");
-                                console.log("Doc Count : " + docs.length);
                                 resolve(true);
                             })
                                 .catch(function (err) {
@@ -216,7 +211,6 @@ var BankDB = /** @class */ (function () {
                         // Make DB for Popular Banks
                         return new Promise(function (resolve, reject) {
                             console.log("<============= Startin with POP BANKS =============>");
-                            console.log("Popular banks are : " + popularBanks);
                             _.map(popularBanks, function (eachPopBank) {
                                 var currentModel = getModelForBankName(eachPopBank);
                                 var fileName = "./dist/Split_Records/" + _.camelCase(eachPopBank) + ".json";
@@ -238,8 +232,6 @@ var BankDB = /** @class */ (function () {
                                 currentModel.collection.drop();
                                 currentModel.insertMany(allBankDocs)
                                     .then(function (docs) {
-                                    console.log("<============= INSERT " + eachPopBank + "!!! ============>");
-                                    console.log("Doc Count : " + docs.length);
                                 })
                                     .catch(function (err) {
                                     console.log("Error !! : Writing Other Bank Data " + err);
@@ -278,7 +270,6 @@ var BankDB = /** @class */ (function () {
     };
     BankDB.prototype.loadDBWithBankBankCollection = function (bankCollection) {
         return new Promise(function (resolve, reject) {
-            console.log("loadDBWithBankBankCollection => Started");
             var promises = bankCollection.allBankNames.map(function (eachBankName) {
                 return new Promise(function (resolve, reject) {
                     bankCollection.loadBranchDetailsForBank(eachBankName)
@@ -299,7 +290,6 @@ var BankDB = /** @class */ (function () {
                         });
                         bankBranchDetailModel.collection.insert(bankDetailObj, function (err, branchDetail) {
                             if (err) {
-                                console.log("We have an error saving Bank Name");
                                 reject();
                             }
                             resolve(true);
@@ -396,9 +386,7 @@ var BankDB = /** @class */ (function () {
             var finalBankName = bankName.toUpperCase(); // Dont use loaash for the uppercase. it messes up string like State bank of inida (SBI) .. it leaves out the ()
             var finalQueryString = queryString.toUpperCase();
             var model = getModelForBankName(finalBankName);
-            console.log("DB HANDLER TALKING>... NEW METHOD>>>> : " + finalBankName, finalQueryString, model);
             model.find({ name: finalBankName, city: { $regex: new RegExp(finalQueryString) } }, function (err, results) {
-                console.log("results are :  " + results);
                 var cityObjects = results.map(function (eachRec) {
                     return { city: eachRec.city, state: eachRec.state };
                 });
@@ -416,7 +404,6 @@ var BankDB = /** @class */ (function () {
             // I am using the in-efficinet regex method to make the find case-insensive.. check out the link above for a more optimizes soln.
             // DRY vioation.... !!!! 
             var explainResults = bankBranchDetailModel.find({ name: { $regex: new RegExp(bankName, "i") } }).explain();
-            console.log("EXPLAIN RESULTS ARE : " + (explainResults.executionTimeMillis));
             bankBranchDetailModel.find({ name: { $regex: new RegExp(bankName, "i") } }, function (err, results) {
                 var cityObjects = results.map(function (eachRec) {
                     return { city: eachRec.city, state: eachRec.state };
@@ -425,7 +412,6 @@ var BankDB = /** @class */ (function () {
                 var sortedUniqueCityObjects = _.sortBy(uniqCityObjects, ['city']);
                 resolve(sortedUniqueCityObjects);
             }).catch(function (err) {
-                console.log("Unable to find branch details : " + err);
             });
         });
     };
@@ -483,9 +469,7 @@ var BankDB = /** @class */ (function () {
                 finalRegEx = new RegExp("[A-Z]");
             }
             var model = getModelForBankName(finalBankName);
-            console.log("DB HANDLER TALKING>... NEW METHOD FOR BRANCH NAME >>> >>>> : " + finalBankName, finalCityName, finalQueryString, model);
             model.find({ name: finalBankName, city: finalCityName, branch: { $regex: finalRegEx } }, function (err, results) {
-                console.log("results are :  " + results);
                 var branchObjects = results.map(function (eachRec) {
                     var tempRec = {};
                     tempRec['branch'] = eachRec.branch;

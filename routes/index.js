@@ -42,7 +42,6 @@ bankColl.loadDataBasesWithDataFromFile()
     return Promise.resolve(metaData);
 })
     .then(function (metaData) {
-    console.log("Processing For Popular Bank Names :  " + metaData.length);
     allBankNamesArr = _.map(bankMetaData, function (eachBankRec) {
         return eachBankRec.bankName;
     });
@@ -51,8 +50,6 @@ bankColl.loadDataBasesWithDataFromFile()
     .then(function (preProcessingComplete) {
     if (preProcessingComplete == true) {
         allSetReadyToLaunch = true;
-        console.log("All bank Name are : " + allBankNamesArr);
-        console.log("Popular bank names arr : " + popularBankNamesArr);
     }
 });
 var appStep = "find_bank";
@@ -60,13 +57,6 @@ var appStep = "find_bank";
 router.get('/', function (req, res, next) {
     //TODO : Check the allSetReadyToLaunch variable, if we are not yet ready. Show a an appropriate page. 
     console.log("Request Received | Route : / | query : " + JSON.stringify(req.query));
-    if (allBankNamesArr.length == 0) {
-        bankColl.getAllBankNames().then(function (allBankNames) {
-            console.log("Step 3 : Done.");
-            console.log("We now have all bank... " + allBankNames);
-            allBankNamesArr = allBankNames;
-        });
-    }
     var bankName = req.query.bankName;
     var cityName = req.query.cityName;
     var branchName = req.query.branchName;
@@ -300,7 +290,6 @@ router.get('/getBranchDetails/', function (req, res, next) {
     var branchName = req.query.branchName;
     bankColl.getBranchesDetailsForBankInCityWithBranchName(bankName, cityName, branchName).then(function (branchNameArr) {
         var fetchedBranch = _.first(branchNameArr);
-        console.log("Fetched Branch is..." + fetchedBranch);
         var statistics_div = dom_gen.getDivForStatistics({
             statistic: [
                 { label: branchNameArr.length == 1 ? "Branch" : "Branches", value: branchNameArr.length }
