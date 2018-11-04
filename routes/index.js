@@ -46,12 +46,14 @@ bankColl.loadDataBasesWithDataFromFile()
     allBankNamesArr = _.map(bankMetaData, function (eachBankRec) {
         return eachBankRec.bankName;
     });
-    return Promise.resolve();
+    return Promise.resolve(true);
 })
-    .then(function () {
-    allSetReadyToLaunch = true;
-    console.log("All bank Name are : " + allBankNamesArr);
-    console.log("Popular bank names arr : " + popularBankNamesArr);
+    .then(function (preProcessingComplete) {
+    if (preProcessingComplete == true) {
+        allSetReadyToLaunch = true;
+        console.log("All bank Name are : " + allBankNamesArr);
+        console.log("Popular bank names arr : " + popularBankNamesArr);
+    }
 });
 var appStep = "find_bank";
 /* GET home page. */

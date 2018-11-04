@@ -37,7 +37,7 @@ bankColl.loadDataBasesWithDataFromFile()
         return Promise.resolve(metaData)
     })
     
-    .then((metaData : Array<any>) => {
+    .then((metaData : Array<any>) : Promise<Array<any>> => {
         // Get List of all popular banks. (From Meta Data Table)
 
         popularBankNamesArr = _.reduce(bankMetaData,(result,value, key) => {
@@ -52,18 +52,20 @@ bankColl.loadDataBasesWithDataFromFile()
         return Promise.resolve(metaData)
     })
     
-    .then((metaData : Array<any>) => {
+    .then((metaData : Array<any>) : Promise<boolean> => {
        console.log("Processing For Popular Bank Names :  " + metaData.length) 
         allBankNamesArr = _.map(bankMetaData, (eachBankRec) => {
             return eachBankRec.bankName
         })
-        return Promise.resolve()
+        return Promise.resolve(true)
     })
     
-    .then(() => {
-        allSetReadyToLaunch = true
-        console.log("All bank Name are : "  + allBankNamesArr)
-        console.log("Popular bank names arr : "  + popularBankNamesArr)
+    .then((preProcessingComplete : boolean) => {
+        if (preProcessingComplete == true) {
+            allSetReadyToLaunch = true
+            console.log("All bank Name are : "  + allBankNamesArr)
+            console.log("Popular bank names arr : "  + popularBankNamesArr)
+        }
     })
 
 var appStep = "find_bank";
