@@ -341,12 +341,12 @@ router.get('/getDomForBranchSearch/', function(req, res, next) {
 router.get('/getDomForResults/', function(req, res, next) {
 
     let bankName = req.query.bankName 
-    let cityName = req.query.cityName
+    let cityName = req.query.locationName
     let branchName = req.query.branchName
    
     console.log("Request Received | Route : /getDomForResults | query : " + JSON.stringify(req.query))
 
-    bankColl.getBranchesDetailsForBankInCityWithBranchName(bankName,cityName,branchName).then((branchNameArr: Array<BankBranchDetail>) => {
+    bankColl.getBranchesDetailsForBankInCityWithBranchName(bankName,cityName,branchName).then((branchNameArr: Array<any>) => {
         
         var fetchedBranch = _.first(branchNameArr)
         

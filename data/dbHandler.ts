@@ -166,7 +166,8 @@ function getModelForBankName(bankName : string) : any {
         } 
 
         default :
-            null
+           return otherBanksModel;
+            break;
     }
 }
 
@@ -469,8 +470,8 @@ export class BankDB {
     getAllCityNamesForBankMatchingQueryString(bankName : string, queryString : string): Promise<Array<any>>{
 
         return new Promise((resolve,reject) => {
-            let finalBankName = _.upperCase(bankName)
-            let finalQueryString = _.upperCase(queryString)
+            let finalBankName = bankName.toUpperCase()   // Dont use loaash for the uppercase. it messes up string like State bank of inida (SBI) .. it leaves out the ()
+            let finalQueryString = queryString.toUpperCase()
             let model = getModelForBankName(finalBankName)
 
            console.log("DB HANDLER TALKING>... NEW METHOD>>>> : " + finalBankName, finalQueryString, model);
@@ -575,9 +576,9 @@ export class BankDB {
     getAllBranchNamesForBankNameInCityMatchingQueryString(bankName : string, cityName : string, queryString : string) : Promise<Array<any>> {
 
         return new Promise((resolve,reject) => {
-            let finalBankName = _.upperCase(bankName)
-            let finalCityName = cityName
-            var finalQueryString = _.upperCase(queryString) 
+            let finalBankName = bankName.toUpperCase()
+            let finalCityName = cityName.toUpperCase()
+            var finalQueryString = queryString.toUpperCase() 
            
             var finalRegEx = new RegExp(finalQueryString) 
             
@@ -640,15 +641,18 @@ export class BankDB {
     }
 
 
-    getAllBranchesForBankNameInCityBranchName(bankName : string, cityName : string, branchName : string) : Promise<Array<BankBranchDetail>> {
+    getAllBranchesForBankNameInCityBranchName(bankName : string, cityName : string, branchName : string) : Promise<any> {
         return new Promise((resolve,reject) => {
             //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb
             // I am using the in-efficinet regex method to make the find case-insensive.. check out the link above for a more optimizes soln.
             // DRY vioation.... !!!! 
 
             let model = getModelForBankName(bankName)
+            if (model == undefined){
+                reject("Error : Model not found for bank name " + bankName, cityName , branchName)
+            }
 
-            model.find({name : { $regex : new RegExp(bankName, "i") } , city : { $regex : new RegExp(cityName, "i") }, branch : { $regex : new RegExp(branchName, "i")}},function(err,results){
+            model.find({name : bankName, city : cityName, branch : branchName},function(err,results){
                 resolve(results)
             })
         })

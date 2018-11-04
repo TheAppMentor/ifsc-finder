@@ -244,7 +244,7 @@ router.get('/getDomForBranchSearch/', function (req, res, next) {
 // Generate DOM for final results 
 router.get('/getDomForResults/', function (req, res, next) {
     var bankName = req.query.bankName;
-    var cityName = req.query.cityName;
+    var cityName = req.query.locationName;
     var branchName = req.query.branchName;
     console.log("Request Received | Route : /getDomForResults | query : " + JSON.stringify(req.query));
     bankColl.getBranchesDetailsForBankInCityWithBranchName(bankName, cityName, branchName).then(function (branchNameArr) {

@@ -139,7 +139,8 @@ function getModelForBankName(bankName) {
             break;
         }
         default:
-            null;
+            return otherBanksModel;
+            break;
     }
 }
 var BankDB = /** @class */ (function () {
@@ -392,8 +393,8 @@ var BankDB = /** @class */ (function () {
     };
     BankDB.prototype.getAllCityNamesForBankMatchingQueryString = function (bankName, queryString) {
         return new Promise(function (resolve, reject) {
-            var finalBankName = _.upperCase(bankName);
-            var finalQueryString = _.upperCase(queryString);
+            var finalBankName = bankName.toUpperCase(); // Dont use loaash for the uppercase. it messes up string like State bank of inida (SBI) .. it leaves out the ()
+            var finalQueryString = queryString.toUpperCase();
             var model = getModelForBankName(finalBankName);
             console.log("DB HANDLER TALKING>... NEW METHOD>>>> : " + finalBankName, finalQueryString, model);
             model.find({ name: finalBankName, city: { $regex: new RegExp(finalQueryString) } }, function (err, results) {
@@ -474,9 +475,9 @@ var BankDB = /** @class */ (function () {
     };
     BankDB.prototype.getAllBranchNamesForBankNameInCityMatchingQueryString = function (bankName, cityName, queryString) {
         return new Promise(function (resolve, reject) {
-            var finalBankName = _.upperCase(bankName);
-            var finalCityName = cityName;
-            var finalQueryString = _.upperCase(queryString);
+            var finalBankName = bankName.toUpperCase();
+            var finalCityName = cityName.toUpperCase();
+            var finalQueryString = queryString.toUpperCase();
             var finalRegEx = new RegExp(finalQueryString);
             if (finalQueryString == "") {
                 finalRegEx = new RegExp("[A-Z]");
@@ -536,7 +537,10 @@ var BankDB = /** @class */ (function () {
             // I am using the in-efficinet regex method to make the find case-insensive.. check out the link above for a more optimizes soln.
             // DRY vioation.... !!!! 
             var model = getModelForBankName(bankName);
-            model.find({ name: { $regex: new RegExp(bankName, "i") }, city: { $regex: new RegExp(cityName, "i") }, branch: { $regex: new RegExp(branchName, "i") } }, function (err, results) {
+            if (model == undefined) {
+                reject("Error : Model not found for bank name " + bankName, cityName, branchName);
+            }
+            model.find({ name: bankName, city: cityName, branch: branchName }, function (err, results) {
                 resolve(results);
             });
         });
