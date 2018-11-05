@@ -8,7 +8,6 @@ var decompress = require('decompress');
 var _ = require('lodash');
 var db = mongoose.connection;
 mongoose.Promise = require('bluebird');
-var logger;
 // Creating a Schema 
 var bankNamesSchema = new mongoose.Schema({
     name: String
@@ -145,8 +144,7 @@ function getModelForBankName(bankName) {
     }
 }
 var BankDB = /** @class */ (function () {
-    function BankDB(logger) {
-        this.logger = logger;
+    function BankDB() {
     }
     BankDB.prototype.connectoToDBAndLoadData = function (bankCollection) {
         return new Promise(function (resolve, reject) {

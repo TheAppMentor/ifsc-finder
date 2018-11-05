@@ -14,7 +14,6 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('public', express.static(path.join(__dirname, 'public')));
 app.set('images', express.static(path.join(__dirname, 'images')));
 app.set('stylesheets', express.static(path.join(__dirname, 'stylesheets')));
-app.set('logs', express.static(path.join(__dirname, 'logs')));
 app.set('view engine', 'hbs');
 
 app.use(logger('dev'));

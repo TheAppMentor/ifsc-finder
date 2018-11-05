@@ -5,29 +5,21 @@ var router = express.Router();
 var _ = require('lodash');
 var handlebars = require('handlebars');
 var fs = require('fs');
-var log4js = require('log4js');
 var WebhookClient = require('dialogflow-fulfillment').WebhookClient;
 var Promise = require('bluebird');
 var BankCollection_1 = require("../model/BankCollection");
 var dialogflow_responseParser_1 = require("../model/dialogflow-responseParser");
 var DOM_Generator = require('../templates/dom_gen');
-var bankColl;
-var dom_gen;
+var bankColl = new BankCollection_1.BankCollection();
+var dom_gen = new DOM_Generator();
 var totalNumberOfBankBranchesInDB = "1.5 L";
 var totalNumberOfBanksInDB;
 var allBankNamesArr = [];
 var popularBankNamesArr = [];
 var allSetReadyToLaunch = false;
 var bankMetaData = [];
-var logger;
-instantiateLogger()
+bankColl.loadDataBasesWithDataFromFile()
     .then(function () {
-    bankColl = new BankCollection_1.BankCollection(logger);
-    dom_gen = new DOM_Generator(logger);
-})
-    .then(function () {
-    bankColl.loadDataBasesWithDataFromFile();
-}).then(function () {
     // Load Meta Data table into memory. This is pretty small and can be stored in memory (Later may be in the cache)
     // db.statebankofindiasbimodels.find({city : /BENGA/}).count()
     return bankColl.getBankMetaData();
@@ -55,82 +47,11 @@ instantiateLogger()
     });
     return Promise.resolve(true);
 })
-    .then(function () {
-    log4js.configure({
-        appenders: {
-            file: {
-                type: 'file',
-                filename: 'public/logs/logfile.log',
-                maxLogSize: 10 * 1024 * 1024,
-                numBackups: 5,
-                compress: true,
-                encoding: 'utf-8',
-                mode: 416,
-                flags: 'w+'
-            },
-            dateFile: {
-                type: 'dateFile',
-                filename: 'more-important-things.log',
-                pattern: 'yyyy-MM-dd-hh',
-                compress: true
-            },
-            out: {
-                type: 'stdout'
-            }
-        },
-        categories: {
-            default: { appenders: ['file', 'dateFile', 'out'], level: 'trace' }
-        }
-    });
-    var logger = log4js.getLogger('things');
-    bankColl.logger = logger;
-    logger.debug('This little thing went to market');
-    logger.info('This little thing stayed at home');
-    logger.error('This little thing had roast beef');
-    logger.fatal('This little thing had none');
-    logger.trace('and this little thing went wee, wee, wee, all the way home.');
-    return Promise.resolve(true);
-})
     .then(function (preProcessingComplete) {
     if (preProcessingComplete == true) {
         allSetReadyToLaunch = true;
     }
 });
-function instantiateLogger() {
-    log4js.configure({
-        appenders: {
-            file: {
-                type: 'file',
-                filename: '../public/logs/logfile.log',
-                maxLogSize: 10 * 1024 * 1024,
-                numBackups: 5,
-                compress: true,
-                encoding: 'utf-8',
-                mode: 416,
-                flags: 'w+'
-            },
-            dateFile: {
-                type: 'dateFile',
-                filename: 'more-important-things.log',
-                pattern: 'yyyy-MM-dd-hh',
-                compress: true
-            },
-            out: {
-                type: 'stdout'
-            }
-        },
-        categories: {
-            default: { appenders: ['file', 'dateFile', 'out'], level: 'trace' }
-        }
-    });
-    logger = log4js.getLogger('Ifsc-Finder');
-    logger.debug('This little thing went to market');
-    logger.info('This little thing stayed at home');
-    logger.error('This little thing had roast beef');
-    logger.fatal('This little thing had none');
-    logger.trace('and this little thing went wee, wee, wee, all the way home.');
-    return Promise.resolve(true);
-}
 var appStep = "find_bank";
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -242,11 +163,6 @@ router.get('/getBranchList/', function (req, res, next) {
         console.log("Returning Response : " + JSON.stringify(resp));
         return res.json(resp);
     });
-});
-router.get('/download', function (req, res, next) {
-    var filePath = "./public/logs/logfile.log"; // Or format the path using the `id` rest param
-    var fileName = "logfile.log"; // The default name the browser will use
-    res.download(filePath, fileName);
 });
 // For Bank Name : Get all locations
 router.get('/getLocations/', function (req, res, next) {
