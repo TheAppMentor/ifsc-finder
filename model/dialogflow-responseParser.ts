@@ -5,7 +5,7 @@ import { BankCollection } from '../model/BankCollection'
 import { BankDB } from '../data/dbHandler'
 import { BankBranchDetail } from '../model/BankBranchDetail'
 
-let bankColl = new BankCollection()
+let bankColl = new BankCollection({})
 
 export class DialogFlowRespParser {
 

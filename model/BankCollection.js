@@ -7,14 +7,17 @@ var Promise = require("bluebird");
 var Trie = require('mnemonist/trie');
 //var fs = require('fs')
 var fs = require('fs-extra-promise');
+//Promise.promisifyAll(fs);
+var logger;
 var BankCollection = /** @class */ (function () {
-    function BankCollection() {
+    function BankCollection(logger) {
         this.bankNameStoreTrie = Trie.from([]);
         this.bankNameToFileMap = {};
-        this.dataStore = new dbHandler_1.BankDB();
         this._allBankNames = Array();
         //console.log("Constructor Calling : loadDataBasesWithDataFromFile")
         //this.loadDataBasesWithDataFromFile()
+        this.logger = logger;
+        this.dataStore = new dbHandler_1.BankDB(logger);
     }
     BankCollection.prototype.getAllBranchesCount = function (bankName) {
         if (bankName === void 0) { bankName = ""; }

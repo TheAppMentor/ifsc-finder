@@ -10,6 +10,8 @@ var _ = require('lodash')
 const db = mongoose.connection
 mongoose.Promise = require('bluebird');
 
+var logger
+
 // Creating a Schema 
 const bankNamesSchema = new mongoose.Schema({
     name: String
@@ -173,6 +175,13 @@ function getModelForBankName(bankName : string) : any {
 
 
 export class BankDB {
+
+    logger : any
+
+    constructor(logger : any) {
+        this.logger = logger 
+    }
+
 
     connectoToDBAndLoadData(bankCollection : BankCollection) : Promise<boolean> {
         return new Promise((resolve,reject) => {

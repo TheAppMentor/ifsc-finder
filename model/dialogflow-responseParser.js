@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var parseJson = require('parse-json');
 var Promise = require("bluebird");
 var BankCollection_1 = require("../model/BankCollection");
-var bankColl = new BankCollection_1.BankCollection();
+var bankColl = new BankCollection_1.BankCollection({});
 var DialogFlowRespParser = /** @class */ (function () {
     function DialogFlowRespParser() {
     }
