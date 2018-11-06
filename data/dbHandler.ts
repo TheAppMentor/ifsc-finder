@@ -419,6 +419,46 @@ export class BankDB {
         })
     }
 
+    getRegExForQueryString(queryString : string) : any{
+
+        if (queryString == ""){
+            return new RegExp("[A-Z]") 
+        }
+
+        var finalQueryString = queryString.toUpperCase() 
+        var finalRegEx = new RegExp(finalQueryString) 
+
+        return finalQueryString
+    }
+
+    getLocationCountForBankName(bankName : string, queryString : string) : Promise<number>{
+        return new Promise((resolve : any, reject : any) => {
+            let finalBankName = bankName.toUpperCase()  
+            var finalRegEx = this.getRegExForQueryString(queryString)
+
+            console.log("NOW I WILL FETCH COUNTS>.... 1111")
+            let model = getModelForBankName(finalBankName)
+
+            console.log("NOW I WILL FETCH COUNTS>.... 22222V")
+
+            let locationCount = model.find({name : finalBankName, city : {$regex : finalRegEx}}).estimatedDocumentCount()
+            resolve(locationCount)
+        })
+    }
+
+    
+    getBranchCountForBankName(bankName : string, locationName : string, queryString : string) : Promise<number>{
+        return new Promise((resolve : any, reject : any) => {
+            let finalBankName = bankName.toUpperCase()  
+            let finalLocationName = locationName.toUpperCase()  
+            var finalRegEx = this.getRegExForQueryString(queryString)
+
+            let model = getModelForBankName(finalBankName)
+
+            let branchCount = model.find({name : finalBankName, city : locationName, branch : {$regex : finalRegEx}}).estimatedDocumentCount()
+            resolve(branchCount)
+        })
+    }
 
     getAllBranchesCount(bankName : string = "") : Promise<number>{
         return new Promise((resolve : any, reject : any) => {
@@ -573,16 +613,10 @@ export class BankDB {
         return new Promise((resolve,reject) => {
             let finalBankName = bankName.toUpperCase()
             let finalCityName = cityName.toUpperCase()
-            var finalQueryString = queryString.toUpperCase() 
-           
-            var finalRegEx = new RegExp(finalQueryString) 
             
-            if (finalQueryString == ""){
-             finalRegEx = new RegExp("[A-Z]") 
-            }
+            var finalRegEx = this.getRegExForQueryString(queryString)
             
             let model = getModelForBankName(finalBankName)
-
 
             model.find({name : finalBankName, city : finalCityName, branch : {$regex : finalRegEx}},function(err,results){
 

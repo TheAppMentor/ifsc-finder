@@ -36,6 +36,7 @@
         "npm": "^6.4.1",
         "papaparse": "^4.6.1",
         "parse-json": "^4.0.0",
+        "redis": "^2.8.0",
         "semantic-ui": "^2.4.0",
         "symbol-tree": "^3.2.2",
         "tree-model": "^1.0.7",

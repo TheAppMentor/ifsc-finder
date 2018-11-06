@@ -341,6 +341,37 @@ var BankDB = /** @class */ (function () {
             });
         });
     };
+    BankDB.prototype.getRegExForQueryString = function (queryString) {
+        if (queryString == "") {
+            return new RegExp("[A-Z]");
+        }
+        var finalQueryString = queryString.toUpperCase();
+        var finalRegEx = new RegExp(finalQueryString);
+        return finalQueryString;
+    };
+    BankDB.prototype.getLocationCountForBankName = function (bankName, queryString) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            var finalBankName = bankName.toUpperCase();
+            var finalRegEx = _this.getRegExForQueryString(queryString);
+            console.log("NOW I WILL FETCH COUNTS>.... 1111");
+            var model = getModelForBankName(finalBankName);
+            console.log("NOW I WILL FETCH COUNTS>.... 22222V");
+            var locationCount = model.find({ name: finalBankName, city: { $regex: finalRegEx } }).estimatedDocumentCount();
+            resolve(locationCount);
+        });
+    };
+    BankDB.prototype.getBranchCountForBankName = function (bankName, locationName, queryString) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            var finalBankName = bankName.toUpperCase();
+            var finalLocationName = locationName.toUpperCase();
+            var finalRegEx = _this.getRegExForQueryString(queryString);
+            var model = getModelForBankName(finalBankName);
+            var branchCount = model.find({ name: finalBankName, city: locationName, branch: { $regex: finalRegEx } }).estimatedDocumentCount();
+            resolve(branchCount);
+        });
+    };
     BankDB.prototype.getAllBranchesCount = function (bankName) {
         if (bankName === void 0) { bankName = ""; }
         return new Promise(function (resolve, reject) {
@@ -462,14 +493,11 @@ var BankDB = /** @class */ (function () {
         });
     };
     BankDB.prototype.getAllBranchNamesForBankNameInCityMatchingQueryString = function (bankName, cityName, queryString) {
+        var _this = this;
         return new Promise(function (resolve, reject) {
             var finalBankName = bankName.toUpperCase();
             var finalCityName = cityName.toUpperCase();
-            var finalQueryString = queryString.toUpperCase();
-            var finalRegEx = new RegExp(finalQueryString);
-            if (finalQueryString == "") {
-                finalRegEx = new RegExp("[A-Z]");
-            }
+            var finalRegEx = _this.getRegExForQueryString(queryString);
             var model = getModelForBankName(finalBankName);
             model.find({ name: finalBankName, city: finalCityName, branch: { $regex: finalRegEx } }, function (err, results) {
                 var branchObjects = results.map(function (eachRec) {
