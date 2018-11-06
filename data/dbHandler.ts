@@ -427,10 +427,7 @@ export class BankDB {
             let finalBankName = bankName.toUpperCase()  
             var finalRegEx = this.getRegExForQueryString(queryString)
 
-            console.log("NOW I WILL FETCH COUNTS>.... 1111")
             let model = getModelForBankName(finalBankName)
-
-            console.log("NOW I WILL FETCH COUNTS>.... 22222V")
 
             let locationCount = model.find({name : finalBankName, city : {$regex : finalRegEx}}).estimatedDocumentCount()
             resolve(locationCount)

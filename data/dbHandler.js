@@ -352,9 +352,7 @@ var BankDB = /** @class */ (function () {
         return new Promise(function (resolve, reject) {
             var finalBankName = bankName.toUpperCase();
             var finalRegEx = _this.getRegExForQueryString(queryString);
-            console.log("NOW I WILL FETCH COUNTS>.... 1111");
             var model = getModelForBankName(finalBankName);
-            console.log("NOW I WILL FETCH COUNTS>.... 22222V");
             var locationCount = model.find({ name: finalBankName, city: { $regex: finalRegEx } }).estimatedDocumentCount();
             resolve(locationCount);
         });

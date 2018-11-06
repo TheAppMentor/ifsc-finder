@@ -11,7 +11,6 @@ var Trie = require('mnemonist/trie');
 const fs = require('fs-extra-promise')
 //Promise.promisifyAll(fs);
 
-
 export interface IHash {
     [details: string] : string;
 } 
@@ -62,8 +61,7 @@ export class BankCollection {
 
     private bankNameStoreTrie  = Trie.from([]);
     private bankNameToFileMap : IHash = {}
-    private dataStore = new BankDB() 
-
+    private dataStore 
     private _allBankNames = Array<string>() 
 
     get allBankNames() : Array<string>{
@@ -78,6 +76,7 @@ export class BankCollection {
     constructor(){
         //console.log("Constructor Calling : loadDataBasesWithDataFromFile")
         //this.loadDataBasesWithDataFromFile()
+        this.dataStore = new BankDB() 
     }
 
     getBankMetaData() : Promise<Array<string>> {

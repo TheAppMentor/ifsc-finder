@@ -11,10 +11,10 @@ var BankCollection = /** @class */ (function () {
     function BankCollection() {
         this.bankNameStoreTrie = Trie.from([]);
         this.bankNameToFileMap = {};
-        this.dataStore = new dbHandler_1.BankDB();
         this._allBankNames = Array();
         //console.log("Constructor Calling : loadDataBasesWithDataFromFile")
         //this.loadDataBasesWithDataFromFile()
+        this.dataStore = new dbHandler_1.BankDB();
     }
     BankCollection.prototype.getAllBranchesCount = function (bankName) {
         if (bankName === void 0) { bankName = ""; }
