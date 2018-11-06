@@ -36,6 +36,11 @@ export class BankCollection {
         return this.dataStore.getAllBankNamesCount()
     }
 
+    getLocationCountForBankName(bankName : string, queryString : string) : Promise<number>{
+        return this.dataStore.getLocationCountForBankName(bankName, queryString)
+    }
+
+
     addBank(bank : Bank) : Promise<boolean> {
         return new Promise((reslove,reject) => {
             this.findBankMatchingName("IC")

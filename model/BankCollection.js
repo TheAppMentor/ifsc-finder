@@ -32,6 +32,9 @@ var BankCollection = /** @class */ (function () {
     BankCollection.prototype.getAllBankNamesCount = function () {
         return this.dataStore.getAllBankNamesCount();
     };
+    BankCollection.prototype.getLocationCountForBankName = function (bankName, queryString) {
+        return this.dataStore.getLocationCountForBankName(bankName, queryString);
+    };
     BankCollection.prototype.addBank = function (bank) {
         var _this = this;
         return new Promise(function (reslove, reject) {
