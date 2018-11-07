@@ -129,16 +129,6 @@ router.get('/getLocationList/', function (req, res, next) {
     var searchInput = req.query.searchInput;
     console.log("Request Received | Route : /getLocationList | query : " + JSON.stringify(req.query));
     bankColl.getAllCityNamesForBankMatchingQueryString(bankName, searchInput).then(function (allCityNames) {
-        //bankColl.getAllCityNamesForBank(bankName).then((allCityNames : [any]) => {
-        //TODO : Prashanth u can send the search query also to the MongoDB.. remember this is the search bar that gives u the user input.
-        /*
-            console.log("Fetched all city names " + JSON.stringify(allCityNames))
-            let matchedCityNames = _.filter(allCityNames, (eachValue) => {
-                if (_.includes(_.toLower(eachValue.city), _.toLower(searchInput)) == true){
-                    return eachValue
-                }
-            })
-         */
         //Form the response.
         var resp = {};
         resp['results'] = allCityNames;
