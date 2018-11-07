@@ -8,7 +8,9 @@ body {
   font-family: Days One;
     color: white;
 }
-
+.ui.search>.results .result .description{
+    font-size: 0.6em;
+}
 
 h1, h2, h3, h4, h5, title {
   font-family: Days One;
