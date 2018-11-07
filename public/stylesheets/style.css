@@ -262,6 +262,13 @@ color : green;
   [class*="or lower hidden"] {
     display: none !important;
   }
+
+
+  .masthead h1.ui.header {
+    font-size: 4em;
+    margin-top: 0em;
+    color : red;  
+}
 }
 
 
