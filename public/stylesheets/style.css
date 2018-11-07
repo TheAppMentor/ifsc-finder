@@ -102,7 +102,7 @@ box-shadow: 0 0 0 0 rgba(34,36,38,.15);
   .ui.large.secondary.inverted.pointing.menu{
   border: none;
 }
-
+}
 
 .hidden.menu {
   display: none;
@@ -155,8 +155,8 @@ ui.segment{
 
 .ui.vertical.stripeShort {
   padding: 1em 0em;
-  border-bottom: 0px
-  border-top: 0px
+  border-bottom: 0px;
+  border-top: 0px;
 }
 
 #amazon_ad{
@@ -280,7 +280,6 @@ color : green;
     display: none !important;
   }
 }
-
 
 /* Computer / Desktop / iPad Landscape */
 

@@ -43,6 +43,7 @@
     },
     "devDependencies": {
         "@types/node": "^10.11.6",
+        "cssnano": "^4.1.7",
         "gulp": "^4.0.0",
         "typescript": "^2.9.2"
     }
