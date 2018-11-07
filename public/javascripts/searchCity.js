@@ -4,6 +4,7 @@
                     url: "/getLocationList/?bankName=" + $("#findBankSearchField.ui.search").data("selectedBank") + "&searchInput={query}"
                 },
                 selectFirstResult : true,
+                fullTextSearch: true,
                 minCharacters : 1,
                 onResponse : function(theresponse) {
                     console.log("The Response is " + theresponse)

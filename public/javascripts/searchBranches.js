@@ -4,6 +4,7 @@ $("#findBranchSearchField.ui.search")
             url: "/getBranchList/?bankName=" + $("#findBankSearchField.ui.search").data("selectedBank") + "&locationName=" + $("#findLocationSearchField.ui.search").data("selectedLocation") +  "&searchInput={query}"
         },
         selectFirstResult : true,
+        fullTextSearch : true,
         minCharacters : 0,
         onResponse : function(theresponse) {
             console.log("The Response is " + theresponse)
