@@ -54,7 +54,7 @@ function loadConfigFile() {
     var reloadAllDB = fileContents['reloadAllDB'];
     return fileContents;
 }
-// TODO DOnt do this.. you have the popular banks tagged in the Meta Data.. fetch it from that.. Hard coding this will make all kind of shitty dependencies.
+// TODO Dont do this.. you have the popular banks tagged in the Meta Data.. fetch it from that.. Hard coding this will make all kind of shitty dependencies.
 var popularBanks = ["ALLAHABAD BANK", "ANDHRA BANK", "AXIS BANK", "BANK OF BARODA (BOB)", "BANK OF INDIA (BOI)", "CANARA BANK", "CENTRAL BANK OF INDIA", "CORPORATION BANK", "HDFC BANK", "ICICI BANK LIMITED", "IDBI BANK", "INDIAN BANK", "INDIAN OVERSEAS BANK (IOB)", "ORIENTAL BANK OF COMMERCE", "PUNJAB NATIONAL BANK (PNB)", "STATE BANK OF INDIA (SBI)", "SYNDICATE BANK", "UCO BANK", "UNION BANK OF INDIA", "YES BANK",];
 function getModelForBankName(bankName) {
     switch (bankName) {
@@ -184,8 +184,10 @@ var BankDB = /** @class */ (function () {
                         // Make DB for Other Banks
                         return new Promise(function (resolve, reject) {
                             var otherBankData = fs.readJsonSync("./dist/Split_Records/otherBanks.json");
+                            var currentModel = getModelForBankName(""); // Default model is otherBanksModel
+                            console.log("Current Model :  " + currentModel);
                             var allBankDocs = _.map(otherBankData, function (eachBankRec) {
-                                var tempBankDetail = new otherBanksModel({
+                                var tempBankDetail = new currentModel({
                                     name: eachBankRec["name"],
                                     ifsc: eachBankRec["ifsc"],
                                     micr: eachBankRec["micr"],
@@ -198,9 +200,12 @@ var BankDB = /** @class */ (function () {
                                 });
                                 return tempBankDetail;
                             });
-                            otherBanksModel.collection.drop();
-                            otherBanksModel.insertMany(allBankDocs)
+                            currentModel.collection.drop();
+                            console.log("Inserting other bank ocs.......  :" + allBankDocs.length);
+                            currentModel.insertMany(allBankDocs)
                                 .then(function (docs) {
+                                console.log("Success !! : Inserting Other Bank Data " + docs.length);
+                                console.log(docs);
                                 resolve(true);
                             })
                                 .catch(function (err) {
@@ -212,6 +217,7 @@ var BankDB = /** @class */ (function () {
                         return new Promise(function (resolve, reject) {
                             console.log("<============= Startin with POP BANKS =============>");
                             _.map(popularBanks, function (eachPopBank) {
+                                console.log("<============= Staring :" + eachPopBank + "=============>");
                                 var currentModel = getModelForBankName(eachPopBank);
                                 var fileName = "./dist/Split_Records/" + _.camelCase(eachPopBank) + ".json";
                                 var popBankData = fs.readJsonSync(fileName);
@@ -232,6 +238,7 @@ var BankDB = /** @class */ (function () {
                                 currentModel.collection.drop();
                                 currentModel.insertMany(allBankDocs)
                                     .then(function (docs) {
+                                    console.log("<============= Complete :" + docs.length + "=============>");
                                 })
                                     .catch(function (err) {
                                     console.log("Error !! : Writing Other Bank Data " + err);
@@ -348,13 +355,18 @@ var BankDB = /** @class */ (function () {
         return finalQueryString;
     };
     BankDB.prototype.getLocationCountForBankName = function (bankName, queryString) {
-        var _this = this;
         return new Promise(function (resolve, reject) {
             var finalBankName = bankName.toUpperCase();
-            var finalRegEx = _this.getRegExForQueryString(queryString);
             var model = getModelForBankName(finalBankName);
-            var locationCount = model.find({ name: finalBankName, city: { $regex: finalRegEx } }).estimatedDocumentCount();
-            resolve(locationCount);
+            model.find({ name: finalBankName }, function (err, results) {
+                var cityNames = results.map(function (eachRec) {
+                    return eachRec.city;
+                });
+                var uniqCityNames = _.uniq(cityNames);
+                var sortedUniqueCityNames = _.sortBy(uniqCityNames);
+                console.log("Final Lenth is : " + sortedUniqueCityNames.length);
+                resolve(sortedUniqueCityNames.length);
+            });
         });
     };
     BankDB.prototype.getBranchCountForBankName = function (bankName, locationName, queryString) {
@@ -364,8 +376,11 @@ var BankDB = /** @class */ (function () {
             var finalLocationName = locationName.toUpperCase();
             var finalRegEx = _this.getRegExForQueryString(queryString);
             var model = getModelForBankName(finalBankName);
-            var branchCount = model.find({ name: finalBankName, city: locationName, branch: { $regex: finalRegEx } }).estimatedDocumentCount();
-            resolve(branchCount);
+            console.log("Find City Count... getBranchCountForBankName");
+            model.find({ name: finalBankName, city: locationName, branch: { $regex: finalRegEx } }, function (err, values) {
+                var branchCount = _.uniq(values).length;
+                resolve(branchCount);
+            });
         });
     };
     BankDB.prototype.getAllBranchesCount = function (bankName) {

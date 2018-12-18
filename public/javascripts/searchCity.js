@@ -8,16 +8,23 @@
                 minCharacters : 1,
                 onResponse : function(theresponse) {
                     console.log("The Response is " + theresponse)
+                    
+                    let formattedResults = _.map((eachResponse) => {
+                        console.log("each response.city is : ", eachResponse.city)     
+                        let newString = '<div style:"color:red">' + eachResponse.city + '</div>'
+                        return newString 
+                    })
+                   
                     return theresponse
                 },
                 fields: {
-                    description     : 'state', // result description
+                    description     : 'state',         // result description
                     //image           : 'image',       // result image
                     //price           : 'price',       // result price
                     results         : 'results',     // array of results (standard)
                     title           : 'city',       // result title
                     action          : 'action',      // "view more" object name
-                    //actionText      : 'text',        // "view more" text
+                    actionText      : 'actionText',        // "view more" text
                     //actionURL       : 'url'          // "view more" url
                 },
                 onSelect(result, response) {

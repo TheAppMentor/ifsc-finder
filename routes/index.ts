@@ -168,7 +168,9 @@ router.get('/getLocationList/', function(req, res, next) {
         //Form the response.
         var resp = {}
         resp['results'] = allCityNames 
-        
+        resp['action'] = {"actionText" : "Found " + allCityNames.length + " locations matching " + searchInput} 
+
+        //resp['actionText'] = "Found " + allCityNames.length + " locations matching " + searchInput 
         let queryReturnedResults = allCityNames.length > 0 ? true : false 
         resp["success"] = queryReturnedResults
 

@@ -63,7 +63,7 @@ function loadConfigFile(){
 }
 
 
-// TODO DOnt do this.. you have the popular banks tagged in the Meta Data.. fetch it from that.. Hard coding this will make all kind of shitty dependencies.
+// TODO Dont do this.. you have the popular banks tagged in the Meta Data.. fetch it from that.. Hard coding this will make all kind of shitty dependencies.
 let popularBanks = ["ALLAHABAD BANK","ANDHRA BANK","AXIS BANK","BANK OF BARODA (BOB)","BANK OF INDIA (BOI)","CANARA BANK","CENTRAL BANK OF INDIA","CORPORATION BANK","HDFC BANK","ICICI BANK LIMITED","IDBI BANK","INDIAN BANK","INDIAN OVERSEAS BANK (IOB)","ORIENTAL BANK OF COMMERCE","PUNJAB NATIONAL BANK (PNB)","STATE BANK OF INDIA (SBI)","SYNDICATE BANK","UCO BANK","UNION BANK OF INDIA","YES BANK",] 
 
 function getModelForBankName(bankName : string) : any {
@@ -213,15 +213,22 @@ export class BankDB {
                                         .catch((err) => {
                                             reject("Error !! : Writing Meta Data " + err) 
                                         })
+
+
+
+
+
+
                             }).then(() : Promise<boolean> => {    // Load Other Bank Details
                                 // Make DB for Other Banks
                                 return new Promise((resolve : any, reject : any) => {
 
                                     let otherBankData = fs.readJsonSync("./dist/Split_Records/otherBanks.json")
-
+                                    let currentModel = getModelForBankName("") // Default model is otherBanksModel
+                                    console.log("Current Model :  " + currentModel) 
+                                    
                                     let allBankDocs = _.map(otherBankData, (eachBankRec) => {
-
-                                        let tempBankDetail = new otherBanksModel({
+                                        let tempBankDetail = new currentModel({
                                             name : eachBankRec["name"],
                                             ifsc : eachBankRec["ifsc"],
                                             micr : eachBankRec["micr"],
@@ -235,24 +242,37 @@ export class BankDB {
                                         return tempBankDetail
                                     }) 
 
-                                    otherBanksModel.collection.drop()
-
-                                    otherBanksModel.insertMany(allBankDocs)
-
+                                    currentModel.collection.drop()
+                                    console.log("Inserting other bank ocs.......  :" + allBankDocs.length) 
+                                    
+                                    currentModel.insertMany(allBankDocs)
                                         .then((docs) => {
+                                            console.log("Success !! : Inserting Other Bank Data " + docs.length) 
+                                            console.log(docs)
                                             resolve(true)
                                         })
                                         .catch((err) => {
                                             console.log("Error !! : Writing Other Bank Data " + err) 
                                         })
                                 })
+
+
+
+
+
+
+
+
+
+
                             }).then(() : Promise<any> => {        // Load Popular Bank Details
                                 // Make DB for Popular Banks
                                 return new Promise((resolve : any, reject : any) => {
-
                                     console.log("<============= Startin with POP BANKS =============>")
 
                                     _.map(popularBanks,(eachPopBank) => {
+
+                                        console.log("<============= Staring :" + eachPopBank + "=============>")
 
                                         let currentModel = getModelForBankName(eachPopBank)
                                         let fileName =   "./dist/Split_Records/" + _.camelCase(eachPopBank) + ".json"
@@ -280,6 +300,7 @@ export class BankDB {
                                         currentModel.insertMany(allBankDocs)
 
                                             .then((docs) => {
+                                                console.log("<============= Complete :" + docs.length + "=============>")
                                             })
                                             .catch((err) => {
                                                 console.log("Error !! : Writing Other Bank Data " + err) 
@@ -289,13 +310,14 @@ export class BankDB {
                                 })
                             }) 
                         resolve(true)
-                    }) 
+ }) 
                 }).catch((err) => {
                     console.log("We Have an Error connecting to Mongoose DB." + err)
                 })
             resolve(true)
         })
     }
+
 
     private loadBankNamesDB(bankCollection : BankCollection) : Promise<any> {
         var numberOfDocumentsLoaded = 0
@@ -424,16 +446,23 @@ export class BankDB {
 
     getLocationCountForBankName(bankName : string, queryString : string) : Promise<number>{
         return new Promise((resolve : any, reject : any) => {
-            let finalBankName = bankName.toUpperCase()  
-            var finalRegEx = this.getRegExForQueryString(queryString)
 
+            let finalBankName = bankName.toUpperCase()  
             let model = getModelForBankName(finalBankName)
 
-            let locationCount = model.find({name : finalBankName, city : {$regex : finalRegEx}}).estimatedDocumentCount()
-            resolve(locationCount)
-        })
-    }
+            model.find({name : finalBankName} ,function(err,results){
 
+                var cityNames = results.map(eachRec => {
+                    return eachRec.city
+                })
+
+                var uniqCityNames = _.uniq(cityNames)
+                let sortedUniqueCityNames = _.sortBy(uniqCityNames)
+                console.log("Final Lenth is : " + sortedUniqueCityNames.length)
+                resolve(sortedUniqueCityNames.length)
+            })
+        })
+    } 
     
     getBranchCountForBankName(bankName : string, locationName : string, queryString : string) : Promise<number>{
         return new Promise((resolve : any, reject : any) => {
@@ -442,9 +471,12 @@ export class BankDB {
             var finalRegEx = this.getRegExForQueryString(queryString)
 
             let model = getModelForBankName(finalBankName)
+            console.log("Find City Count... getBranchCountForBankName")
 
-            let branchCount = model.find({name : finalBankName, city : locationName, branch : {$regex : finalRegEx}}).estimatedDocumentCount()
-            resolve(branchCount)
+            model.find({name : finalBankName, city : locationName, branch : {$regex : finalRegEx}},function(err,values){
+                let branchCount = _.uniq(values).length
+                resolve(branchCount)
+            })
         })
     }
 
