@@ -8,14 +8,28 @@
             <div class="ui vertical stripe segment" id="infoDivSearchBank" style="display:block">
                 <div class="ui vertical stripe segment">
                     <div class="ui two column stackable center aligned grid">
-                        <div class="middle aligned row">
+                        <div class="top aligned row">
+                            <!--For Mobile Devices, show the statistic first  --> 
+                            <div class="ui mobile only seven wide column ">
+                                <h2 style="color: darkgray">{{bankName}}</h2>
+                                <div class="ui statistic">
+                                    <div class="value">
+                                        {{locationCount}}
+                                    </div>
+                                    <div class="label">
+                                        Locations in India
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui mobile only vertical divider"></div>
+
                             <div class="ui seven wide column">
                                 <h2 style="color: darkgray">What is RTGS?</h2>
                                 <p style="font-family:Lato">'RTGS' stands for Real Time Gross Settlement. RTGS is continuous (real-time) settlement of funds individually on an order by order basis (without netting). 'Real Time' means the processing of instructions at the time they are received rather than at some later time.'Gross Settlement' means the settlement of funds transfer instructions occurs individually (on an instruction by instruction basis). Remember that the funds settlement takes place in the books of the Reserve Bank of India, the payments are final and irrevocable.
 </p>
                             </div>
-                            <div class="ui vertical divider"></div>
-                            <div class="ui seven wide column ">
+                            <div class="ui mobile hidden vertical divider"></div>
+                            <div class="ui mobile hidden seven wide column ">
                                 <h2 style="color: darkgray">{{bankName}}</h2>
                                 <div class="ui statistic">
                                     <div class="value">

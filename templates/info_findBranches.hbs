@@ -8,13 +8,28 @@
                 <div class="ui vertical stripe segment" id="infoDivSearchBank" style="display:block">
                     <div class="ui vertical stripe segment">
                         <div class="ui two column stackable center aligned grid">
-                            <div class="middle aligned row">
-                                <div class="ui seven wide column">
+                            <div class="top aligned row">
+                                <!-- DRY Violiation -->
+                                <div class="ui mobile only divider"></div>
+                                <div class="ui mobile only seven wide column ">
+                                    <h2 style="color: darkgray">{{bankName}}</h2>
+                                    <div class="ui statistic">
+                                        <div class="value">
+                                            {{branchCount}}
+                                        </div>
+                                        <div class="label">
+                                            Branches in {{locationName}} 
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="ui mobile hidden seven wide column">
                                     <h2 style="color: darkgray">What is NEFT?</h2>
                                     <p style="font-family:Lato">National Electronic Funds Transfer (NEFT) is a nation-wide payment system facilitating one-to-one funds transfer. Under this Scheme, individuals can electronically transfer funds from any bank branch to any individual having an account with any other bank branch in the country participating in the Scheme.</p>
                                 </div>
-                                <div class="ui vertical divider"></div>
-                                <div class="ui seven wide column ">
+                                <div class="ui mobile hidden vertical divider"></div>
+                                <div class="ui mobile hidden seven wide column ">
+                                    <!-- DRY Violiation -->
                                     <h2 style="color: darkgray">{{bankName}}</h2>
                                     <div class="ui statistic">
                                         <div class="value">
