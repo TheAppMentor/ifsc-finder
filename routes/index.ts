@@ -76,23 +76,8 @@ router.get('/', function(req, res, next) {
     let cityName = req.query.cityName
     let branchName = req.query.branchName
 
-    //TODO : ALl this is waste with the new look app.. clean this up.
-    if (_.isEmpty(req.query)){
         res.render('index', { 
-            title: 'IFSC Search', 
-            processStep : "findBank",
-            dropDownPlaceHolderText : "Search Bank Name", 
-            stepStatus : [
-                {title : "Find Bank", status : "active", description :  "Enter Bank Name"},
-                {title : "Find City", status : "disabled", description : "Enter Bank Location"},
-                {title : "Find Branch", status : "disabled", description : "Enter Bank Branch"}],
-            allBankNames : allBankNamesArr,
-            statistic: [{label : "Banks", value: totalNumberOfBanksInDB},{label : "Bank Branches", value: totalNumberOfBankBranchesInDB}],
-            statisticCount : "two",
-            statiticTitle : "All Banks", 
-            statiticSubTitle : "India" 
         });
-    }
 });
 
 router.get('/getBanks/', function(req, res, next) {
