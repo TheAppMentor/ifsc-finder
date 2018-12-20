@@ -215,18 +215,23 @@ router.get('/getDomForBranchSearch/', function (req, res, next) {
     var bankName = req.query.bankName;
     var locationName = req.query.locationName;
     console.log("Request Received | Route : /getDomForBranchSearch | query : " + JSON.stringify(req.query));
-    var branchSearch_div = dom_gen.getDivForBranchSearch({
-        bankName: bankName,
-        locationName: locationName,
-        segmentID: "findBranchSegment",
-        searchFieldID: "findBranchSearchField",
-        descriptionText: "Choose your branch"
+    bankColl.getBranchCountForBankNameInCity(bankName, locationName)
+        .then(function (branchCountAtLocation) {
+        console.log(" >>>>>>>>>>>>>>>> The Branch Count is...... " + branchCountAtLocation);
+        var branchSearch_div = dom_gen.getDivForBranchSearch({
+            bankName: bankName,
+            locationName: locationName,
+            segmentID: "findBranchSegment",
+            searchFieldID: "findBranchSearchField",
+            descriptionText: "Choose your branch"
+        });
+        var info_div = dom_gen.getDivForInfoBranchSearch({
+            bankName: bankName,
+            branchCount: branchCountAtLocation
+        });
+        console.log("Response Sent | Route : /getDomForBranchSearch | query : " + JSON.stringify(req.query) + " : Results : DIV_Branch Search");
+        res.json({ div_branchSearch: branchSearch_div, div_info: info_div });
     });
-    var info_div = dom_gen.getDivForInfoBranchSearch({
-        bankName: bankName,
-    });
-    console.log("Response Sent | Route : /getDomForBranchSearch | query : " + JSON.stringify(req.query) + " : Results : DIV_Branch Search");
-    res.json({ div_branchSearch: branchSearch_div, div_info: info_div });
 });
 // Generate DOM for final results 
 router.get('/getDomForResults/', function (req, res, next) {

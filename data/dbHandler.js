@@ -376,15 +376,13 @@ var BankDB = /** @class */ (function () {
             });
         });
     };
-    BankDB.prototype.getBranchCountForBankName = function (bankName, locationName, queryString) {
-        var _this = this;
+    BankDB.prototype.getBranchCountForBankNameInCity = function (bankName, locationName) {
         return new Promise(function (resolve, reject) {
             var finalBankName = bankName.toUpperCase();
             var finalLocationName = locationName.toUpperCase();
-            var finalRegEx = _this.getRegExForQueryString(queryString);
             var model = getModelForBankName(finalBankName);
             console.log("Find City Count... getBranchCountForBankName");
-            model.find({ name: finalBankName, city: locationName, branch: { $regex: finalRegEx } }, function (err, values) {
+            model.find({ name: finalBankName, city: locationName }, function (err, values) {
                 var branchCount = _.uniq(values).length;
                 resolve(branchCount);
             });

@@ -468,16 +468,15 @@ export class BankDB {
             })
     } 
     
-    getBranchCountForBankName(bankName : string, locationName : string, queryString : string) : Promise<number>{
+    getBranchCountForBankNameInCity(bankName : string, locationName : string) : Promise<number>{
         return new Promise((resolve : any, reject : any) => {
             let finalBankName = bankName.toUpperCase()  
             let finalLocationName = locationName.toUpperCase()  
-            var finalRegEx = this.getRegExForQueryString(queryString)
 
             let model = getModelForBankName(finalBankName)
             console.log("Find City Count... getBranchCountForBankName")
 
-            model.find({name : finalBankName, city : locationName, branch : {$regex : finalRegEx}},function(err,values){
+            model.find({name : finalBankName, city : locationName},function(err,values){
                 let branchCount = _.uniq(values).length
                 resolve(branchCount)
             })

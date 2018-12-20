@@ -39,8 +39,8 @@ export class BankCollection {
         return this.dataStore.getLocationCountForBankName(bankName, queryString)
     }
 
-    getBranchCountForBankNameInCity(bankName : string, cityName : string, queryString : string) : Promise<number>{
-        return this.dataStore.getBranchCountForBankNameInCity(bankName,cityName, queryString)
+    getBranchCountForBankNameInCity(bankName : string, cityName : string) : Promise<number>{
+        return this.dataStore.getBranchCountForBankNameInCity(bankName,cityName)
     }
 
     addBank(bank : Bank) : Promise<boolean> {

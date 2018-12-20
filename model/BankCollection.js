@@ -35,8 +35,8 @@ var BankCollection = /** @class */ (function () {
     BankCollection.prototype.getLocationCountForBankName = function (bankName, queryString) {
         return this.dataStore.getLocationCountForBankName(bankName, queryString);
     };
-    BankCollection.prototype.getBranchCountForBankNameInCity = function (bankName, cityName, queryString) {
-        return this.dataStore.getBranchCountForBankNameInCity(bankName, cityName, queryString);
+    BankCollection.prototype.getBranchCountForBankNameInCity = function (bankName, cityName) {
+        return this.dataStore.getBranchCountForBankNameInCity(bankName, cityName);
     };
     BankCollection.prototype.addBank = function (bank) {
         var _this = this;
