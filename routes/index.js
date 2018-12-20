@@ -217,7 +217,6 @@ router.get('/getDomForBranchSearch/', function (req, res, next) {
     console.log("Request Received | Route : /getDomForBranchSearch | query : " + JSON.stringify(req.query));
     bankColl.getBranchCountForBankNameInCity(bankName, locationName)
         .then(function (branchCountAtLocation) {
-        console.log(" >>>>>>>>>>>>>>>> The Branch Count is...... " + branchCountAtLocation);
         var branchSearch_div = dom_gen.getDivForBranchSearch({
             bankName: bankName,
             locationName: locationName,
@@ -227,6 +226,7 @@ router.get('/getDomForBranchSearch/', function (req, res, next) {
         });
         var info_div = dom_gen.getDivForInfoBranchSearch({
             bankName: bankName,
+            locationName: locationName,
             branchCount: branchCountAtLocation
         });
         console.log("Response Sent | Route : /getDomForBranchSearch | query : " + JSON.stringify(req.query) + " : Results : DIV_Branch Search");
