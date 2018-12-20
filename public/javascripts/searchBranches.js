@@ -31,6 +31,10 @@ $("#findBranchSearchField.ui.search")
             let locationName = $("#findLocationSearchField.ui.search").data("selectedLocation") 
             let branchName = $("#findBranchSearchField.ui.search").data("selectedBranch") 
 
+            var jQueryScript = document.createElement('script');  
+            jQueryScript.setAttribute('src','https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js');
+            document.head.appendChild(jQueryScript);
+            
             //Generate div for Results
             let results_div = getDivFinalResult(bankName,locationName,branchName)
             
@@ -48,9 +52,8 @@ function getDivFinalResult(bankName,locationName,branchName){
             var myObj = JSON.parse(this.responseText);
             
             document.getElementById('showResultSegment').outerHTML = myObj.div_finaResults 
-            
+           
             $('html, body').animate({ scrollTop: $('#showResultSegment').offset().top }, 'slow');
-
             new ClipboardJS('#button-copy-ifsc');
         }                   
     }
