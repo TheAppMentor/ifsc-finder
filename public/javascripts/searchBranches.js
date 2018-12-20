@@ -17,7 +17,7 @@ $("#findBranchSearchField.ui.search")
             results         : 'results',     // array of results (standard)
             title           : 'branch',       // result title
             action          : 'action',      // "view more" object name
-            //actionText      : 'text',        // "view more" text
+            actionText      : 'actionText',        // "view more" text
             //actionURL       : 'url'          // "view more" url
         },
         onSelect(result, response) {

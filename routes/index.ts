@@ -166,13 +166,15 @@ router.get('/getLocationList/', function(req, res, next) {
     console.log("Request Received | Route : /getLocationList | query : " + JSON.stringify(req.query))
     bankColl.getAllCityNamesForBankMatchingQueryString(bankName,searchInput).then((allCityNames : [any]) => {
         //Form the response.
+
+        let locationStr = allCityNames.length == 1 ? "location" : "locations" 
         var resp = {}
         resp['results'] = allCityNames 
-        resp['action'] = {"actionText" : "Found " + allCityNames.length + " locations matching " + searchInput} 
+        resp['action'] = {"actionText" : "Found " + allCityNames.length + " " + locationStr + " matching " + "'<font color=\"green\">" + searchInput + "</font>'"} 
 
-        //resp['actionText'] = "Found " + allCityNames.length + " locations matching " + searchInput 
         let queryReturnedResults = allCityNames.length > 0 ? true : false 
         resp["success"] = queryReturnedResults
+        
 
         //Matching City Names
         console.log("Response Sent | Route : /getLocationList | query : " + JSON.stringify(req.query) +  ": Results : Something Was Sent" )
@@ -194,6 +196,8 @@ router.get('/getBranchList/', function(req, res, next) {
         //Form the response.
         var resp = {}
         resp['results'] = branchNameArr 
+        let branchStr = branchNameArr.length == 1 ? "branch" : "branches" 
+        resp['action'] = {"actionText" : "Found " + branchNameArr.length + " " + branchStr + " matching " + "'<font color=\"green\">" + searchInput + "</font>'"} 
         
         let queryReturnedResults = branchNameArr.length > 0 ? true : false 
         resp["success"] = queryReturnedResults

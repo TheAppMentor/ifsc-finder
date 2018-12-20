@@ -130,10 +130,10 @@ router.get('/getLocationList/', function (req, res, next) {
     console.log("Request Received | Route : /getLocationList | query : " + JSON.stringify(req.query));
     bankColl.getAllCityNamesForBankMatchingQueryString(bankName, searchInput).then(function (allCityNames) {
         //Form the response.
+        var locationStr = allCityNames.length == 1 ? "location" : "locations";
         var resp = {};
         resp['results'] = allCityNames;
-        resp['action'] = { "actionText": "Found " + allCityNames.length + " locations matching " + searchInput };
-        //resp['actionText'] = "Found " + allCityNames.length + " locations matching " + searchInput 
+        resp['action'] = { "actionText": "Found " + allCityNames.length + " " + locationStr + " matching " + "'<font color=\"green\">" + searchInput + "</font>'" };
         var queryReturnedResults = allCityNames.length > 0 ? true : false;
         resp["success"] = queryReturnedResults;
         //Matching City Names
@@ -150,6 +150,8 @@ router.get('/getBranchList/', function (req, res, next) {
         //Form the response.
         var resp = {};
         resp['results'] = branchNameArr;
+        var branchStr = branchNameArr.length == 1 ? "branch" : "branches";
+        resp['action'] = { "actionText": "Found " + branchNameArr.length + " " + branchStr + " matching " + "'<font color=\"green\">" + searchInput + "</font>'" };
         var queryReturnedResults = branchNameArr.length > 0 ? true : false;
         resp["success"] = queryReturnedResults;
         //Matching City Names
