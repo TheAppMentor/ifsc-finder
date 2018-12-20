@@ -35,6 +35,9 @@ var BankCollection = /** @class */ (function () {
     BankCollection.prototype.getLocationCountForBankName = function (bankName, queryString) {
         return this.dataStore.getLocationCountForBankName(bankName, queryString);
     };
+    BankCollection.prototype.getBranchCountForBankNameInCity = function (bankName, cityName, queryString) {
+        return this.dataStore.getBranchCountForBankNameInCity(bankName, cityName, queryString);
+    };
     BankCollection.prototype.addBank = function (bank) {
         var _this = this;
         return new Promise(function (reslove, reject) {
@@ -66,7 +69,6 @@ var BankCollection = /** @class */ (function () {
         return this.dataStore.connectoToDBAndLoadData(this);
     };
     BankCollection.prototype.getBankMetaData = function () {
-        console.log("In the Coll... goint to talk to datastore");
         return this.dataStore.getBankMetaData();
     };
     BankCollection.prototype.getAllBankNames = function () {

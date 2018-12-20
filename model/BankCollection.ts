@@ -39,6 +39,9 @@ export class BankCollection {
         return this.dataStore.getLocationCountForBankName(bankName, queryString)
     }
 
+    getBranchCountForBankNameInCity(bankName : string, cityName : string, queryString : string) : Promise<number>{
+        return this.dataStore.getBranchCountForBankNameInCity(bankName,cityName, queryString)
+    }
 
     addBank(bank : Bank) : Promise<boolean> {
         return new Promise((reslove,reject) => {
@@ -80,7 +83,6 @@ export class BankCollection {
     }
 
     getBankMetaData() : Promise<Array<string>> {
-        console.log("In the Coll... goint to talk to datastore")
         return this.dataStore.getBankMetaData()
     }
 

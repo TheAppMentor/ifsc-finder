@@ -386,13 +386,27 @@ export class BankDB {
         })
     }
 
-
-    getBankMetaData() : Promise<Array<string>>{
+    getBankMetaData() : Promise<any>{
 
         return new Promise((resolve,reject) => {
-
+            console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>> We are in getBankMetaData Fellow")
             bankMetaDataModel.find((err,values) => {
                 resolve(values) 
+            }).catch((err) => {
+                reject("BANK DB : getBankMetaData : Unable to fetch metadata : " + err)
+            })
+        })
+    } 
+    
+    getBankMetaDataForBankName(bankName : string) : Promise<any>{
+
+        return new Promise((resolve,reject) => {
+            console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>> We are in getBankMetaData Fellow")
+            bankMetaDataModel.find({bankName : bankName},(err,values) => {
+                if (values.length == 1) {
+                    resolve(values[0]) 
+                }
+                reject("BANK DB : getBankMetaData : Unable to fetch metadata : ") 
             }).catch((err) => {
                 reject("BANK DB : getBankMetaData : Unable to fetch metadata : " + err)
             })
@@ -447,21 +461,11 @@ export class BankDB {
     getLocationCountForBankName(bankName : string, queryString : string) : Promise<number>{
         return new Promise((resolve : any, reject : any) => {
 
-            let finalBankName = bankName.toUpperCase()  
-            let model = getModelForBankName(finalBankName)
-
-            model.find({name : finalBankName} ,function(err,results){
-
-                var cityNames = results.map(eachRec => {
-                    return eachRec.city
+            this.getBankMetaDataForBankName(bankName)
+                .then((bankMetaData : any) => {
+                    resolve(bankMetaData.locationCount)
                 })
-
-                var uniqCityNames = _.uniq(cityNames)
-                let sortedUniqueCityNames = _.sortBy(uniqCityNames)
-                console.log("Final Lenth is : " + sortedUniqueCityNames.length)
-                resolve(sortedUniqueCityNames.length)
             })
-        })
     } 
     
     getBranchCountForBankName(bankName : string, locationName : string, queryString : string) : Promise<number>{
@@ -648,7 +652,7 @@ export class BankDB {
                 }) 
                 resolve(branchObjects)
             }).catch((err) => {
-                reject("Error ! : DB Handler.ts : getCountOfBranchesBankNameInCity : "  + err)    
+                reject("Error ! : DB Handler.ts : getAllBranchNamesForBankNameInCityMatchingQueryString : "  + err)    
             }) 
 
         })
@@ -667,7 +671,7 @@ export class BankDB {
                     }) 
                     resolve(branchObjects)
                 }).catch((err) => {
-                    reject("Error ! : DB Handler.ts : getCountOfBranchesBankNameInCity : "  + err)    
+                    reject("Error ! : DB Handler.ts : getAllBranchNamesForBankNameInCity : "  + err)    
                 }) 
         })
     }

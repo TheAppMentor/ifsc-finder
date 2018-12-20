@@ -318,6 +318,19 @@ var BankDB = /** @class */ (function () {
             });
         });
     };
+    BankDB.prototype.getBankMetaDataForBankName = function (bankName) {
+        return new Promise(function (resolve, reject) {
+            console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>> We are in getBankMetaData Fellow");
+            bankMetaDataModel.find({ bankName: bankName }, function (err, values) {
+                if (values.length == 1) {
+                    resolve(values[0]);
+                }
+                reject("BANK DB : getBankMetaData : Unable to fetch metadata : ");
+            }).catch(function (err) {
+                reject("BANK DB : getBankMetaData : Unable to fetch metadata : " + err);
+            });
+        });
+    };
     BankDB.prototype.getAllBankNames = function () {
         return new Promise(function (resolve, reject) {
             //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb
@@ -355,17 +368,11 @@ var BankDB = /** @class */ (function () {
         return finalQueryString;
     };
     BankDB.prototype.getLocationCountForBankName = function (bankName, queryString) {
+        var _this = this;
         return new Promise(function (resolve, reject) {
-            var finalBankName = bankName.toUpperCase();
-            var model = getModelForBankName(finalBankName);
-            model.find({ name: finalBankName }, function (err, results) {
-                var cityNames = results.map(function (eachRec) {
-                    return eachRec.city;
-                });
-                var uniqCityNames = _.uniq(cityNames);
-                var sortedUniqueCityNames = _.sortBy(uniqCityNames);
-                console.log("Final Lenth is : " + sortedUniqueCityNames.length);
-                resolve(sortedUniqueCityNames.length);
+            _this.getBankMetaDataForBankName(bankName)
+                .then(function (bankMetaData) {
+                resolve(bankMetaData.locationCount);
             });
         });
     };
@@ -519,7 +526,7 @@ var BankDB = /** @class */ (function () {
                 });
                 resolve(branchObjects);
             }).catch(function (err) {
-                reject("Error ! : DB Handler.ts : getCountOfBranchesBankNameInCity : " + err);
+                reject("Error ! : DB Handler.ts : getAllBranchNamesForBankNameInCityMatchingQueryString : " + err);
             });
         });
     };
@@ -537,7 +544,7 @@ var BankDB = /** @class */ (function () {
                 });
                 resolve(branchObjects);
             }).catch(function (err) {
-                reject("Error ! : DB Handler.ts : getCountOfBranchesBankNameInCity : " + err);
+                reject("Error ! : DB Handler.ts : getAllBranchNamesForBankNameInCity : " + err);
             });
         });
     };
