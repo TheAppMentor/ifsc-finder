@@ -515,7 +515,8 @@ var BankDB = /** @class */ (function () {
             var finalCityName = cityName.toUpperCase();
             var finalRegEx = _this.getRegExForQueryString(queryString);
             var model = getModelForBankName(finalBankName);
-            model.find({ name: finalBankName, city: finalCityName, branch: { $regex: finalRegEx } }, function (err, results) {
+            //model.find({name : finalBankName, city : finalCityName, branch : {$regex : finalRegEx}},function(err,results){
+            model.find({ name: finalBankName, city: finalCityName, $or: [{ address: { '$regex': finalRegEx } }, { branch: { '$regex': finalRegEx } }] }, function (err, results) {
                 var branchObjects = results.map(function (eachRec) {
                     var tempRec = {};
                     tempRec['branch'] = eachRec.branch;

@@ -146,51 +146,95 @@ router.get('/getBanks/', function(req, res, next) {
 router.get('/getLocationList/', function(req, res, next) {
 
     let bankName = req.query.bankName 
-    let searchInput = req.query.searchInput
+    let searchInput = req.query.searchInput.toUpperCase()
 
     console.log("Request Received | Route : /getLocationList | query : " + JSON.stringify(req.query))
-    bankColl.getAllCityNamesForBankMatchingQueryString(bankName,searchInput).then((allCityNames : [any]) => {
-        //Form the response.
+    bankColl.getAllCityNamesForBankMatchingQueryString(bankName,searchInput)
+        .then((allCityNames : [any]) => {
+            
+            let formattedSearchInput = "<font color=\"red\">" + searchInput + "</font>"
+           
+            //Form the response.
+            var formattedResults = _.map(allCityNames, (eachCityRec) => {
 
-        let locationStr = allCityNames.length == 1 ? "location" : "locations" 
-        var resp = {}
-        resp['results'] = allCityNames 
-        resp['action'] = {"actionText" : "Found " + allCityNames.length + " " + locationStr + " matching " + "'<font color=\"green\">" + searchInput + "</font>'"} 
+                let tempBranchRec = {}
 
-        let queryReturnedResults = allCityNames.length > 0 ? true : false 
-        resp["success"] = queryReturnedResults
-        
+                var cityText = eachCityRec['city']
 
-        //Matching City Names
-        console.log("Response Sent | Route : /getLocationList | query : " + JSON.stringify(req.query) +  ": Results : Something Was Sent" )
-        return res.json(resp)
-    })
+                cityText = cityText.replace(searchInput,formattedSearchInput) 
+
+                var stateText = eachCityRec['state']
+                stateText = stateText.replace(searchInput,formattedSearchInput) 
+
+                tempBranchRec ['city'] = cityText  
+                tempBranchRec ['state'] = stateText  
+                return tempBranchRec  
+            })
+
+            let locationStr = formattedResults.length == 1 ? "location" : "locations" 
+            var resp = {}
+            resp['results'] = formattedResults  
+
+            resp['action'] = {"actionText" : "Found " + formattedResults.length + " " + locationStr + " matching " + formattedSearchInput} 
+
+            let queryReturnedResults = formattedResults.length > 0 ? true : false 
+            resp["success"] = queryReturnedResults
+
+
+            //Matching City Names
+            console.log("Response Sent | Route : /getLocationList | query : " + JSON.stringify(req.query) +  ": Results : Something Was Sent" )
+            return res.json(resp)
+        })
 })
 
 
 router.get('/getBranchList/', function(req, res, next) {
 
-    let bankName = req.query.bankName 
-    let locationName = req.query.locationName 
-    let searchInput = req.query.searchInput
+    //let bankName = req.query.bankName
+    
+    //let bankName = $(req.query.bankName).text();
+    let bankName = req.query.bankName
+    let locationName = req.query.locationName.replace(/<(.|\n)*?>/g, '');
+    let searchInput = req.query.searchInput.toUpperCase()
     
     console.log("Request Received | Route : /getBranchList| query : " + JSON.stringify(req.query))
+
+    bankColl.getAllBranchNamesForBankNameInCityMatchingQueryString(bankName,locationName,searchInput)
+        .then((branchNameArr: Array<string>) => {
+            //Form the response.
+            var resp = {}
+           
+            let formattedSearchInput = "<font color=\"red\">" + searchInput + "</font>"
+
+            var formattedResults = _.map(branchNameArr, (eachBranchRec) => {
+                let tempBranchRec = {}
+
+                var branchText = eachBranchRec['branch']
+               
+               branchText = branchText.replace(searchInput,formattedSearchInput) 
+                var addrtext = eachBranchRec['address']
+                addrtext = addrtext.replace(searchInput,formattedSearchInput) 
+
+                tempBranchRec ['branch'] = branchText 
+                tempBranchRec ['address'] = addrtext  
+                return tempBranchRec  
+            })
+
+            resp['results'] = formattedResults 
     
-    bankColl.getAllBranchNamesForBankNameInCityMatchingQueryString(bankName,locationName,searchInput).then((branchNameArr: Array<string>) => {
+            let branchStr = formattedResults.length == 1 ? "branch" : "branches" 
+            //resp['action'] = {"actionText" : "Found " + branchNameArr.length + " " + branchStr + " matching " + "'<font color=\"green\">" + searchInput + "</font>'"} 
+            resp['action'] = {"actionText" : "Found " + formattedResults.length + " " + branchStr + " matching " + formattedSearchInput} 
 
-        //Form the response.
-        var resp = {}
-        resp['results'] = branchNameArr 
-        let branchStr = branchNameArr.length == 1 ? "branch" : "branches" 
-        resp['action'] = {"actionText" : "Found " + branchNameArr.length + " " + branchStr + " matching " + "'<font color=\"green\">" + searchInput + "</font>'"} 
-        
-        let queryReturnedResults = branchNameArr.length > 0 ? true : false 
-        resp["success"] = queryReturnedResults
+            let queryReturnedResults = formattedResults.length > 0 ? true : false 
+            resp["success"] = queryReturnedResults
 
-        //Matching City Names
-        console.log("Response Sent | Route : /getBranchList| query : " + JSON.stringify(req.query) + " : Results : " + (resp["results"].length) + "Branches")
-        return res.json(resp)
-    }) 
+            console.log(JSON.stringify(req.query))
+
+            //Matching City Names
+            console.log("Response Sent | Route : /getBranchList| query : " + JSON.stringify(req.query) + " : Results : " + (resp["results"].length) + "Branches")
+            return res.json(resp)
+        }) 
 })
 
 
@@ -318,8 +362,8 @@ router.get('/getDomForBranchSearch/', function(req, res, next) {
 router.get('/getDomForResults/', function(req, res, next) {
 
     let bankName = req.query.bankName 
-    let cityName = req.query.locationName
-    let branchName = req.query.branchName
+    let cityName = req.query.locationName.replace(/<(.|\n)*?>/g, '');
+    let branchName = req.query.branchName.replace(/<(.|\n)*?>/g, '');
    
     console.log("Request Received | Route : /getDomForResults | query : " + JSON.stringify(req.query))
 

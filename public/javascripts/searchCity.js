@@ -29,7 +29,7 @@
                 },
                 onSelect(result, response) {
 
-                    let selectedLocation = result.city 
+                    let selectedLocation = result.city.replace(/<(.|\n)*?>/g, ''); 
                     let selectedBank = $("#findBankSearchField.ui.search").data("selectedBank")
 
                     $("#findLocationSearchField.ui.search").data("selectedLocation",selectedLocation)

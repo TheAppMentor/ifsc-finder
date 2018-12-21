@@ -641,7 +641,8 @@ export class BankDB {
             
             let model = getModelForBankName(finalBankName)
 
-            model.find({name : finalBankName, city : finalCityName, branch : {$regex : finalRegEx}},function(err,results){
+            //model.find({name : finalBankName, city : finalCityName, branch : {$regex : finalRegEx}},function(err,results){
+            model.find({name : finalBankName, city : finalCityName, $or:[{address:{'$regex':finalRegEx}},{branch:{'$regex':finalRegEx}}]},function(err,results){
 
                 var branchObjects = results.map(eachRec => {
                     var tempRec = {}

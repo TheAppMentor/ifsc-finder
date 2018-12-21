@@ -109,15 +109,27 @@ router.get('/getBanks/', function (req, res, next) {
 });
 router.get('/getLocationList/', function (req, res, next) {
     var bankName = req.query.bankName;
-    var searchInput = req.query.searchInput;
+    var searchInput = req.query.searchInput.toUpperCase();
     console.log("Request Received | Route : /getLocationList | query : " + JSON.stringify(req.query));
-    bankColl.getAllCityNamesForBankMatchingQueryString(bankName, searchInput).then(function (allCityNames) {
+    bankColl.getAllCityNamesForBankMatchingQueryString(bankName, searchInput)
+        .then(function (allCityNames) {
+        var formattedSearchInput = "<font color=\"red\">" + searchInput + "</font>";
         //Form the response.
-        var locationStr = allCityNames.length == 1 ? "location" : "locations";
+        var formattedResults = _.map(allCityNames, function (eachCityRec) {
+            var tempBranchRec = {};
+            var cityText = eachCityRec['city'];
+            cityText = cityText.replace(searchInput, formattedSearchInput);
+            var stateText = eachCityRec['state'];
+            stateText = stateText.replace(searchInput, formattedSearchInput);
+            tempBranchRec['city'] = cityText;
+            tempBranchRec['state'] = stateText;
+            return tempBranchRec;
+        });
+        var locationStr = formattedResults.length == 1 ? "location" : "locations";
         var resp = {};
-        resp['results'] = allCityNames;
-        resp['action'] = { "actionText": "Found " + allCityNames.length + " " + locationStr + " matching " + "'<font color=\"green\">" + searchInput + "</font>'" };
-        var queryReturnedResults = allCityNames.length > 0 ? true : false;
+        resp['results'] = formattedResults;
+        resp['action'] = { "actionText": "Found " + formattedResults.length + " " + locationStr + " matching " + formattedSearchInput };
+        var queryReturnedResults = formattedResults.length > 0 ? true : false;
         resp["success"] = queryReturnedResults;
         //Matching City Names
         console.log("Response Sent | Route : /getLocationList | query : " + JSON.stringify(req.query) + ": Results : Something Was Sent");
@@ -125,18 +137,34 @@ router.get('/getLocationList/', function (req, res, next) {
     });
 });
 router.get('/getBranchList/', function (req, res, next) {
+    //let bankName = req.query.bankName
+    //let bankName = $(req.query.bankName).text();
     var bankName = req.query.bankName;
-    var locationName = req.query.locationName;
-    var searchInput = req.query.searchInput;
+    var locationName = req.query.locationName.replace(/<(.|\n)*?>/g, '');
+    var searchInput = req.query.searchInput.toUpperCase();
     console.log("Request Received | Route : /getBranchList| query : " + JSON.stringify(req.query));
-    bankColl.getAllBranchNamesForBankNameInCityMatchingQueryString(bankName, locationName, searchInput).then(function (branchNameArr) {
+    bankColl.getAllBranchNamesForBankNameInCityMatchingQueryString(bankName, locationName, searchInput)
+        .then(function (branchNameArr) {
         //Form the response.
         var resp = {};
-        resp['results'] = branchNameArr;
-        var branchStr = branchNameArr.length == 1 ? "branch" : "branches";
-        resp['action'] = { "actionText": "Found " + branchNameArr.length + " " + branchStr + " matching " + "'<font color=\"green\">" + searchInput + "</font>'" };
-        var queryReturnedResults = branchNameArr.length > 0 ? true : false;
+        var formattedSearchInput = "<font color=\"red\">" + searchInput + "</font>";
+        var formattedResults = _.map(branchNameArr, function (eachBranchRec) {
+            var tempBranchRec = {};
+            var branchText = eachBranchRec['branch'];
+            branchText = branchText.replace(searchInput, formattedSearchInput);
+            var addrtext = eachBranchRec['address'];
+            addrtext = addrtext.replace(searchInput, formattedSearchInput);
+            tempBranchRec['branch'] = branchText;
+            tempBranchRec['address'] = addrtext;
+            return tempBranchRec;
+        });
+        resp['results'] = formattedResults;
+        var branchStr = formattedResults.length == 1 ? "branch" : "branches";
+        //resp['action'] = {"actionText" : "Found " + branchNameArr.length + " " + branchStr + " matching " + "'<font color=\"green\">" + searchInput + "</font>'"} 
+        resp['action'] = { "actionText": "Found " + formattedResults.length + " " + branchStr + " matching " + formattedSearchInput };
+        var queryReturnedResults = formattedResults.length > 0 ? true : false;
         resp["success"] = queryReturnedResults;
+        console.log(JSON.stringify(req.query));
         //Matching City Names
         console.log("Response Sent | Route : /getBranchList| query : " + JSON.stringify(req.query) + " : Results : " + (resp["results"].length) + "Branches");
         return res.json(resp);
@@ -221,8 +249,8 @@ router.get('/getDomForBranchSearch/', function (req, res, next) {
 // Generate DOM for final results 
 router.get('/getDomForResults/', function (req, res, next) {
     var bankName = req.query.bankName;
-    var cityName = req.query.locationName;
-    var branchName = req.query.branchName;
+    var cityName = req.query.locationName.replace(/<(.|\n)*?>/g, '');
+    var branchName = req.query.branchName.replace(/<(.|\n)*?>/g, '');
     console.log("Request Received | Route : /getDomForResults | query : " + JSON.stringify(req.query));
     bankColl.getBranchesDetailsForBankInCityWithBranchName(bankName, cityName, branchName).then(function (branchNameArr) {
         var fetchedBranch = _.first(branchNameArr);

@@ -102,9 +102,6 @@ export class BankCollection {
             reject(Error("Bank Name Not found in bankNameToFileMap"))
         })
     }
-
-
-
     //new API with split db and querysting passed to mongodb for filtering.
     //
 
@@ -112,8 +109,8 @@ export class BankCollection {
         return this.dataStore.getAllCityNamesForBankMatchingQueryString(bankName,queryString)
     }
 
-
     getAllBranchNamesForBankNameInCityMatchingQueryString(bankName : string, cityName : string, queryString : string) : Promise<Array<string>> {
+        // Note this searches Address fields also. From the logs I can see the users dont seem to know the branch name and they are searching by Addresss etc.
         return this.dataStore.getAllBranchNamesForBankNameInCityMatchingQueryString(bankName,cityName,queryString)
     }    
 

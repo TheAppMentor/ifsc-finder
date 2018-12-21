@@ -92,6 +92,7 @@ var BankCollection = /** @class */ (function () {
         return this.dataStore.getAllCityNamesForBankMatchingQueryString(bankName, queryString);
     };
     BankCollection.prototype.getAllBranchNamesForBankNameInCityMatchingQueryString = function (bankName, cityName, queryString) {
+        // Note this searches Address fields also. From the logs I can see the users dont seem to know the branch name and they are searching by Addresss etc.
         return this.dataStore.getAllBranchNamesForBankNameInCityMatchingQueryString(bankName, cityName, queryString);
     };
     BankCollection.prototype.getAllBranchesForBankNameInStateDistrictCity = function (bankName, stateName, cityName, districtName) {

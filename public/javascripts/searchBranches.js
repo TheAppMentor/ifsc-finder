@@ -24,7 +24,6 @@ $("#findBranchSearchField.ui.search")
             console.log("Find Branch Result is : " + JSON.stringify(result))
             console.log("Find Response is : " + JSON.stringify(response))
 
-
             $("#findBranchSearchField.ui.search").data("selectedBranch",result.branch)
 
             let bankName = $("#findBankSearchField.ui.search").data("selectedBank") 
