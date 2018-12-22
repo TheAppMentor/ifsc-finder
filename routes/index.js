@@ -52,15 +52,16 @@ bankColl.loadDataBasesWithDataFromFile()
         allSetReadyToLaunch = true;
     }
 });
-var appStep = "find_bank";
 /* GET home page. */
 router.get('/', function (req, res, next) {
     //TODO : Check the allSetReadyToLaunch variable, if we are not yet ready. Show a an appropriate page. 
     console.log("Request Received | Route : / | query : " + JSON.stringify(req.query));
-    var bankName = req.query.bankName;
-    var cityName = req.query.cityName;
-    var branchName = req.query.branchName;
     res.render('index', {});
+});
+/* RTGS Holidays Page */
+router.get('/rtgsholidays', function (req, res, next) {
+    console.log("Request Received | Route : /rtgsholidays | query : " + JSON.stringify(req.query));
+    res.render('rtgs_holidays', {});
 });
 router.get('/getBanks/', function (req, res, next) {
     var query = req.query;
