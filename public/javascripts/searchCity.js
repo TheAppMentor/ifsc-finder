@@ -5,7 +5,7 @@
                 },
                 selectFirstResult : true,
                 fullTextSearch: true,
-                minCharacters : 0,
+                minCharacters : 1,
                 onResponse : function(theresponse) {
                     console.log("The Response is " + theresponse)
                     
