@@ -108,10 +108,23 @@ router.get('/getBanks/', function (req, res, next) {
     console.log("Response Sent | Route : /getBanks | query : " + JSON.stringify(query) + " | Results : Somethign was sent");
     res.json(resp);
 });
+function isValidateSearchInput(searchInput) {
+    if (searchInput.search(/[^a-zA-Z0-9]+/) === -1) {
+        return true;
+    }
+    return false;
+}
 router.get('/getLocationList/', function (req, res, next) {
     var bankName = req.query.bankName;
     var searchInput = req.query.searchInput.toUpperCase();
     console.log("Request Received | Route : /getLocationList | query : " + JSON.stringify(req.query));
+    if (isValidateSearchInput(searchInput) == false) {
+        console.log("We Have an ERROR  " + searchInput);
+        var errResp = {};
+        errResp['results'] = [];
+        console.log("Response Sent | Route : /getLocationList | query : " + JSON.stringify(req.query) + ": Results : Something Was Sent");
+        return res.json(errResp);
+    }
     bankColl.getAllCityNamesForBankMatchingQueryString(bankName, searchInput)
         .then(function (allCityNames) {
         var formattedSearchInput = "<font color=\"red\">" + searchInput + "</font>";
@@ -144,6 +157,13 @@ router.get('/getBranchList/', function (req, res, next) {
     var locationName = req.query.locationName.replace(/<(.|\n)*?>/g, '');
     var searchInput = req.query.searchInput.toUpperCase();
     console.log("Request Received | Route : /getBranchList| query : " + JSON.stringify(req.query));
+    if (isValidateSearchInput(searchInput) == false) {
+        console.log("We Have an ERROR  " + searchInput);
+        var errResp = {};
+        errResp['results'] = [];
+        console.log("Response Sent | Route : /getLocationList | query : " + JSON.stringify(req.query) + ": Results : Something Was Sent");
+        return res.json(errResp);
+    }
     bankColl.getAllBranchNamesForBankNameInCityMatchingQueryString(bankName, locationName, searchInput)
         .then(function (branchNameArr) {
         //Form the response.

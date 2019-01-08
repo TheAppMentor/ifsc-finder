@@ -83,7 +83,6 @@ router.get('/rtgsholidays', function(req, res, next) {
 });
 
 
-
 router.get('/getBanks/', function(req, res, next) {
     
     let query = req.query
@@ -146,13 +145,30 @@ router.get('/getBanks/', function(req, res, next) {
 })
 
 
+function isValidateSearchInput(searchInput : String) : Boolean{
+    if (searchInput.search(/[^a-zA-Z0-9]+/) === -1) {
+        return true
+    }
+
+    return false 
+}
 
 router.get('/getLocationList/', function(req, res, next) {
 
     let bankName = req.query.bankName 
     let searchInput = req.query.searchInput.toUpperCase()
-
+    
     console.log("Request Received | Route : /getLocationList | query : " + JSON.stringify(req.query))
+    
+    if (isValidateSearchInput(searchInput) == false){
+           console.log("We Have an ERROR  " + searchInput)     
+            var errResp = {}
+            errResp['results'] = [] 
+
+            console.log("Response Sent | Route : /getLocationList | query : " + JSON.stringify(req.query) +  ": Results : Something Was Sent" )
+            return res.json(errResp)
+    }
+
     bankColl.getAllCityNamesForBankMatchingQueryString(bankName,searchInput)
         .then((allCityNames : [any]) => {
             
@@ -184,7 +200,6 @@ router.get('/getLocationList/', function(req, res, next) {
             let queryReturnedResults = formattedResults.length > 0 ? true : false 
             resp["success"] = queryReturnedResults
 
-
             //Matching City Names
             console.log("Response Sent | Route : /getLocationList | query : " + JSON.stringify(req.query) +  ": Results : Something Was Sent" )
             return res.json(resp)
@@ -202,6 +217,14 @@ router.get('/getBranchList/', function(req, res, next) {
     let searchInput = req.query.searchInput.toUpperCase()
     
     console.log("Request Received | Route : /getBranchList| query : " + JSON.stringify(req.query))
+    if (isValidateSearchInput(searchInput) == false){
+           console.log("We Have an ERROR  " + searchInput)     
+            var errResp = {}
+            errResp['results'] = [] 
+
+            console.log("Response Sent | Route : /getLocationList | query : " + JSON.stringify(req.query) +  ": Results : Something Was Sent" )
+            return res.json(errResp)
+    }
 
     bankColl.getAllBranchNamesForBankNameInCityMatchingQueryString(bankName,locationName,searchInput)
         .then((branchNameArr: Array<string>) => {
