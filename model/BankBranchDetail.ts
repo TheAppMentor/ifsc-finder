@@ -9,7 +9,8 @@ export let BankBranchDetailSchema = new mongoose.Schema({
     contact : String,
     city : String,
     district : String,
-    state : String
+    state : String,
+    pincode : String
 })
 
 export class BankBranchDetail {
@@ -22,6 +23,7 @@ export class BankBranchDetail {
     city : string
     district : string
     state : string
+    pincode : string
 
     constructor(bankObj : {string:string}, fromJSONFile : boolean = false){
 
@@ -36,6 +38,7 @@ export class BankBranchDetail {
             this.city = bankObj["city"] 
             this.district = bankObj["district"] 
             this.state = bankObj["state"] 
+            this.pincode = bankObj["pincode"] 
             return
         }
 
@@ -48,6 +51,6 @@ export class BankBranchDetail {
         this.city = bankObj["CITY"] 
         this.district = bankObj["DISTRICT"] 
         this.state = bankObj["STATE"] 
-
+        this.pincode = bankObj["PINCODE"] 
     }
 }

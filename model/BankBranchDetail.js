@@ -10,7 +10,8 @@ exports.BankBranchDetailSchema = new mongoose.Schema({
     contact: String,
     city: String,
     district: String,
-    state: String
+    state: String,
+    pincode: String
 });
 var BankBranchDetail = /** @class */ (function () {
     function BankBranchDetail(bankObj, fromJSONFile) {
@@ -25,6 +26,7 @@ var BankBranchDetail = /** @class */ (function () {
             this.city = bankObj["city"];
             this.district = bankObj["district"];
             this.state = bankObj["state"];
+            this.pincode = bankObj["pincode"];
             return;
         }
         this.name = bankObj["BANK"];
@@ -36,6 +38,7 @@ var BankBranchDetail = /** @class */ (function () {
         this.city = bankObj["CITY"];
         this.district = bankObj["DISTRICT"];
         this.state = bankObj["STATE"];
+        this.pincode = bankObj["pincode"];
     }
     return BankBranchDetail;
 }());

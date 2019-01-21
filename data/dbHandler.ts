@@ -237,13 +237,14 @@ export class BankDB {
                                             contact : eachBankRec["contact"], 
                                             city : eachBankRec["city"],
                                             district : eachBankRec["district"],
-                                            state : eachBankRec["state"]
+                                            state : eachBankRec["state"],
+                                            pincode : eachBankRec["pincode"]
                                         }) 
                                         return tempBankDetail
                                     }) 
 
                                     currentModel.collection.drop()
-                                    console.log("Inserting other bank ocs.......  :" + allBankDocs.length) 
+                                    console.log("Inserting other bank docs.......  :" + allBankDocs.length) 
                                     
                                     currentModel.insertMany(allBankDocs)
                                         .then((docs) => {
@@ -289,10 +290,10 @@ export class BankDB {
                                                 contact : eachBankRec["contact"], 
                                                 city : eachBankRec["city"],
                                                 district : eachBankRec["district"],
-                                                state : eachBankRec["state"]
+                                                state : eachBankRec["state"],
+                                                pincode : eachBankRec["pincode"]
                                             }) 
                                             return tempBankDetail
-
                                         })
 
                                         currentModel.collection.drop()
@@ -363,7 +364,8 @@ export class BankDB {
                                     contact : bankDetails.contact,
                                     city : bankDetails.city,
                                     district : bankDetails.district,
-                                    state : bankDetails.state
+                                    state : bankDetails.state,
+                                    pincode : bankDetails.pincode
                                 })
 
                                 return bankBranchDetial

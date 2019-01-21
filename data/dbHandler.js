@@ -196,7 +196,8 @@ var BankDB = /** @class */ (function () {
                                     contact: eachBankRec["contact"],
                                     city: eachBankRec["city"],
                                     district: eachBankRec["district"],
-                                    state: eachBankRec["state"]
+                                    state: eachBankRec["state"],
+                                    pincode: eachBankRec["pincode"]
                                 });
                                 return tempBankDetail;
                             });
@@ -231,7 +232,8 @@ var BankDB = /** @class */ (function () {
                                         contact: eachBankRec["contact"],
                                         city: eachBankRec["city"],
                                         district: eachBankRec["district"],
-                                        state: eachBankRec["state"]
+                                        state: eachBankRec["state"],
+                                        pincode: eachBankRec["pincode"]
                                     });
                                     return tempBankDetail;
                                 });
@@ -291,7 +293,8 @@ var BankDB = /** @class */ (function () {
                                 contact: bankDetails.contact,
                                 city: bankDetails.city,
                                 district: bankDetails.district,
-                                state: bankDetails.state
+                                state: bankDetails.state,
+                                pincode: bankDetails.pincode
                             });
                             return bankBranchDetial;
                         });
@@ -311,6 +314,7 @@ var BankDB = /** @class */ (function () {
     };
     BankDB.prototype.getBankMetaData = function () {
         return new Promise(function (resolve, reject) {
+            console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>> We are in getBankMetaData Fellow");
             bankMetaDataModel.find(function (err, values) {
                 resolve(values);
             }).catch(function (err) {
