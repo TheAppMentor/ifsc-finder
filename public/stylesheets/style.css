@@ -57,9 +57,7 @@ h1, h2, h3, h4, h5, title {
 }
 
 .ui.segments{
-border: 0 solid rgba(34,36,38,.15);
--webkit-box-shadow: 0 0 0 0 rgba(34,36,38,.15);*/
-box-shadow: 0 0 0 0 rgba(34,36,38,.15); 
+border: none; 
 }
 
 .ui.stripe.segment {
@@ -69,6 +67,11 @@ box-shadow: 0 0 0 0 rgba(34,36,38,.15);
     border-left-width: 0px;
     border-right-width: 0px;
     box-shadow: 0 0px 0px 0 rgba(34,36,38,0);
+    border-top : none;
+}
+
+.ui.white.vertical.stripe.segment {
+    border-top : none;
 }
 
 .quote.stripe.segment .grid .column {

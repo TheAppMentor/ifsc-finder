@@ -86,7 +86,7 @@ $(document)
                     //Add the InfoDiv
                     document.getElementById('infoDivShowingLocationSearch').outerHTML = myObj.div_info
 
-                    document.getElementById('findLocationFindBranchGroupSeg').setAttribute("style", "display:block")
+                    document.getElementById('findLocationFindBranchGroupSeg').setAttribute("style", "display:block;border:none;")
                     
                     //Scroll to the newly inserted segment
                     $('html, body').animate({ scrollTop: $('#divider_findLocation').offset().top }, 'slow');
