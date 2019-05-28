@@ -64,7 +64,7 @@ function loadConfigFile(){
 
 
 // TODO Dont do this.. you have the popular banks tagged in the Meta Data.. fetch it from that.. Hard coding this will make all kind of shitty dependencies.
-let popularBanks = ["ALLAHABAD BANK","ANDHRA BANK","AXIS BANK","BANK OF BARODA (BOB)","BANK OF INDIA (BOI)","CANARA BANK","CENTRAL BANK OF INDIA","CORPORATION BANK","HDFC BANK","ICICI BANK LIMITED","IDBI BANK","INDIAN BANK","INDIAN OVERSEAS BANK (IOB)","ORIENTAL BANK OF COMMERCE","PUNJAB NATIONAL BANK (PNB)","STATE BANK OF INDIA (SBI)","SYNDICATE BANK","UCO BANK","UNION BANK OF INDIA","YES BANK",] 
+let popularBanks = ["ALLAHABAD BANK","ANDHRA BANK","AXIS BANK LTD","BANK OF BARODA (BOB)","BANK OF INDIA (BOI)","CANARA BANK","CENTRAL BANK OF INDIA","CORPORATION BANK","HDFC BANK LTD","ICICI BANK LTD","IDBI LTD","INDIAN BANK","INDIAN OVERSEAS BANK (IOB)","ORIENTAL BANK OF COMMERCE","PUNJAB NATIONAL BANK (PNB)","STATE BANK OF INDIA (SBI)","SYNDICATE BANK","UCO BANK","UNION BANK OF INDIA","YES BANK LTD",] 
 
 function getModelForBankName(bankName : string) : any {
     switch (bankName) {
@@ -76,7 +76,7 @@ function getModelForBankName(bankName : string) : any {
             return andhraBankModel;
             break;
         }
-        case "AXIS BANK":{
+        case "AXIS BANK LTD":{
             return axisBankModel;
             break;
         } 
@@ -106,17 +106,17 @@ function getModelForBankName(bankName : string) : any {
             break;
         } 
 
-        case "HDFC BANK" :{
+        case "HDFC BANK LTD" :{
             return hdfcBankModel;
             break;
         } 
 
-        case "ICICI BANK LIMITED" :{
+        case "ICICI BANK LTD" :{
             return iciciBankLimitedModel;
             break;
         } 
 
-        case "IDBI BANK" :{
+        case "IDBI LTD" :{
             return idbiBankModel;
             break;
         } 
@@ -160,13 +160,18 @@ function getModelForBankName(bankName : string) : any {
             break;
         } 
 
-        case "YES BANK" :{
+        case "YES BANK LTD" :{
             return yesBankModel;
             break;
         } 
 
+        case "" :{
+            return otherBanksModel;
+            break;
+        } 
+
         default :
-           return otherBanksModel;
+            console.log("Info : dbHandler.ts : ERROR  COULD NOT GET MODEL...   =>  ERROR  COULD NOT GET MODEL...")  
             break;
     }
 }

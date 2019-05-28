@@ -38,7 +38,7 @@ var BankBranchDetail = /** @class */ (function () {
         this.city = bankObj["CITY"];
         this.district = bankObj["DISTRICT"];
         this.state = bankObj["STATE"];
-        this.pincode = bankObj["pincode"];
+        this.pincode = bankObj["PINCODE"];
     }
     return BankBranchDetail;
 }());

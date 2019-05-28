@@ -55,7 +55,7 @@ function loadConfigFile() {
     return fileContents;
 }
 // TODO Dont do this.. you have the popular banks tagged in the Meta Data.. fetch it from that.. Hard coding this will make all kind of shitty dependencies.
-var popularBanks = ["ALLAHABAD BANK", "ANDHRA BANK", "AXIS BANK", "BANK OF BARODA (BOB)", "BANK OF INDIA (BOI)", "CANARA BANK", "CENTRAL BANK OF INDIA", "CORPORATION BANK", "HDFC BANK", "ICICI BANK LIMITED", "IDBI BANK", "INDIAN BANK", "INDIAN OVERSEAS BANK (IOB)", "ORIENTAL BANK OF COMMERCE", "PUNJAB NATIONAL BANK (PNB)", "STATE BANK OF INDIA (SBI)", "SYNDICATE BANK", "UCO BANK", "UNION BANK OF INDIA", "YES BANK",];
+var popularBanks = ["ALLAHABAD BANK", "ANDHRA BANK", "AXIS BANK LTD", "BANK OF BARODA (BOB)", "BANK OF INDIA (BOI)", "CANARA BANK", "CENTRAL BANK OF INDIA", "CORPORATION BANK", "HDFC BANK LTD", "ICICI BANK LTD", "IDBI LTD", "INDIAN BANK", "INDIAN OVERSEAS BANK (IOB)", "ORIENTAL BANK OF COMMERCE", "PUNJAB NATIONAL BANK (PNB)", "STATE BANK OF INDIA (SBI)", "SYNDICATE BANK", "UCO BANK", "UNION BANK OF INDIA", "YES BANK LTD",];
 function getModelForBankName(bankName) {
     switch (bankName) {
         case "ALLAHABAD BANK": {
@@ -66,7 +66,7 @@ function getModelForBankName(bankName) {
             return andhraBankModel;
             break;
         }
-        case "AXIS BANK": {
+        case "AXIS BANK LTD": {
             return axisBankModel;
             break;
         }
@@ -90,15 +90,15 @@ function getModelForBankName(bankName) {
             return corporationBankModel;
             break;
         }
-        case "HDFC BANK": {
+        case "HDFC BANK LTD": {
             return hdfcBankModel;
             break;
         }
-        case "ICICI BANK LIMITED": {
+        case "ICICI BANK LTD": {
             return iciciBankLimitedModel;
             break;
         }
-        case "IDBI BANK": {
+        case "IDBI LTD": {
             return idbiBankModel;
             break;
         }
@@ -134,12 +134,16 @@ function getModelForBankName(bankName) {
             return unionBankBankModel;
             break;
         }
-        case "YES BANK": {
+        case "YES BANK LTD": {
             return yesBankModel;
             break;
         }
-        default:
+        case "": {
             return otherBanksModel;
+            break;
+        }
+        default:
+            console.log("Info : dbHandler.ts : ERROR  COULD NOT GET MODEL...   =>  ERROR  COULD NOT GET MODEL...");
             break;
     }
 }
@@ -202,7 +206,7 @@ var BankDB = /** @class */ (function () {
                                 return tempBankDetail;
                             });
                             currentModel.collection.drop();
-                            console.log("Inserting other bank ocs.......  :" + allBankDocs.length);
+                            console.log("Inserting other bank docs.......  :" + allBankDocs.length);
                             currentModel.insertMany(allBankDocs)
                                 .then(function (docs) {
                                 console.log("Success !! : Inserting Other Bank Data " + docs.length);
