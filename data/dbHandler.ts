@@ -182,8 +182,8 @@ export class BankDB {
     connectoToDBAndLoadData(bankCollection : BankCollection) : Promise<boolean> {
         return new Promise((resolve,reject) => {
             //mongodb://heroku_ptln6dnj:vi22d3nuk65m1ktjqrtjalvnku@ds111492.mlab.com:11492/heroku_ptln6dnj
-            mongoose.connect('mongodb://localhost/localtest')
-            //mongoose.connect('mongodb://heroku_ptln6dnj:vi22d3nuk65m1ktjqrtjalvnku@ds111492.mlab.com:11492/heroku_ptln6dnj')
+            //mongoose.connect('mongodb://localhost/localtest')
+            mongoose.connect('mongodb://heroku_ptln6dnj:vi22d3nuk65m1ktjqrtjalvnku@ds111492.mlab.com:11492/heroku_ptln6dnj')
 
                 .then(() : Promise<boolean> => {
                     // Check if app config requires us to reload the DB.
