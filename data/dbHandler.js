@@ -153,8 +153,8 @@ var BankDB = /** @class */ (function () {
     BankDB.prototype.connectoToDBAndLoadData = function (bankCollection) {
         return new Promise(function (resolve, reject) {
             //mongodb://heroku_ptln6dnj:vi22d3nuk65m1ktjqrtjalvnku@ds111492.mlab.com:11492/heroku_ptln6dnj
-            //mongoose.connect('mongodb://localhost/localtest')
-            mongoose.connect('mongodb://heroku_ptln6dnj:vi22d3nuk65m1ktjqrtjalvnku@ds111492.mlab.com:11492/heroku_ptln6dnj')
+            mongoose.connect('mongodb://localhost/localtest')
+                //mongoose.connect('mongodb://heroku_ptln6dnj:vi22d3nuk65m1ktjqrtjalvnku@ds111492.mlab.com:11492/heroku_ptln6dnj')
                 .then(function () {
                 // Check if app config requires us to reload the DB.
                 if (appConfigOptions["reloadBankDetailsDB"] == false) {
@@ -167,6 +167,7 @@ var BankDB = /** @class */ (function () {
                         // Load Bank MetaData Table 
                         var bankMetaData = fs.readJsonSync("./dist/Split_Records/BankMetaData.json");
                         var allMetaDataModels = _.map(bankMetaData, function (eachBankRec) {
+                            console.log("BANK META DATA RELOADING : " + eachBankRec["bankName"]);
                             var tempModel = new bankMetaDataModel({
                                 bankName: eachBankRec["bankName"],
                                 branchCount: eachBankRec["branchCount"],
@@ -189,7 +190,6 @@ var BankDB = /** @class */ (function () {
                         return new Promise(function (resolve, reject) {
                             var otherBankData = fs.readJsonSync("./dist/Split_Records/otherBanks.json");
                             var currentModel = getModelForBankName(""); // Default model is otherBanksModel
-                            console.log("Current Model :  " + currentModel);
                             var allBankDocs = _.map(otherBankData, function (eachBankRec) {
                                 var tempBankDetail = new currentModel({
                                     name: eachBankRec["name"],
@@ -210,7 +210,6 @@ var BankDB = /** @class */ (function () {
                             currentModel.insertMany(allBankDocs)
                                 .then(function (docs) {
                                 console.log("Success !! : Inserting Other Bank Data " + docs.length);
-                                console.log(docs);
                                 resolve(true);
                             })
                                 .catch(function (err) {

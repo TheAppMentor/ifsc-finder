@@ -182,8 +182,8 @@ export class BankDB {
     connectoToDBAndLoadData(bankCollection : BankCollection) : Promise<boolean> {
         return new Promise((resolve,reject) => {
             //mongodb://heroku_ptln6dnj:vi22d3nuk65m1ktjqrtjalvnku@ds111492.mlab.com:11492/heroku_ptln6dnj
-            //mongoose.connect('mongodb://localhost/localtest')
-            mongoose.connect('mongodb://heroku_ptln6dnj:vi22d3nuk65m1ktjqrtjalvnku@ds111492.mlab.com:11492/heroku_ptln6dnj')
+            mongoose.connect('mongodb://localhost/localtest')
+            //mongoose.connect('mongodb://heroku_ptln6dnj:vi22d3nuk65m1ktjqrtjalvnku@ds111492.mlab.com:11492/heroku_ptln6dnj')
 
                 .then(() : Promise<boolean> => {
                     // Check if app config requires us to reload the DB.
@@ -198,6 +198,8 @@ export class BankDB {
 
                                     let bankMetaData = fs.readJsonSync("./dist/Split_Records/BankMetaData.json")
                                     let allMetaDataModels = _.map(bankMetaData,(eachBankRec) => {
+
+                                        console.log("BANK META DATA RELOADING : " + eachBankRec["bankName"])
 
                                         let tempModel = new bankMetaDataModel({
                                             bankName : eachBankRec["bankName"],   
@@ -230,7 +232,6 @@ export class BankDB {
 
                                     let otherBankData = fs.readJsonSync("./dist/Split_Records/otherBanks.json")
                                     let currentModel = getModelForBankName("") // Default model is otherBanksModel
-                                    console.log("Current Model :  " + currentModel) 
                                     
                                     let allBankDocs = _.map(otherBankData, (eachBankRec) => {
                                         let tempBankDetail = new currentModel({
@@ -254,7 +255,6 @@ export class BankDB {
                                     currentModel.insertMany(allBankDocs)
                                         .then((docs) => {
                                             console.log("Success !! : Inserting Other Bank Data " + docs.length) 
-                                            console.log(docs)
                                             resolve(true)
                                         })
                                         .catch((err) => {
