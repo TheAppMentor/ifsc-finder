@@ -138,12 +138,8 @@ function getModelForBankName(bankName) {
             return yesBankModel;
             break;
         }
-        case "": {
-            return otherBanksModel;
-            break;
-        }
         default:
-            console.log("Info : dbHandler.ts : ERROR  COULD NOT GET MODEL...   =>  ERROR  COULD NOT GET MODEL...");
+            return otherBanksModel;
             break;
     }
 }
@@ -189,7 +185,7 @@ var BankDB = /** @class */ (function () {
                         // Make DB for Other Banks
                         return new Promise(function (resolve, reject) {
                             var otherBankData = fs.readJsonSync("./dist/Split_Records/otherBanks.json");
-                            var currentModel = getModelForBankName(""); // Default model is otherBanksModel
+                            var currentModel = getModelForBankName("otherBanksModel"); // Default model is otherBanksModel
                             var allBankDocs = _.map(otherBankData, function (eachBankRec) {
                                 var tempBankDetail = new currentModel({
                                     name: eachBankRec["name"],

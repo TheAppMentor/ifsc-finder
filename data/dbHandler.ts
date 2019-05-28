@@ -164,14 +164,8 @@ function getModelForBankName(bankName : string) : any {
             return yesBankModel;
             break;
         } 
-
-        case "" :{
-            return otherBanksModel;
-            break;
-        } 
-
         default :
-            console.log("Info : dbHandler.ts : ERROR  COULD NOT GET MODEL...   =>  ERROR  COULD NOT GET MODEL...")  
+            return otherBanksModel;
             break;
     }
 }
@@ -231,7 +225,7 @@ export class BankDB {
                                 return new Promise((resolve : any, reject : any) => {
 
                                     let otherBankData = fs.readJsonSync("./dist/Split_Records/otherBanks.json")
-                                    let currentModel = getModelForBankName("") // Default model is otherBanksModel
+                                    let currentModel = getModelForBankName("otherBanksModel") // Default model is otherBanksModel
                                     
                                     let allBankDocs = _.map(otherBankData, (eachBankRec) => {
                                         let tempBankDetail = new currentModel({
