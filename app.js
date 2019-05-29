@@ -17,8 +17,12 @@ var mongoose = require('mongoose')
 
 let MONGODB_URI = "mongodb://localhost:27017/"
 
+console.log("process.env.IS_HEROKU is : " + process.env.IS_HEROKU)
+console.log("process.env.MONGODB_URI " + process.env.MONGODB_URI)
+
 if (process.env.IS_HEROKU == "true"){
    MONGODB_URI = process.env.MONGODB_URI
+    console.log("Inside the IF process.env.MONGODB_URI " + process.env.MONGODB_URI)
 }
 var MongoDBStore = require('connect-mongodb-session')(session);
 
