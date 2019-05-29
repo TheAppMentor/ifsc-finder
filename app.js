@@ -31,6 +31,7 @@ MONGODB_URI = MONGODB_URI + "userSessions"
 
 var store = new MongoDBStore({
     uri: MONGODB_URI,
+   db : "heroku_ptln6dnj", 
     collection: 'sessions'
 });
  
