@@ -29,12 +29,14 @@ var MongoDBStore = require('connect-mongodb-session')(session);
 
 MONGODB_URI = MONGODB_URI + "userSessions"
 
+//var store = mongoose.connect(MONGODB_URI)
+
 var store = new MongoDBStore({
     uri: MONGODB_URI,
-   db : "heroku_ptln6dnj", 
+    databaseName: 'heroku_ptln6dnj',
     collection: 'sessions'
 });
- 
+
 // Catch errors
 store.on('error', function(error) {
   console.log(error);
