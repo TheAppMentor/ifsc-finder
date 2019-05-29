@@ -16,6 +16,7 @@ var FileStore = require('session-file-store')(session);
 var mongoose = require('mongoose')
 
 let MONGODB_URI = "mongodb://localhost:27017/"
+MONGODB_URI = MONGODB_URI + "userSessions"
 
 console.log("process.env.IS_HEROKU is : " + process.env.IS_HEROKU)
 console.log("process.env.MONGODB_URI " + process.env.MONGODB_URI)
