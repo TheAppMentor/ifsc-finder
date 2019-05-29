@@ -6,7 +6,7 @@ var Promise = require("bluebird");
 var mongoose = require('mongoose');
 var decompress = require('decompress');
 var _ = require('lodash');
-var db = mongoose.connection;
+//const db = mongoose.connection
 mongoose.Promise = require('bluebird');
 // Creating a Schema 
 var bankNamesSchema = new mongoose.Schema({
@@ -143,14 +143,17 @@ function getModelForBankName(bankName) {
             break;
     }
 }
+var MONGODB_URI = "mongodb://localhost/localtest";
+if (process.env.IS_HEROKU == "true") {
+    MONGODB_URI = process.env.MONGODB_URI;
+}
 var BankDB = /** @class */ (function () {
     function BankDB() {
     }
     BankDB.prototype.connectoToDBAndLoadData = function (bankCollection) {
         return new Promise(function (resolve, reject) {
-            //mongodb://heroku_ptln6dnj:vi22d3nuk65m1ktjqrtjalvnku@ds111492.mlab.com:11492/heroku_ptln6dnj
-            //mongoose.connect('mongodb://localhost/localtest')
-            mongoose.connect('mongodb://heroku_ptln6dnj:vi22d3nuk65m1ktjqrtjalvnku@ds111492.mlab.com:11492/heroku_ptln6dnj')
+            console.log("MONGODB : Connecting to .... " + MONGODB_URI);
+            mongoose.connect(MONGODB_URI)
                 .then(function () {
                 // Check if app config requires us to reload the DB.
                 if (appConfigOptions["reloadBankDetailsDB"] == false) {
@@ -163,7 +166,6 @@ var BankDB = /** @class */ (function () {
                         // Load Bank MetaData Table 
                         var bankMetaData = fs.readJsonSync("./dist/Split_Records/BankMetaData.json");
                         var allMetaDataModels = _.map(bankMetaData, function (eachBankRec) {
-                            console.log("BANK META DATA RELOADING : " + eachBankRec["bankName"]);
                             var tempModel = new bankMetaDataModel({
                                 bankName: eachBankRec["bankName"],
                                 branchCount: eachBankRec["branchCount"],
@@ -313,7 +315,6 @@ var BankDB = /** @class */ (function () {
     };
     BankDB.prototype.getBankMetaData = function () {
         return new Promise(function (resolve, reject) {
-            console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>> We are in getBankMetaData Fellow");
             bankMetaDataModel.find(function (err, values) {
                 resolve(values);
             }).catch(function (err) {
@@ -323,7 +324,6 @@ var BankDB = /** @class */ (function () {
     };
     BankDB.prototype.getBankMetaDataForBankName = function (bankName) {
         return new Promise(function (resolve, reject) {
-            console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>> We are in getBankMetaData Fellow");
             bankMetaDataModel.find({ bankName: bankName }, function (err, values) {
                 if (values.length == 1) {
                     resolve(values[0]);
@@ -384,7 +384,6 @@ var BankDB = /** @class */ (function () {
             var finalBankName = bankName.toUpperCase();
             var finalLocationName = locationName.toUpperCase();
             var model = getModelForBankName(finalBankName);
-            console.log("Find City Count... getBranchCountForBankName");
             model.find({ name: finalBankName, city: locationName }, function (err, values) {
                 var branchCount = _.uniq(values).length;
                 resolve(branchCount);

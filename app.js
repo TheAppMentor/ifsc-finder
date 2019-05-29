@@ -1,5 +1,7 @@
-var createError = require('http-errors');
 var express = require('express');
+var app = express();
+
+var createError = require('http-errors');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -7,7 +9,41 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
-var app = express();
+
+var session = require('express-session');
+var FileStore = require('session-file-store')(session);
+
+var mongoose = require('mongoose')
+
+let MONGODB_URI = "mongodb://localhost:27017/"
+
+if (process.env.IS_HEROKU == "true"){
+   MONGODB_URI = process.env.MONGODB_URI
+}
+var MongoDBStore = require('connect-mongodb-session')(session);
+
+MONGODB_URI = MONGODB_URI + "userSessions"
+
+var store = new MongoDBStore({
+    uri: MONGODB_URI,
+    collection: 'sessions'
+});
+ 
+// Catch errors
+store.on('error', function(error) {
+  console.log(error);
+});
+ 
+app.use(require('express-session')({
+  secret: 'whatever',
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24 * 7 // 1 week
+  },
+  store: store,
+  resave: true,
+  saveUninitialized: true
+}));
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -21,7 +57,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

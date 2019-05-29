@@ -12,8 +12,6 @@ var BankCollection = /** @class */ (function () {
         this.bankNameStoreTrie = Trie.from([]);
         this.bankNameToFileMap = {};
         this._allBankNames = Array();
-        //console.log("Constructor Calling : loadDataBasesWithDataFromFile")
-        //this.loadDataBasesWithDataFromFile()
         this.dataStore = new dbHandler_1.BankDB();
     }
     BankCollection.prototype.getAllBranchesCount = function (bankName) {
@@ -43,7 +41,7 @@ var BankCollection = /** @class */ (function () {
         return new Promise(function (reslove, reject) {
             _this.findBankMatchingName("IC")
                 .then(function () {
-                console.log("Do Something... ");
+                //console.log("Do Something... ")
             });
         });
     };
@@ -65,14 +63,12 @@ var BankCollection = /** @class */ (function () {
         configurable: true
     });
     BankCollection.prototype.loadDataBasesWithDataFromFile = function () {
-        console.log("Function Calling : loadDataBasesWithDataFromFile");
         return this.dataStore.connectoToDBAndLoadData(this);
     };
     BankCollection.prototype.getBankMetaData = function () {
         return this.dataStore.getBankMetaData();
     };
     BankCollection.prototype.getAllBankNames = function () {
-        console.log("In the Coll... goint to talk to datastore");
         return this.dataStore.getAllBankNames();
     };
     BankCollection.prototype.loadBranchDetailsForBank = function (bankName) {

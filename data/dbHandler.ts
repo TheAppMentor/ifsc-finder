@@ -7,7 +7,7 @@ const Promise = require("bluebird");
 const mongoose = require('mongoose')
 const decompress = require('decompress');
 var _ = require('lodash')
-const db = mongoose.connection
+//const db = mongoose.connection
 mongoose.Promise = require('bluebird');
 
 // Creating a Schema 
@@ -171,14 +171,18 @@ function getModelForBankName(bankName : string) : any {
 }
 
 
+let MONGODB_URI = "mongodb://localhost/localtest"
+
+if (process.env.IS_HEROKU == "true"){
+   MONGODB_URI = process.env.MONGODB_URI 
+}
+
 export class BankDB {
 
     connectoToDBAndLoadData(bankCollection : BankCollection) : Promise<boolean> {
         return new Promise((resolve,reject) => {
-            //mongodb://heroku_ptln6dnj:vi22d3nuk65m1ktjqrtjalvnku@ds111492.mlab.com:11492/heroku_ptln6dnj
-            //mongoose.connect('mongodb://localhost/localtest')
-            mongoose.connect('mongodb://heroku_ptln6dnj:vi22d3nuk65m1ktjqrtjalvnku@ds111492.mlab.com:11492/heroku_ptln6dnj')
-
+           console.log("MONGODB : Connecting to .... " + MONGODB_URI) 
+            mongoose.connect(MONGODB_URI)
                 .then(() : Promise<boolean> => {
                     // Check if app config requires us to reload the DB.
                     if (appConfigOptions["reloadBankDetailsDB"] == false) {
@@ -192,8 +196,6 @@ export class BankDB {
 
                                     let bankMetaData = fs.readJsonSync("./dist/Split_Records/BankMetaData.json")
                                     let allMetaDataModels = _.map(bankMetaData,(eachBankRec) => {
-
-                                        console.log("BANK META DATA RELOADING : " + eachBankRec["bankName"])
 
                                         let tempModel = new bankMetaDataModel({
                                             bankName : eachBankRec["bankName"],   
@@ -390,7 +392,6 @@ export class BankDB {
     getBankMetaData() : Promise<any>{
 
         return new Promise((resolve,reject) => {
-            console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>> We are in getBankMetaData Fellow")
             bankMetaDataModel.find((err,values) => {
                 resolve(values) 
             }).catch((err) => {
@@ -402,7 +403,6 @@ export class BankDB {
     getBankMetaDataForBankName(bankName : string) : Promise<any>{
 
         return new Promise((resolve,reject) => {
-            console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>> We are in getBankMetaData Fellow")
             bankMetaDataModel.find({bankName : bankName},(err,values) => {
                 if (values.length == 1) {
                     resolve(values[0]) 
@@ -475,7 +475,6 @@ export class BankDB {
             let finalLocationName = locationName.toUpperCase()  
 
             let model = getModelForBankName(finalBankName)
-            console.log("Find City Count... getBranchCountForBankName")
 
             model.find({name : finalBankName, city : locationName},function(err,values){
                 let branchCount = _.uniq(values).length

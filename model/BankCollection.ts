@@ -47,7 +47,7 @@ export class BankCollection {
         return new Promise((reslove,reject) => {
             this.findBankMatchingName("IC")
                 .then(() => {
-                    console.log("Do Something... ")
+                    //console.log("Do Something... ")
                 })
         }) 
     }
@@ -72,13 +72,10 @@ export class BankCollection {
     } 
    
     loadDataBasesWithDataFromFile() : Promise<boolean> {
-        console.log("Function Calling : loadDataBasesWithDataFromFile")
         return this.dataStore.connectoToDBAndLoadData(this)  
     }
 
     constructor(){
-        //console.log("Constructor Calling : loadDataBasesWithDataFromFile")
-        //this.loadDataBasesWithDataFromFile()
         this.dataStore = new BankDB() 
     }
 
@@ -87,7 +84,6 @@ export class BankCollection {
     }
 
     getAllBankNames() : Promise<Array<string>> {
-        console.log("In the Coll... goint to talk to datastore")
         return this.dataStore.getAllBankNames()
     }
 

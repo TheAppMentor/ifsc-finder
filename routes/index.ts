@@ -4,6 +4,8 @@ var _ = require('lodash');
 var handlebars = require('handlebars')
 const fs = require('fs');
 
+const uuidv1 = require('uuid/v1');
+
 const { WebhookClient } = require('dialogflow-fulfillment')
 var Promise = require('bluebird')
 
@@ -68,8 +70,13 @@ bankColl.loadDataBasesWithDataFromFile()
 /* GET home page. */
 router.get('/', function(req, res, next) {
     //TODO : Check the allSetReadyToLaunch variable, if we are not yet ready. Show a an appropriate page. 
-    console.log("Request Received | Route : / | query : " + JSON.stringify(req.query))
-
+    if ( req.session.userData === undefined) {
+        req.session.userData = {} 
+        req.session.userData = {sessID : uuidv1()} 
+    }
+    
+    console.log("Session :" +  req.session.userData.sessID +  " : Request Received | Route : / | query : " + JSON.stringify(req.query))
+    
     res.render('index', { 
     });
 });
@@ -77,7 +84,7 @@ router.get('/', function(req, res, next) {
 
 /* RTGS Holidays Page */
 router.get('/rtgsholidays', function(req, res, next) {
-    console.log("Request Received | Route : /rtgsholidays | query : " + JSON.stringify(req.query))
+    console.log("Session :" +  req.session.Stupid +  " : Request Received | Route : /rtgsholidays | query : " + JSON.stringify(req.query))
     res.render('rtgs_holidays', { 
     });
 });
@@ -87,7 +94,7 @@ router.get('/getBanks/', function(req, res, next) {
     
     let query = req.query
 
-    console.log("Request Received | Route : /getBanks | query : " + JSON.stringify(query))
+    console.log("Session :" + req.session.userData.sessID +  " : Request Received | Route : /getBanks | query : " + JSON.stringify(query))
 
     let matchedBanks = _.filter(allBankNamesArr, (eachValue) => {
         if (_.includes(_.toLower(eachValue), _.toLower(query.q)) == true){
@@ -140,7 +147,7 @@ router.get('/getBanks/', function(req, res, next) {
 
     resp['results'].push(allBanksCat)
 
-    console.log("Response Sent | Route : /getBanks | query : " + JSON.stringify(query) + " | Results : Somethign was sent")
+    console.log("Session :" +  req.session.userData.sessID +  " : Response Sent | Route : /getBanks | query : " + JSON.stringify(query) + " | Results : Somethign was sent")
     res.json(resp)
 })
 
@@ -158,14 +165,14 @@ router.get('/getLocationList/', function(req, res, next) {
     let bankName = req.query.bankName 
     let searchInput = req.query.searchInput.toUpperCase()
     
-    console.log("Request Received | Route : /getLocationList | query : " + JSON.stringify(req.query))
+    console.log("Session :" +  req.session.userData.sessID +  " : Request Received | Route : /getLocationList | query : " + JSON.stringify(req.query))
     
     if (isValidateSearchInput(searchInput) == false){
-           console.log("We Have an ERROR  " + searchInput)     
+           console.log("Session :" +  "We Have an ERROR  " + searchInput)     
             var errResp = {}
             errResp['results'] = [] 
 
-            console.log("Response Sent | Route : /getLocationList | query : " + JSON.stringify(req.query) +  ": Results : Something Was Sent" )
+            console.log("Session :" +  req.session.userData.sessID +  "Response Sent | Route : /getLocationList | query : " + JSON.stringify(req.query) +  ": Results : Something Was Sent" )
             return res.json(errResp)
     }
 
@@ -201,7 +208,7 @@ router.get('/getLocationList/', function(req, res, next) {
             resp["success"] = queryReturnedResults
 
             //Matching City Names
-            console.log("Response Sent | Route : /getLocationList | query : " + JSON.stringify(req.query) +  ": Results : Something Was Sent" )
+            console.log("Session :" +  "Response Sent | Route : /getLocationList | query : " + JSON.stringify(req.query) +  ": Results : Something Was Sent" )
             return res.json(resp)
         })
 })
@@ -216,13 +223,13 @@ router.get('/getBranchList/', function(req, res, next) {
     let locationName = req.query.locationName.replace(/<(.|\n)*?>/g, '');
     let searchInput = req.query.searchInput.toUpperCase()
     
-    console.log("Request Received | Route : /getBranchList| query : " + JSON.stringify(req.query))
+    console.log("Session :" +  "Request Received | Route : /getBranchList| query : " + JSON.stringify(req.query))
     if (isValidateSearchInput(searchInput) == false){
-           console.log("We Have an ERROR  " + searchInput)     
+           console.log("Session :" +  "We Have an ERROR  " + searchInput)     
             var errResp = {}
             errResp['results'] = [] 
 
-            console.log("Response Sent | Route : /getLocationList | query : " + JSON.stringify(req.query) +  ": Results : Something Was Sent" )
+            console.log("Session :" +  "Response Sent | Route : /getLocationList | query : " + JSON.stringify(req.query) +  ": Results : Something Was Sent" )
             return res.json(errResp)
     }
 
@@ -256,10 +263,10 @@ router.get('/getBranchList/', function(req, res, next) {
             let queryReturnedResults = formattedResults.length > 0 ? true : false 
             resp["success"] = queryReturnedResults
 
-            console.log(JSON.stringify(req.query))
+            console.log("Session :" +  JSON.stringify(req.query))
 
             //Matching City Names
-            console.log("Response Sent | Route : /getBranchList| query : " + JSON.stringify(req.query) + " : Results : " + (resp["results"].length) + "Branches")
+            console.log("Session :" + req.session.userData.sessID + "Response Sent | Route : /getBranchList| query : " + JSON.stringify(req.query) + " : Results : " + (resp["results"].length) + "Branches")
             return res.json(resp)
         }) 
 })
@@ -334,7 +341,7 @@ router.get('/getDomForLocationSearch/', function(req, res, next) {
 
     let bankName = req.query.bankName 
 
-    console.log("Request Received | Route : /getDomForLocationSearch | query : " + JSON.stringify(req.query))
+    console.log("Session :" +  req.session.userData.sessID +  "Request Received | Route : /getDomForLocationSearch | query : " + JSON.stringify(req.query))
     //TODO : WE dont have to get the search div and the counts for the info div at the same time. If performance is an issue the info div count can be fetched later.
     bankColl.getLocationCountForBankName(bankName,"").then((bankLocationCount : number) => {
         var locationSearch_div = dom_gen.getDivForLocationSearch({
@@ -348,7 +355,7 @@ router.get('/getDomForLocationSearch/', function(req, res, next) {
             bankName : bankName,
             locationCount : bankLocationCount 
         }) 
-        console.log("Response Sent | Route : /getDomForLocationSearch | query : " + JSON.stringify(req.query) + " : Results : DIV_Location Search")
+        console.log("Session :" + req.session.userData.sessID +  " : Response Sent | Route : /getDomForLocationSearch | query : " + JSON.stringify(req.query) + " : Results : DIV_Location Search")
         res.json({div_locationSearch : locationSearch_div, div_info : info_div})
     }) 
 }) 
@@ -360,7 +367,7 @@ router.get('/getDomForBranchSearch/', function(req, res, next) {
     let bankName = req.query.bankName 
     let locationName = req.query.locationName 
 
-    console.log("Request Received | Route : /getDomForBranchSearch | query : " + JSON.stringify(req.query))
+    console.log("Session :" +  req.session.userData.sessID +  " : Request Received | Route : /getDomForBranchSearch | query : " + JSON.stringify(req.query))
 
     bankColl.getBranchCountForBankNameInCity(bankName,locationName)
         .then((branchCountAtLocation : number) => {
@@ -378,7 +385,7 @@ router.get('/getDomForBranchSearch/', function(req, res, next) {
                 branchCount : branchCountAtLocation
             }) 
 
-            console.log("Response Sent | Route : /getDomForBranchSearch | query : " + JSON.stringify(req.query) + " : Results : DIV_Branch Search")
+            console.log(req.session.userData.sessID +  " : Response Sent | Route : /getDomForBranchSearch | query : " + JSON.stringify(req.query) + " : Results : DIV_Branch Search")
             res.json({div_branchSearch : branchSearch_div, div_info : info_div})
 
         }) 
@@ -392,7 +399,7 @@ router.get('/getDomForResults/', function(req, res, next) {
     let cityName = req.query.locationName.replace(/<(.|\n)*?>/g, '');
     let branchName = req.query.branchName.replace(/<(.|\n)*?>/g, '');
    
-    console.log("Request Received | Route : /getDomForResults | query : " + JSON.stringify(req.query))
+    console.log("Session :" +  req.session.userData.sessID +  "Request Received | Route : /getDomForResults | query : " + JSON.stringify(req.query))
 
     bankColl.getBranchesDetailsForBankInCityWithBranchName(bankName,cityName,branchName).then((branchNameArr: Array<any>) => {
         
@@ -407,7 +414,7 @@ router.get('/getDomForResults/', function(req, res, next) {
             state : fetchedBranch.state
         }) 
 
-        console.log("Response Sent | Route : /getDomForBranchSearch | query : " + JSON.stringify(req.query) + " : Results : DIV_FINAL_Results")
+        console.log(req.session.userData.sessID +  " : Response Sent | Route : /getDomForBranchSearch | query : " + JSON.stringify(req.query) + " : Results : DIV_FINAL_Results" + JSON.stringify(fetchedBranch))
         res.json({div_finaResults : results_div})
     })
 });
