@@ -1,107 +1,121 @@
-import { BankDB } from '../data/dbHandler';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var dbHandler_1 = require("../data/dbHandler");
 var Papa = require('papaparse');
 var _ = require('lodash');
 var Promise = require("bluebird");
 var Trie = require('mnemonist/trie');
 //var fs = require('fs')
-const fs = require('fs-extra-promise');
-export class BankCollection {
-    constructor() {
+var fs = require('fs-extra-promise');
+var BankCollection = /** @class */ (function () {
+    function BankCollection() {
         this.bankNameStoreTrie = Trie.from([]);
         this.bankNameToFileMap = {};
         this._allBankNames = Array();
-        this.dataStore = new BankDB();
+        this.dataStore = new dbHandler_1.BankDB();
     }
-    getAllBranchesCount(bankName = "") {
+    BankCollection.prototype.getAllBranchesCount = function (bankName) {
+        if (bankName === void 0) { bankName = ""; }
         return this.dataStore.getAllBranchesCount(bankName);
-    }
-    findBankNameContainingString(bankName) {
+    };
+    BankCollection.prototype.findBankNameContainingString = function (bankName) {
         return this.dataStore.getAllBankNamesMatching(bankName);
-    }
-    findBankMatchingName(name) {
-        return new Promise((resolve, reject) => {
-            resolve(this.bankNameStoreTrie.find(name));
+    };
+    BankCollection.prototype.findBankMatchingName = function (name) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            resolve(_this.bankNameStoreTrie.find(name));
         });
-    }
-    getAllBankNamesCount() {
+    };
+    BankCollection.prototype.getAllBankNamesCount = function () {
         return this.dataStore.getAllBankNamesCount();
-    }
-    getLocationCountForBankName(bankName, queryString) {
+    };
+    BankCollection.prototype.getLocationCountForBankName = function (bankName, queryString) {
         return this.dataStore.getLocationCountForBankName(bankName, queryString);
-    }
-    getBranchCountForBankNameInCity(bankName, cityName) {
+    };
+    BankCollection.prototype.getBranchCountForBankNameInCity = function (bankName, cityName) {
         return this.dataStore.getBranchCountForBankNameInCity(bankName, cityName);
-    }
-    addBank(bank) {
-        return new Promise((reslove, reject) => {
-            this.findBankMatchingName("IC")
-                .then(() => {
+    };
+    BankCollection.prototype.addBank = function (bank) {
+        var _this = this;
+        return new Promise(function (reslove, reject) {
+            _this.findBankMatchingName("IC")
+                .then(function () {
                 //console.log("Do Something... ")
             });
         });
-    }
-    fetchFileNameForBank(bankName) {
-        return new Promise((resolve, reject) => {
-            resolve(this.bankNameToFileMap[bankName]);
-            if (this.bankNameToFileMap[bankName] != null) {
-                resolve(this.bankNameToFileMap[bankName]);
+    };
+    BankCollection.prototype.fetchFileNameForBank = function (bankName) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            resolve(_this.bankNameToFileMap[bankName]);
+            if (_this.bankNameToFileMap[bankName] != null) {
+                resolve(_this.bankNameToFileMap[bankName]);
             }
             reject(Error("Unable to find bank name : " + bankName));
         });
-    }
-    get allBankNames() {
-        return this._allBankNames;
-    }
-    loadDataBasesWithDataFromFile() {
+    };
+    Object.defineProperty(BankCollection.prototype, "allBankNames", {
+        get: function () {
+            return this._allBankNames;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    BankCollection.prototype.loadDataBasesWithDataFromFile = function () {
         return this.dataStore.connectoToDBAndLoadData(this);
-    }
-    getBankMetaData() {
+    };
+    BankCollection.prototype.getBankMetaData = function () {
         return this.dataStore.getBankMetaData();
-    }
-    getAllBankNames() {
+    };
+    BankCollection.prototype.getAllBankNames = function () {
         return this.dataStore.getAllBankNames();
-    }
-    loadBranchDetailsForBank(bankName) {
-        return new Promise((resolve, reject) => {
+    };
+    BankCollection.prototype.loadBranchDetailsForBank = function (bankName) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
             //TODO : This is loading from File everytime.. Modify this to load from cache.
-            if (this.bankNameToFileMap.hasOwnProperty(bankName)) {
-                let bankFileName = this.bankNameToFileMap[bankName];
+            if (_this.bankNameToFileMap.hasOwnProperty(bankName)) {
+                var bankFileName = _this.bankNameToFileMap[bankName];
                 resolve(bankFileName);
             }
             reject(Error("Bank Name Not found in bankNameToFileMap"));
         });
-    }
+    };
     //new API with split db and querysting passed to mongodb for filtering.
     //
-    getAllCityNamesForBankMatchingQueryString(bankName, queryString) {
+    BankCollection.prototype.getAllCityNamesForBankMatchingQueryString = function (bankName, queryString) {
         return this.dataStore.getAllCityNamesForBankMatchingQueryString(bankName, queryString);
-    }
-    getAllBranchNamesForBankNameInCityMatchingQueryString(bankName, cityName, queryString) {
+    };
+    BankCollection.prototype.getAllBranchNamesForBankNameInCityMatchingQueryString = function (bankName, cityName, queryString) {
         // Note this searches Address fields also. From the logs I can see the users dont seem to know the branch name and they are searching by Addresss etc.
         return this.dataStore.getAllBranchNamesForBankNameInCityMatchingQueryString(bankName, cityName, queryString);
-    }
-    getAllBranchesForBankNameInStateDistrictCity(bankName, stateName, cityName, districtName = null) {
+    };
+    BankCollection.prototype.getAllBranchesForBankNameInStateDistrictCity = function (bankName, stateName, cityName, districtName) {
+        if (districtName === void 0) { districtName = null; }
         return this.dataStore.getAllBranchesForBankNameInStateDistrictCity(bankName, stateName, cityName, districtName);
-    }
-    getAllBranchesForBankNameInState(bankName, stateName) {
+    };
+    BankCollection.prototype.getAllBranchesForBankNameInState = function (bankName, stateName) {
         return this.dataStore.getAllBranchesForBankNameInState(bankName, stateName);
-    }
-    getAllBranchesForBankNameInCity(bankName, cityName) {
+    };
+    BankCollection.prototype.getAllBranchesForBankNameInCity = function (bankName, cityName) {
         return this.dataStore.getAllBranchesForBankNameInCity(bankName, cityName);
-    }
-    getBranchesDetailsForBankInCityWithBranchName(bankName, cityName, branchName) {
+    };
+    BankCollection.prototype.getBranchesDetailsForBankInCityWithBranchName = function (bankName, cityName, branchName) {
         return this.dataStore.getAllBranchesForBankNameInCityBranchName(bankName, cityName, branchName);
-    }
-    getAllBranchNamesForBankNameInCity(bankName, cityName) {
+    };
+    BankCollection.prototype.getAllBranchNamesForBankNameInCity = function (bankName, cityName) {
         return this.dataStore.getAllBranchNamesForBankNameInCity(bankName, cityName);
-    }
-    getAllStateNamesForBank(bankName) {
+    };
+    BankCollection.prototype.getAllStateNamesForBank = function (bankName) {
         return this.dataStore.getAllStateNamesForBank(bankName);
-    }
-    getAllCityNamesForBank(bankName) {
+    };
+    BankCollection.prototype.getAllCityNamesForBank = function (bankName) {
         return this.dataStore.getAllCityNamesForBank(bankName);
-    }
-    getAllDistrictNamesForBank(bankName) {
+    };
+    BankCollection.prototype.getAllDistrictNamesForBank = function (bankName) {
         return this.dataStore.getAllDistrictNamesForBank(bankName);
-    }
-}
+    };
+    return BankCollection;
+}());
+exports.BankCollection = BankCollection;
