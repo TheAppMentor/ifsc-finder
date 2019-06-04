@@ -64,7 +64,7 @@ function loadConfigFile(){
 
 
 // TODO Dont do this.. you have the popular banks tagged in the Meta Data.. fetch it from that.. Hard coding this will make all kind of shitty dependencies.
-let popularBanks = ["ALLAHABAD BANK","ANDHRA BANK","AXIS BANK LTD","BANK OF BARODA (BOB)","BANK OF INDIA (BOI)","CANARA BANK","CENTRAL BANK OF INDIA","CORPORATION BANK","HDFC BANK LTD","ICICI BANK LTD","IDBI LTD","INDIAN BANK","INDIAN OVERSEAS BANK (IOB)","ORIENTAL BANK OF COMMERCE","PUNJAB NATIONAL BANK (PNB)","STATE BANK OF INDIA (SBI)","SYNDICATE BANK","UCO BANK","UNION BANK OF INDIA","YES BANK LTD",] 
+let popularBanks = ["ALLAHABAD BANK","ANDHRA BANK","AXIS BANK LTD","BANK OF BARODA (BOB)","BANK OF INDIA (BOI)","CANARA BANK","CENTRAL BANK OF INDIA","CORPORATION BANK","HDFC BANK LTD","ICICI BANK LTD","IDBI LTD","INDIAN BANK","INDIAN OVERSEAS BANK (IOB)","ORIENTAL BANK OF COMMERCE (OBC)","PUNJAB NATIONAL BANK (PNB)","STATE BANK OF INDIA (SBI)","SYNDICATE BANK","UCO BANK","UNION BANK OF INDIA","YES BANK LTD",] 
 
 function getModelForBankName(bankName : string) : any {
     switch (bankName) {
@@ -131,7 +131,7 @@ function getModelForBankName(bankName : string) : any {
             break;
         } 
 
-        case "ORIENTAL BANK OF COMMERCE": {
+        case "ORIENTAL BANK OF COMMERCE (OBC)": {
             return orientalBankOfCommerceModel;
             break;
         } 
@@ -176,7 +176,6 @@ let MONGODB_URI = "mongodb://localhost/localtest"
 if (process.env.IS_HEROKU == "true"){
    MONGODB_URI = process.env.MONGODB_URI 
    MONGODB_URI = "mongodb://heroku_ptln6dnj:vi22d3nuk65m1ktjqrtjalvnku@ds111492.mlab.com:11492/heroku_ptln6dnj"
-
 }
 
 export class BankDB {

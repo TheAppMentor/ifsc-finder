@@ -1,19 +1,17 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var BankBranchDetail_1 = require("../model/BankBranchDetail");
-var fs = require('fs-extra-promise');
-var Promise = require("bluebird");
-var mongoose = require('mongoose');
-var decompress = require('decompress');
+import { BankBranchDetailSchema } from '../model/BankBranchDetail';
+const fs = require('fs-extra-promise');
+const Promise = require("bluebird");
+const mongoose = require('mongoose');
+const decompress = require('decompress');
 var _ = require('lodash');
 //const db = mongoose.connection
 mongoose.Promise = require('bluebird');
 // Creating a Schema 
-var bankNamesSchema = new mongoose.Schema({
+const bankNamesSchema = new mongoose.Schema({
     name: String
 });
 // Creating a Schema 
-var bankMetaDataSchema = new mongoose.Schema({
+const bankMetaDataSchema = new mongoose.Schema({
     bankName: String,
     branchCount: String,
     locationCount: String,
@@ -21,41 +19,41 @@ var bankMetaDataSchema = new mongoose.Schema({
     isPopular: String
 });
 // Creating a Bank Model
-var bankNamesModel = mongoose.model("BankName", bankNamesSchema);
-var bankMetaDataModel = mongoose.model("bankMetaData", bankMetaDataSchema);
-var bankBranchDetailModel = mongoose.model("BankBranchDetail", BankBranchDetail_1.BankBranchDetailSchema);
-var allahabadBankModel = mongoose.model("allahabadBankModel", BankBranchDetail_1.BankBranchDetailSchema);
-var andhraBankModel = mongoose.model("andhraBankModel", BankBranchDetail_1.BankBranchDetailSchema);
-var axisBankModel = mongoose.model("axisBankModel", BankBranchDetail_1.BankBranchDetailSchema);
-var bankOfBarodaBobModel = mongoose.model("bankOfBarodaBobModel", BankBranchDetail_1.BankBranchDetailSchema);
-var bankOfIndiaBoiModel = mongoose.model("bankOfIndiaBoiModel", BankBranchDetail_1.BankBranchDetailSchema);
-var canaraBankModel = mongoose.model("canaraBankModel", BankBranchDetail_1.BankBranchDetailSchema);
-var centralBankOfIndiaModel = mongoose.model("centralBankOfIndiaModel", BankBranchDetail_1.BankBranchDetailSchema);
-var corporationBankModel = mongoose.model("corporationBankModel", BankBranchDetail_1.BankBranchDetailSchema);
-var hdfcBankModel = mongoose.model("hdfcBankModel", BankBranchDetail_1.BankBranchDetailSchema);
-var iciciBankLimitedModel = mongoose.model("iciciBankLimitedModel", BankBranchDetail_1.BankBranchDetailSchema);
-var idbiBankModel = mongoose.model("idbiBankModel", BankBranchDetail_1.BankBranchDetailSchema);
-var indianBankModel = mongoose.model("indianBankModel", BankBranchDetail_1.BankBranchDetailSchema);
-var indianOverseasBankIobModel = mongoose.model("indianOverseasBankIobModel", BankBranchDetail_1.BankBranchDetailSchema);
-var orientalBankOfCommerceModel = mongoose.model("orientalBankOfCommerceModel", BankBranchDetail_1.BankBranchDetailSchema);
-var otherBanksModel = mongoose.model("otherBanksModel", BankBranchDetail_1.BankBranchDetailSchema);
-var punjabNationalBankPnbModel = mongoose.model("punjabNationalBankPnbModel", BankBranchDetail_1.BankBranchDetailSchema);
-var stateBankOfIndiaSbiModel = mongoose.model("stateBankOfIndiaSbiModel", BankBranchDetail_1.BankBranchDetailSchema);
-var syndicateBankModel = mongoose.model("syndicateBankModel", BankBranchDetail_1.BankBranchDetailSchema);
-var ucoBankModel = mongoose.model("ucoBankModel", BankBranchDetail_1.BankBranchDetailSchema);
-var unionBankBankModel = mongoose.model("unionBankBankModel", BankBranchDetail_1.BankBranchDetailSchema);
-var yesBankModel = mongoose.model("yesBankModel", BankBranchDetail_1.BankBranchDetailSchema);
+const bankNamesModel = mongoose.model("BankName", bankNamesSchema);
+const bankMetaDataModel = mongoose.model("bankMetaData", bankMetaDataSchema);
+const bankBranchDetailModel = mongoose.model("BankBranchDetail", BankBranchDetailSchema);
+const allahabadBankModel = mongoose.model("allahabadBankModel", BankBranchDetailSchema);
+const andhraBankModel = mongoose.model("andhraBankModel", BankBranchDetailSchema);
+const axisBankModel = mongoose.model("axisBankModel", BankBranchDetailSchema);
+const bankOfBarodaBobModel = mongoose.model("bankOfBarodaBobModel", BankBranchDetailSchema);
+const bankOfIndiaBoiModel = mongoose.model("bankOfIndiaBoiModel", BankBranchDetailSchema);
+const canaraBankModel = mongoose.model("canaraBankModel", BankBranchDetailSchema);
+const centralBankOfIndiaModel = mongoose.model("centralBankOfIndiaModel", BankBranchDetailSchema);
+const corporationBankModel = mongoose.model("corporationBankModel", BankBranchDetailSchema);
+const hdfcBankModel = mongoose.model("hdfcBankModel", BankBranchDetailSchema);
+const iciciBankLimitedModel = mongoose.model("iciciBankLimitedModel", BankBranchDetailSchema);
+const idbiBankModel = mongoose.model("idbiBankModel", BankBranchDetailSchema);
+const indianBankModel = mongoose.model("indianBankModel", BankBranchDetailSchema);
+const indianOverseasBankIobModel = mongoose.model("indianOverseasBankIobModel", BankBranchDetailSchema);
+const orientalBankOfCommerceModel = mongoose.model("orientalBankOfCommerceModel", BankBranchDetailSchema);
+const otherBanksModel = mongoose.model("otherBanksModel", BankBranchDetailSchema);
+const punjabNationalBankPnbModel = mongoose.model("punjabNationalBankPnbModel", BankBranchDetailSchema);
+const stateBankOfIndiaSbiModel = mongoose.model("stateBankOfIndiaSbiModel", BankBranchDetailSchema);
+const syndicateBankModel = mongoose.model("syndicateBankModel", BankBranchDetailSchema);
+const ucoBankModel = mongoose.model("ucoBankModel", BankBranchDetailSchema);
+const unionBankBankModel = mongoose.model("unionBankBankModel", BankBranchDetailSchema);
+const yesBankModel = mongoose.model("yesBankModel", BankBranchDetailSchema);
 var connectedToDB = false;
-var appConfigOptions = loadConfigFile();
+const appConfigOptions = loadConfigFile();
 function loadConfigFile() {
-    var configFileName = "./appConfig.json";
+    let configFileName = "./appConfig.json";
     //let configFileName = "/Users/i328244/Desktop/NodeProjects/ifsc-finder/appConfig.json"
-    var fileContents = fs.readJsonSync(configFileName);
-    var reloadAllDB = fileContents['reloadAllDB'];
+    let fileContents = fs.readJsonSync(configFileName);
+    let reloadAllDB = fileContents['reloadAllDB'];
     return fileContents;
 }
 // TODO Dont do this.. you have the popular banks tagged in the Meta Data.. fetch it from that.. Hard coding this will make all kind of shitty dependencies.
-var popularBanks = ["ALLAHABAD BANK", "ANDHRA BANK", "AXIS BANK LTD", "BANK OF BARODA (BOB)", "BANK OF INDIA (BOI)", "CANARA BANK", "CENTRAL BANK OF INDIA", "CORPORATION BANK", "HDFC BANK LTD", "ICICI BANK LTD", "IDBI LTD", "INDIAN BANK", "INDIAN OVERSEAS BANK (IOB)", "ORIENTAL BANK OF COMMERCE", "PUNJAB NATIONAL BANK (PNB)", "STATE BANK OF INDIA (SBI)", "SYNDICATE BANK", "UCO BANK", "UNION BANK OF INDIA", "YES BANK LTD",];
+let popularBanks = ["ALLAHABAD BANK", "ANDHRA BANK", "AXIS BANK LTD", "BANK OF BARODA (BOB)", "BANK OF INDIA (BOI)", "CANARA BANK", "CENTRAL BANK OF INDIA", "CORPORATION BANK", "HDFC BANK LTD", "ICICI BANK LTD", "IDBI LTD", "INDIAN BANK", "INDIAN OVERSEAS BANK (IOB)", "ORIENTAL BANK OF COMMERCE (OBC)", "PUNJAB NATIONAL BANK (PNB)", "STATE BANK OF INDIA (SBI)", "SYNDICATE BANK", "UCO BANK", "UNION BANK OF INDIA", "YES BANK LTD",];
 function getModelForBankName(bankName) {
     switch (bankName) {
         case "ALLAHABAD BANK": {
@@ -110,7 +108,7 @@ function getModelForBankName(bankName) {
             return indianOverseasBankIobModel;
             break;
         }
-        case "ORIENTAL BANK OF COMMERCE": {
+        case "ORIENTAL BANK OF COMMERCE (OBC)": {
             return orientalBankOfCommerceModel;
             break;
         }
@@ -143,31 +141,29 @@ function getModelForBankName(bankName) {
             break;
     }
 }
-var MONGODB_URI = "mongodb://localhost/localtest";
+let MONGODB_URI = "mongodb://localhost/localtest";
 if (process.env.IS_HEROKU == "true") {
     MONGODB_URI = process.env.MONGODB_URI;
     MONGODB_URI = "mongodb://heroku_ptln6dnj:vi22d3nuk65m1ktjqrtjalvnku@ds111492.mlab.com:11492/heroku_ptln6dnj";
 }
-var BankDB = /** @class */ (function () {
-    function BankDB() {
-    }
-    BankDB.prototype.connectoToDBAndLoadData = function (bankCollection) {
-        return new Promise(function (resolve, reject) {
+export class BankDB {
+    connectoToDBAndLoadData(bankCollection) {
+        return new Promise((resolve, reject) => {
             console.log("MONGODB : Connecting to .... " + MONGODB_URI);
             mongoose.connect(MONGODB_URI)
-                .then(function () {
+                .then(() => {
                 // Check if app config requires us to reload the DB.
                 if (appConfigOptions["reloadBankDetailsDB"] == false) {
                     return Promise.resolve(true);
                 }
-                return new Promise(function (resolve, reject) {
+                return new Promise((resolve, reject) => {
                     decompress('./Split_Records.zip', 'dist')
-                        .then(function (unzipComplete) {
+                        .then((unzipComplete) => {
                         // Load Meta Data 
                         // Load Bank MetaData Table 
-                        var bankMetaData = fs.readJsonSync("./dist/Split_Records/BankMetaData.json");
-                        var allMetaDataModels = _.map(bankMetaData, function (eachBankRec) {
-                            var tempModel = new bankMetaDataModel({
+                        let bankMetaData = fs.readJsonSync("./dist/Split_Records/BankMetaData.json");
+                        let allMetaDataModels = _.map(bankMetaData, (eachBankRec) => {
+                            let tempModel = new bankMetaDataModel({
                                 bankName: eachBankRec["bankName"],
                                 branchCount: eachBankRec["branchCount"],
                                 locationCount: eachBankRec["locationCount"],
@@ -178,19 +174,19 @@ var BankDB = /** @class */ (function () {
                         });
                         bankMetaDataModel.collection.drop(); // Drop old data before writing
                         bankMetaDataModel.insertMany(allMetaDataModels)
-                            .then(function (docs) {
+                            .then((docs) => {
                             resolve(true);
                         })
-                            .catch(function (err) {
+                            .catch((err) => {
                             reject("Error !! : Writing Meta Data " + err);
                         });
-                    }).then(function () {
+                    }).then(() => {
                         // Make DB for Other Banks
-                        return new Promise(function (resolve, reject) {
-                            var otherBankData = fs.readJsonSync("./dist/Split_Records/otherBanks.json");
-                            var currentModel = getModelForBankName("otherBanksModel"); // Default model is otherBanksModel
-                            var allBankDocs = _.map(otherBankData, function (eachBankRec) {
-                                var tempBankDetail = new currentModel({
+                        return new Promise((resolve, reject) => {
+                            let otherBankData = fs.readJsonSync("./dist/Split_Records/otherBanks.json");
+                            let currentModel = getModelForBankName("otherBanksModel"); // Default model is otherBanksModel
+                            let allBankDocs = _.map(otherBankData, (eachBankRec) => {
+                                let tempBankDetail = new currentModel({
                                     name: eachBankRec["name"],
                                     ifsc: eachBankRec["ifsc"],
                                     micr: eachBankRec["micr"],
@@ -207,25 +203,25 @@ var BankDB = /** @class */ (function () {
                             currentModel.collection.drop();
                             console.log("Inserting other bank docs.......  :" + allBankDocs.length);
                             currentModel.insertMany(allBankDocs)
-                                .then(function (docs) {
+                                .then((docs) => {
                                 console.log("Success !! : Inserting Other Bank Data " + docs.length);
                                 resolve(true);
                             })
-                                .catch(function (err) {
+                                .catch((err) => {
                                 console.log("Error !! : Writing Other Bank Data " + err);
                             });
                         });
-                    }).then(function () {
+                    }).then(() => {
                         // Make DB for Popular Banks
-                        return new Promise(function (resolve, reject) {
+                        return new Promise((resolve, reject) => {
                             console.log("<============= Startin with POP BANKS =============>");
-                            _.map(popularBanks, function (eachPopBank) {
+                            _.map(popularBanks, (eachPopBank) => {
                                 console.log("<============= Staring :" + eachPopBank + "=============>");
-                                var currentModel = getModelForBankName(eachPopBank);
-                                var fileName = "./dist/Split_Records/" + _.camelCase(eachPopBank) + ".json";
-                                var popBankData = fs.readJsonSync(fileName);
-                                var allBankDocs = _.map(popBankData, function (eachBankRec) {
-                                    var tempBankDetail = new currentModel({
+                                let currentModel = getModelForBankName(eachPopBank);
+                                let fileName = "./dist/Split_Records/" + _.camelCase(eachPopBank) + ".json";
+                                let popBankData = fs.readJsonSync(fileName);
+                                let allBankDocs = _.map(popBankData, (eachBankRec) => {
+                                    let tempBankDetail = new currentModel({
                                         name: eachBankRec["name"],
                                         ifsc: eachBankRec["ifsc"],
                                         micr: eachBankRec["micr"],
@@ -241,10 +237,10 @@ var BankDB = /** @class */ (function () {
                                 });
                                 currentModel.collection.drop();
                                 currentModel.insertMany(allBankDocs)
-                                    .then(function (docs) {
+                                    .then((docs) => {
                                     console.log("<============= Complete :" + docs.length + "=============>");
                                 })
-                                    .catch(function (err) {
+                                    .catch((err) => {
                                     console.log("Error !! : Writing Other Bank Data " + err);
                                 });
                             });
@@ -252,18 +248,18 @@ var BankDB = /** @class */ (function () {
                     });
                     resolve(true);
                 });
-            }).catch(function (err) {
+            }).catch((err) => {
                 console.log("We Have an Error connecting to Mongoose DB." + err);
             });
             resolve(true);
         });
-    };
-    BankDB.prototype.loadBankNamesDB = function (bankCollection) {
+    }
+    loadBankNamesDB(bankCollection) {
         var numberOfDocumentsLoaded = 0;
-        var promises = bankCollection.allBankNames.map(function (eachBankName) {
-            return new Promise(function (resolve, reject) {
+        const promises = bankCollection.allBankNames.map(eachBankName => {
+            return new Promise((resolve, reject) => {
                 var bankName = new bankNamesModel({ name: eachBankName });
-                bankName.save(function (err, bank) {
+                bankName.save((err, bank) => {
                     if (err) {
                         reject(Error("We have an error saving Bank Name"));
                     }
@@ -272,20 +268,20 @@ var BankDB = /** @class */ (function () {
                 });
             });
         });
-        var finalPromise = new Promise(function (resolve, reject) {
+        const finalPromise = new Promise(function (resolve, reject) {
             Promise.all(promises).then(function (values) {
                 resolve(values);
             });
         });
         return finalPromise;
-    };
-    BankDB.prototype.loadDBWithBankBankCollection = function (bankCollection) {
-        return new Promise(function (resolve, reject) {
-            var promises = bankCollection.allBankNames.map(function (eachBankName) {
-                return new Promise(function (resolve, reject) {
+    }
+    loadDBWithBankBankCollection(bankCollection) {
+        return new Promise((resolve, reject) => {
+            const promises = bankCollection.allBankNames.map(eachBankName => {
+                return new Promise((resolve, reject) => {
                     bankCollection.loadBranchDetailsForBank(eachBankName)
-                        .then(function (bankDetailsArr) {
-                        var bankDetailObj = bankDetailsArr.map(function (bankDetails) {
+                        .then((bankDetailsArr) => {
+                        var bankDetailObj = bankDetailsArr.map(bankDetails => {
                             var bankBranchDetial = new bankBranchDetailModel({
                                 name: bankDetails.name,
                                 ifsc: bankDetails.ifsc,
@@ -300,7 +296,7 @@ var BankDB = /** @class */ (function () {
                             });
                             return bankBranchDetial;
                         });
-                        bankBranchDetailModel.collection.insert(bankDetailObj, function (err, branchDetail) {
+                        bankBranchDetailModel.collection.insert(bankDetailObj, (err, branchDetail) => {
                             if (err) {
                                 reject();
                             }
@@ -309,93 +305,90 @@ var BankDB = /** @class */ (function () {
                     });
                 });
             });
-            Promise.all(promises).then(function () {
+            Promise.all(promises).then(() => {
                 resolve(true);
             });
         });
-    };
-    BankDB.prototype.getBankMetaData = function () {
-        return new Promise(function (resolve, reject) {
-            bankMetaDataModel.find(function (err, values) {
+    }
+    getBankMetaData() {
+        return new Promise((resolve, reject) => {
+            bankMetaDataModel.find((err, values) => {
                 resolve(values);
-            }).catch(function (err) {
+            }).catch((err) => {
                 reject("BANK DB : getBankMetaData : Unable to fetch metadata : " + err);
             });
         });
-    };
-    BankDB.prototype.getBankMetaDataForBankName = function (bankName) {
-        return new Promise(function (resolve, reject) {
-            bankMetaDataModel.find({ bankName: bankName }, function (err, values) {
+    }
+    getBankMetaDataForBankName(bankName) {
+        return new Promise((resolve, reject) => {
+            bankMetaDataModel.find({ bankName: bankName }, (err, values) => {
                 if (values.length == 1) {
                     resolve(values[0]);
                 }
                 reject("BANK DB : getBankMetaData : Unable to fetch metadata : ");
-            }).catch(function (err) {
+            }).catch((err) => {
                 reject("BANK DB : getBankMetaData : Unable to fetch metadata : " + err);
             });
         });
-    };
-    BankDB.prototype.getAllBankNames = function () {
-        return new Promise(function (resolve, reject) {
+    }
+    getAllBankNames() {
+        return new Promise((resolve, reject) => {
             //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb
             // I am using the in-efficinet regex method to make the find case-insensive.. check out the link above for a more optimizes soln.
-            bankNamesModel.find(function (err, values) {
+            bankNamesModel.find((err, values) => {
                 if (err) {
                     reject("DB Hanlder : getAllBankCount : Error ! : " + err);
                 }
-                var bankNames = values.map(function (eachRec) {
+                var bankNames = values.map(eachRec => {
                     return eachRec.name;
                 });
                 resolve(bankNames);
             });
         });
-    };
-    BankDB.prototype.getAllBankNamesCount = function () {
-        var _this = this;
-        return new Promise(function (resolve, reject) {
+    }
+    getAllBankNamesCount() {
+        return new Promise((resolve, reject) => {
             //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb
             // I am using the in-efficinet regex method to make the find case-insensive.. check out the link above for a more optimizes soln.
-            _this.getAllBankNames()
-                .then(function (allBankNames) {
+            this.getAllBankNames()
+                .then((allBankNames) => {
                 resolve(allBankNames.length);
-            }).catch(function (err) {
+            }).catch((err) => {
                 reject("DB Hanlder : getAllBankCount : Error ! : " + err);
             });
         });
-    };
-    BankDB.prototype.getRegExForQueryString = function (queryString) {
+    }
+    getRegExForQueryString(queryString) {
         if (queryString == "") {
             return new RegExp("[A-Z]");
         }
         var finalQueryString = queryString.toUpperCase();
         var finalRegEx = new RegExp(finalQueryString);
         return finalQueryString;
-    };
-    BankDB.prototype.getLocationCountForBankName = function (bankName, queryString) {
-        var _this = this;
-        return new Promise(function (resolve, reject) {
-            _this.getBankMetaDataForBankName(bankName)
-                .then(function (bankMetaData) {
+    }
+    getLocationCountForBankName(bankName, queryString) {
+        return new Promise((resolve, reject) => {
+            this.getBankMetaDataForBankName(bankName)
+                .then((bankMetaData) => {
                 resolve(bankMetaData.locationCount);
             });
         });
-    };
-    BankDB.prototype.getBranchCountForBankNameInCity = function (bankName, locationName) {
-        return new Promise(function (resolve, reject) {
-            var finalBankName = bankName.toUpperCase();
-            var finalLocationName = locationName.toUpperCase();
-            var model = getModelForBankName(finalBankName);
+    }
+    getBranchCountForBankNameInCity(bankName, locationName) {
+        return new Promise((resolve, reject) => {
+            let finalBankName = bankName.toUpperCase();
+            let finalLocationName = locationName.toUpperCase();
+            let model = getModelForBankName(finalBankName);
             model.find({ name: finalBankName, city: locationName }, function (err, values) {
-                var branchCount = _.uniq(values).length;
+                let branchCount = _.uniq(values).length;
                 resolve(branchCount);
             });
         });
-    };
-    BankDB.prototype.getAllBranchesCount = function (bankName) {
-        if (bankName === void 0) { bankName = ""; }
-        return new Promise(function (resolve, reject) {
+    }
+    getAllBranchesCount(bankName = "") {
+        return new Promise((resolve, reject) => {
             if (bankName == "") {
-                bankBranchDetailModel.find(function (err, values) {
+                bankBranchDetailModel.find((err, values) => {
                     resolve(values.length);
                 });
             }
@@ -405,104 +398,104 @@ var BankDB = /** @class */ (function () {
                 });
             }
         });
-    };
-    BankDB.prototype.getAllBankNamesMatching = function (bankName) {
-        return new Promise(function (resolve, reject) {
+    }
+    getAllBankNamesMatching(bankName) {
+        return new Promise((resolve, reject) => {
             //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb
             // I am using the in-efficinet regex method to make the find case-insensive.. check out the link above for a more optimizes soln.
             bankNamesModel.find({ name: { $regex: new RegExp(bankName, "i") } }, function (err, results) {
                 //bankBranchDetailModel.find({name : bankName},function(err,results){
-                var bankNames = results.map(function (eachRec) {
+                var bankNames = results.map(eachRec => {
                     return eachRec.name;
                 });
                 resolve(bankNames);
             });
         });
-    };
-    BankDB.prototype.getAllStateNamesForBank = function (bankName) {
-        return new Promise(function (resolve, reject) {
+    }
+    getAllStateNamesForBank(bankName) {
+        return new Promise((resolve, reject) => {
             //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb
             // I am using the in-efficinet regex method to make the find case-insensive.. check out the link above for a more optimizes soln.
             bankBranchDetailModel.find({ name: { $regex: new RegExp(bankName, "i") } }, function (err, results) {
-                var stateNames = results.map(function (eachRec) {
+                var stateNames = results.map(eachRec => {
                     return eachRec.state;
                 });
                 var uniqStateNames = _.uniq(stateNames);
-                var sortedUniqueStateNames = _.sortBy(uniqStateNames);
+                let sortedUniqueStateNames = _.sortBy(uniqStateNames);
                 resolve(sortedUniqueStateNames);
             });
         });
-    };
-    BankDB.prototype.getAllCityNamesForBankMatchingQueryString = function (bankName, queryString) {
-        return new Promise(function (resolve, reject) {
-            var finalBankName = bankName.toUpperCase(); // Dont use loaash for the uppercase. it messes up string like State bank of inida (SBI) .. it leaves out the ()
-            var finalQueryString = queryString.toUpperCase();
-            var model = getModelForBankName(finalBankName);
+    }
+    getAllCityNamesForBankMatchingQueryString(bankName, queryString) {
+        return new Promise((resolve, reject) => {
+            let finalBankName = bankName.toUpperCase(); // Dont use loaash for the uppercase. it messes up string like State bank of inida (SBI) .. it leaves out the ()
+            let finalQueryString = queryString.toUpperCase();
+            let model = getModelForBankName(finalBankName);
             model.find({ name: finalBankName, city: { $regex: new RegExp(finalQueryString) } }, function (err, results) {
-                var cityObjects = results.map(function (eachRec) {
+                var cityObjects = results.map(eachRec => {
                     return { city: eachRec.city, state: eachRec.state };
                 });
                 var uniqCityObjects = _.uniqBy(cityObjects, 'city');
-                var sortedUniqueCityObjects = _.sortBy(uniqCityObjects, ['city']);
+                let sortedUniqueCityObjects = _.sortBy(uniqCityObjects, ['city']);
                 resolve(sortedUniqueCityObjects);
-            }).catch(function (err) {
+            }).catch((err) => {
                 console.log("Unable to find branch details : " + err);
             });
         });
-    };
-    BankDB.prototype.getAllCityNamesForBank = function (bankName) {
-        return new Promise(function (resolve, reject) {
+    }
+    getAllCityNamesForBank(bankName) {
+        return new Promise((resolve, reject) => {
             //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb
             // I am using the in-efficinet regex method to make the find case-insensive.. check out the link above for a more optimizes soln.
             // DRY vioation.... !!!! 
-            var explainResults = bankBranchDetailModel.find({ name: { $regex: new RegExp(bankName, "i") } }).explain();
+            let explainResults = bankBranchDetailModel.find({ name: { $regex: new RegExp(bankName, "i") } }).explain();
             bankBranchDetailModel.find({ name: { $regex: new RegExp(bankName, "i") } }, function (err, results) {
-                var cityObjects = results.map(function (eachRec) {
+                var cityObjects = results.map(eachRec => {
                     return { city: eachRec.city, state: eachRec.state };
                 });
                 var uniqCityObjects = _.uniqBy(cityObjects, 'city');
-                var sortedUniqueCityObjects = _.sortBy(uniqCityObjects, ['city']);
+                let sortedUniqueCityObjects = _.sortBy(uniqCityObjects, ['city']);
                 resolve(sortedUniqueCityObjects);
-            }).catch(function (err) {
+            }).catch((err) => {
             });
         });
-    };
+    }
     //Old Implementation, without the state object.. thing..
-    BankDB.prototype.getAllCityNamesForBank_OLD = function (bankName) {
-        return new Promise(function (resolve, reject) {
+    getAllCityNamesForBank_OLD(bankName) {
+        return new Promise((resolve, reject) => {
             //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb
             // I am using the in-efficinet regex method to make the find case-insensive.. check out the link above for a more optimizes soln.
             // DRY vioation.... !!!! 
             bankBranchDetailModel.find({ name: { $regex: new RegExp(bankName, "i") } }, function (err, results) {
-                var cityNames = results.map(function (eachRec) {
+                var cityNames = results.map(eachRec => {
                     return eachRec.city;
                 });
                 var uniqCityNames = _.uniq(cityNames);
-                var sortedUniqueCityNames = _.sortBy(uniqCityNames);
+                let sortedUniqueCityNames = _.sortBy(uniqCityNames);
                 resolve(sortedUniqueCityNames);
-            }).catch(function (err) {
+            }).catch((err) => {
                 console.log("Unable to find branch details : " + err);
             });
         });
-    };
-    BankDB.prototype.getAllDistrictNamesForBank = function (bankName) {
-        return new Promise(function (resolve, reject) {
+    }
+    getAllDistrictNamesForBank(bankName) {
+        return new Promise((resolve, reject) => {
             //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb
             // I am using the in-efficinet regex method to make the find case-insensive.. check out the link above for a more optimizes soln.
             // DRY vioation.... !!!! 
             bankBranchDetailModel.find({ name: { $regex: new RegExp(bankName, "i") } }, function (err, results) {
-                var allDistrictNames = results.map(function (eachBranch) {
+                let allDistrictNames = results.map(eachBranch => {
                     return eachBranch.district;
                 });
-                var uniqDistrictNames = _.uniq(allDistrictNames);
-                var sortedUniqueNames = _.sortBy(uniqDistrictNames);
+                let uniqDistrictNames = _.uniq(allDistrictNames);
+                let sortedUniqueNames = _.sortBy(uniqDistrictNames);
                 console.log("Resolving with : " + sortedUniqueNames);
                 resolve(sortedUniqueNames);
             });
         });
-    };
-    BankDB.prototype.getAllBranchesForBankNameInCity = function (bankName, cityName) {
-        return new Promise(function (resolve, reject) {
+    }
+    getAllBranchesForBankNameInCity(bankName, cityName) {
+        return new Promise((resolve, reject) => {
             //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb
             // I am using the in-efficinet regex method to make the find case-insensive.. check out the link above for a more optimizes soln.
             // DRY vioation.... !!!! 
@@ -510,67 +503,64 @@ var BankDB = /** @class */ (function () {
                 resolve(results);
             });
         });
-    };
-    BankDB.prototype.getAllBranchNamesForBankNameInCityMatchingQueryString = function (bankName, cityName, queryString) {
-        var _this = this;
-        return new Promise(function (resolve, reject) {
-            var finalBankName = bankName.toUpperCase();
-            var finalCityName = cityName.toUpperCase();
-            var finalRegEx = _this.getRegExForQueryString(queryString);
-            var model = getModelForBankName(finalBankName);
+    }
+    getAllBranchNamesForBankNameInCityMatchingQueryString(bankName, cityName, queryString) {
+        return new Promise((resolve, reject) => {
+            let finalBankName = bankName.toUpperCase();
+            let finalCityName = cityName.toUpperCase();
+            var finalRegEx = this.getRegExForQueryString(queryString);
+            let model = getModelForBankName(finalBankName);
             //model.find({name : finalBankName, city : finalCityName, branch : {$regex : finalRegEx}},function(err,results){
             model.find({ name: finalBankName, city: finalCityName, $or: [{ address: { '$regex': finalRegEx } }, { branch: { '$regex': finalRegEx } }] }, function (err, results) {
-                var branchObjects = results.map(function (eachRec) {
+                var branchObjects = results.map(eachRec => {
                     var tempRec = {};
                     tempRec['branch'] = eachRec.branch;
                     tempRec['address'] = eachRec.address;
                     return tempRec;
                 });
                 resolve(branchObjects);
-            }).catch(function (err) {
+            }).catch((err) => {
                 reject("Error ! : DB Handler.ts : getAllBranchNamesForBankNameInCityMatchingQueryString : " + err);
             });
         });
-    };
+    }
     //Prashanth : Scope for optimiztion ehre.. here you query the db for list of branch names etc. U can just get the cout here and only and pass it to the caller... why make another call.. just to get the counts. Or even better.. have some kind of metadata store.. that is created each time you the db with new data from RBI.
-    BankDB.prototype.getAllBranchNamesForBankNameInCity = function (bankName, cityName) {
-        var _this = this;
-        return new Promise(function (resolve, reject) {
-            _this.getAllBranchesForBankNameInCity(bankName, cityName)
-                .then(function (branchDetailsArr) {
-                var branchObjects = branchDetailsArr.map(function (eachRec) {
+    getAllBranchNamesForBankNameInCity(bankName, cityName) {
+        return new Promise((resolve, reject) => {
+            this.getAllBranchesForBankNameInCity(bankName, cityName)
+                .then((branchDetailsArr) => {
+                var branchObjects = branchDetailsArr.map(eachRec => {
                     var tempRec = {};
                     tempRec['branch'] = eachRec.branch;
                     tempRec['address'] = eachRec.address;
                     return tempRec;
                 });
                 resolve(branchObjects);
-            }).catch(function (err) {
+            }).catch((err) => {
                 reject("Error ! : DB Handler.ts : getAllBranchNamesForBankNameInCity : " + err);
             });
         });
-    };
+    }
     //Prashanth : Scope for optimiztion ehre.. here you query the db for list of branch names etc. U can just get the cout here and only and pass it to the caller... why make another call.. just to get the counts. Or even better.. have some kind of metadata store.. that is created each time you the db with new data from RBI.
-    BankDB.prototype.getAllBranchNamesForBankNameInCity_OLD = function (bankName, cityName) {
-        var _this = this;
-        return new Promise(function (resolve, reject) {
-            _this.getAllBranchesForBankNameInCity(bankName, cityName)
-                .then(function (branchDetailsArr) {
-                var branchNames = branchDetailsArr.map(function (eachRec) {
+    getAllBranchNamesForBankNameInCity_OLD(bankName, cityName) {
+        return new Promise((resolve, reject) => {
+            this.getAllBranchesForBankNameInCity(bankName, cityName)
+                .then((branchDetailsArr) => {
+                var branchNames = branchDetailsArr.map(eachRec => {
                     return eachRec.branch;
                 });
                 resolve(branchNames);
-            }).catch(function (err) {
+            }).catch((err) => {
                 reject("Error ! : DB Handler.ts : getCountOfBranchesBankNameInCity : " + err);
             });
         });
-    };
-    BankDB.prototype.getAllBranchesForBankNameInCityBranchName = function (bankName, cityName, branchName) {
-        return new Promise(function (resolve, reject) {
+    }
+    getAllBranchesForBankNameInCityBranchName(bankName, cityName, branchName) {
+        return new Promise((resolve, reject) => {
             //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb
             // I am using the in-efficinet regex method to make the find case-insensive.. check out the link above for a more optimizes soln.
             // DRY vioation.... !!!! 
-            var model = getModelForBankName(bankName);
+            let model = getModelForBankName(bankName);
             if (model == undefined) {
                 reject("Error : Model not found for bank name " + bankName, cityName, branchName);
             }
@@ -578,9 +568,9 @@ var BankDB = /** @class */ (function () {
                 resolve(results);
             });
         });
-    };
-    BankDB.prototype.getAllBranchesForBankNameInState = function (bankName, stateName) {
-        return new Promise(function (resolve, reject) {
+    }
+    getAllBranchesForBankNameInState(bankName, stateName) {
+        return new Promise((resolve, reject) => {
             //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb
             // I am using the in-efficinet regex method to make the find case-insensive.. check out the link above for a more optimizes soln.
             // DRY vioation.... !!!! 
@@ -588,10 +578,9 @@ var BankDB = /** @class */ (function () {
                 resolve(results);
             });
         });
-    };
-    BankDB.prototype.getAllBranchesForBankNameInStateDistrictCity = function (bankName, stateName, cityName, districtName) {
-        if (districtName === void 0) { districtName = null; }
-        return new Promise(function (resolve, reject) {
+    }
+    getAllBranchesForBankNameInStateDistrictCity(bankName, stateName, cityName, districtName = null) {
+        return new Promise((resolve, reject) => {
             //NB : https://stackoverflow.com/questions/7101703/how-do-i-make-case-insensitive-queries-on-mongodb
             // I am using the in-efficinet regex method to make the find case-insensive.. check out the link above for a more optimizes soln.
             // DRY vioation.... !!!! 
@@ -603,7 +592,5 @@ var BankDB = /** @class */ (function () {
                 resolve(results);
             });
         });
-    };
-    return BankDB;
-}());
-exports.BankDB = BankDB;
+    }
+}
