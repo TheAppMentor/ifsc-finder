@@ -144,4 +144,19 @@ export class BankCollection {
     getAllDistrictNamesForBank(bankName : string) : Promise<Array<string>>{
         return this.dataStore.getAllDistrictNamesForBank(bankName)
     }
+    
+    getAllBanksForCity(cityName : string) {
+        return this.dataStore.getAllBanksForCity(cityName)
+    } 
+    
+    getAllKnownCities(searchInput : string) {
+       console.log("Info : BankCollection.ts : cityName  => " + JSON.stringify(searchInput))  
+        return this.dataStore.getAllKnownCities(searchInput)
+    } 
+    
+    getAllBanksForIFSC(searchInput : string) {
+       console.log("Info : BankCollection.ts : IFSC => " + JSON.stringify(searchInput))  
+        return this.dataStore.getAllBanksForIFSC(searchInput)
+    } 
+
 }

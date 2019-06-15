@@ -116,6 +116,17 @@ var BankCollection = /** @class */ (function () {
     BankCollection.prototype.getAllDistrictNamesForBank = function (bankName) {
         return this.dataStore.getAllDistrictNamesForBank(bankName);
     };
+    BankCollection.prototype.getAllBanksForCity = function (cityName) {
+        return this.dataStore.getAllBanksForCity(cityName);
+    };
+    BankCollection.prototype.getAllKnownCities = function (searchInput) {
+        console.log("Info : BankCollection.ts : cityName  => " + JSON.stringify(searchInput));
+        return this.dataStore.getAllKnownCities(searchInput);
+    };
+    BankCollection.prototype.getAllBanksForIFSC = function (searchInput) {
+        console.log("Info : BankCollection.ts : IFSC => " + JSON.stringify(searchInput));
+        return this.dataStore.getAllBanksForIFSC(searchInput);
+    };
     return BankCollection;
 }());
 exports.BankCollection = BankCollection;

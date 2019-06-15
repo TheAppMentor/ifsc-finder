@@ -1,3 +1,5 @@
+var compression = require('compression')
+
 var express = require('express');
 var app = express();
 
@@ -9,6 +11,12 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
+// compress all responses
+app.use(compression())
+
+// set up Cors.
+var cors = require('cors')
+app.use(cors())
 
 var session = require('express-session');
 var FileStore = require('session-file-store')(session);
@@ -31,6 +39,7 @@ MONGODB_URI = MONGODB_URI + "userSessions"
 
 //var store = mongoose.connect(MONGODB_URI)
 
+    //uri: 'mongodb://heroku_ptln6dnj:vi22d3nuk65m1ktjqrtjalvnku@ds111492.mlab.com:11492/heroku_ptln6dnj',
 var store = new MongoDBStore({
     uri: 'mongodb://heroku_ptln6dnj:vi22d3nuk65m1ktjqrtjalvnku@ds111492.mlab.com:11492/heroku_ptln6dnj',
     collection: 'sessions'
@@ -38,7 +47,7 @@ var store = new MongoDBStore({
 
 // Catch errors
 store.on('error', function(error) {
-   console.log("WE have an error coonnecting to MONGODB FELLLOW .. ") 
+   console.log("Info : app.js : Failed to connect to MongoDB  => " + error)  
     console.log(error);
 });
  

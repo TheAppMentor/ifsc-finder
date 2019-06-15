@@ -17,6 +17,7 @@ var totalNumberOfBankBranchesInDB = "1.5 L";
 var totalNumberOfBanksInDB;
 var allBankNamesArr = [];
 var popularBankNamesArr = [];
+var allKnowCitiesArr = [];
 var allSetReadyToLaunch = false;
 var bankMetaData = [];
 bankColl.loadDataBasesWithDataFromFile()
@@ -48,20 +49,35 @@ bankColl.loadDataBasesWithDataFromFile()
     });
     return Promise.resolve(true);
 })
+    .then(function (success) {
+    bankColl.getAllKnownCities("")
+        .then(function (allCities) {
+        allKnowCitiesArr = allCities;
+        return Promise.resolve(true);
+    });
+    return Promise.resolve(true);
+})
     .then(function (preProcessingComplete) {
     if (preProcessingComplete == true) {
         allSetReadyToLaunch = true;
     }
+})
+    .catch(function (err) {
+    console.log("Error! : index.ts :  => " + err);
 });
+function createUserData(req) {
+    req.session.userData = {};
+    req.session.userData = { sessID: uuidv1() };
+}
 /* GET home page. */
 router.get('/', function (req, res, next) {
     //TODO : Check the allSetReadyToLaunch variable, if we are not yet ready. Show a an appropriate page. 
     if (req.session.userData === undefined) {
-        req.session.userData = {};
-        req.session.userData = { sessID: uuidv1() };
+        createUserData(req);
     }
-    console.log("Session :" + req.session.userData.sessID + " : Request Received | Route : / | query : " + JSON.stringify(req.query));
-    res.render('index', {});
+    // Check Device . If Mobile, redirect to the mobile friendly Site
+    var pageToRender = "index";
+    res.render(pageToRender, {});
 });
 /* RTGS Holidays Page */
 router.get('/rtgsholidays', function (req, res, next) {
@@ -70,6 +86,9 @@ router.get('/rtgsholidays', function (req, res, next) {
 });
 router.get('/getBanks/', function (req, res, next) {
     var query = req.query;
+    if (req.session.userData === undefined) {
+        createUserData(req);
+    }
     console.log("Session :" + req.session.userData.sessID + " : Request Received | Route : /getBanks | query : " + JSON.stringify(query));
     var matchedBanks = _.filter(allBankNamesArr, function (eachValue) {
         if (_.includes(_.toLower(eachValue), _.toLower(query.q)) == true) {
@@ -122,6 +141,9 @@ function isValidateSearchInput(searchInput) {
 router.get('/getLocationList/', function (req, res, next) {
     var bankName = req.query.bankName;
     var searchInput = req.query.searchInput.toUpperCase();
+    if (req.session.userData === undefined) {
+        createUserData(req);
+    }
     console.log("Session :" + req.session.userData.sessID + " : Request Received | Route : /getLocationList | query : " + JSON.stringify(req.query));
     if (isValidateSearchInput(searchInput) == false) {
         console.log("Session :" + "We Have an ERROR  " + searchInput);
@@ -393,6 +415,67 @@ router.get('/loadBranchDetailsInState', function (req, res, next) {
 router.get('/loadBranchDetailsEveryThing', function (req, res, next) {
     bankColl.getAllBranchesForBankNameInStateDistrictCity("DenA BanK", "Karnataka", "Bangalore", null).then(function (matchedBranches) {
         res.render('index', { title: matchedBranches.toString() });
+    });
+});
+router.get('/getAllBanksByLocation/', function (req, res, next) {
+    var query = req.query;
+    var searchInput = req.query.searchInput.toUpperCase();
+    if (req.session.userData === undefined) {
+        createUserData(req);
+    }
+    console.log("Session :" + req.session.userData.sessID + " : Request Received | Route : /getAllBanksByLocation | query : " + JSON.stringify(query));
+    var resp = {};
+    resp['results'] = [];
+    bankColl.getAllBanksForCity(searchInput)
+        .then(function (allBankBranches) {
+        var allBanksArr = _.flattenDeep(allBankBranches);
+        var sortedResults = _.sortBy(allBanksArr, function (eachResult) { return eachResult.length; });
+        resp['results'] = _.reverse(sortedResults);
+        res.json(resp);
+    })
+        .catch(function (err) {
+        console.log("Error! : index.ts :  => " + err);
+    });
+});
+//TODO : The city object has both city and state names. Instead of passing the statenames with each object. you can have a hash table of statename to code and pass that along... and do the mapping on the client.. 
+router.get('/getAllKnownCities/', function (req, res, next) {
+    var query = req.query;
+    var searchInput = req.query.searchInput.toUpperCase();
+    if (req.session.userData === undefined) {
+        createUserData(req);
+    }
+    console.log("Session :" + req.session.userData.sessID + " : Request Received | Route : /getAllKnownCities/ | query : " + JSON.stringify(query));
+    var resp = {};
+    resp['results'] = [];
+    if (searchInput == "") {
+        resp['results'] = allKnowCitiesArr;
+    }
+    else {
+        resp['results'] = _.filter(allKnowCitiesArr, function (eachCityObj) {
+            return (eachCityObj.city.includes(searchInput) || eachCityObj.state.includes(searchInput));
+        });
+    }
+    res.json(resp);
+});
+// We need to this be able to provide a link using IFSC Code.
+router.get('/getBankByIFSC/', function (req, res, next) {
+    var query = req.query;
+    var searchInput = req.query.searchInput.toUpperCase();
+    if (req.session.userData === undefined) {
+        createUserData(req);
+    }
+    console.log("Session :" + req.session.userData.sessID + " : Request Received | Route : /getAllBanksByLocation | query : " + JSON.stringify(query));
+    var resp = {};
+    resp['results'] = [];
+    bankColl.getAllBanksForIFSC(searchInput)
+        .then(function (allBankBranches) {
+        var allBanksArr = _.flattenDeep(allBankBranches);
+        var sortedResults = _.sortBy(allBanksArr, function (eachResult) { return eachResult.length; });
+        resp['results'] = _.reverse(sortedResults);
+        res.json(resp);
+    })
+        .catch(function (err) {
+        console.log("Error! : index.ts :  => " + err);
     });
 });
 router.post('/DF', function (req, res, next) {

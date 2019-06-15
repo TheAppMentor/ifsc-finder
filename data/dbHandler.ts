@@ -66,12 +66,10 @@ function loadConfigFile(){
 // TODO Dont do this.. you have the popular banks tagged in the Meta Data.. fetch it from that.. Hard coding this will make all kind of shitty dependencies.
 let popularBanks = ["ALLAHABAD BANK","ANDHRA BANK","AXIS BANK LTD","BANK OF BARODA (BOB)","BANK OF INDIA (BOI)","CANARA BANK","CENTRAL BANK OF INDIA","CORPORATION BANK","HDFC BANK LTD","ICICI BANK LTD","IDBI LTD","INDIAN BANK","INDIAN OVERSEAS BANK (IOB)","ORIENTAL BANK OF COMMERCE (OBC)","PUNJAB NATIONAL BANK (PNB)","STATE BANK OF INDIA (SBI)","SYNDICATE BANK","UCO BANK","UNION BANK OF INDIA","YES BANK LTD",] 
 
-function getModelForBankName(bankName : string) : any {
+const getModelForBankName = (bankName : string) : any =>  {
+   console.log("IN FUNC... " + bankName) 
     switch (bankName) {
-        case "ALLAHABAD BANK": {
-            return allahabadBankModel;
-            break;
-        } 
+        case "ALLAHABAD BANK": { return allahabadBankModel; break; } 
         case "ANDHRA BANK": {
             return andhraBankModel;
             break;
@@ -161,6 +159,7 @@ function getModelForBankName(bankName : string) : any {
         } 
 
         case "YES BANK LTD" :{
+           console.log("Returning .. YES BANK : " + yesBankModel) 
             return yesBankModel;
             break;
         } 
@@ -737,4 +736,99 @@ export class BankDB {
         })
 
     }
+
+    // GET details without bank name.. by city etc... this is diff coz we need to search across collections.
+    // TODO : I am sure there is a better way to do this... 
+    //
+
+    getAllBanksForCity(cityName : string) {
+        return new Promise((resolve,reject) => {
+            let finalCityName = cityName.toUpperCase()
+
+            let allBankModels = this.getAllBankModels()
+            let allPromises = _.map(allBankModels,(model) => {
+                return new Promise((resolve,reject) => {
+                    if (model==null){
+                        reject(Error("Got a dabba model"))
+                    }
+                    model.find({city : finalCityName},function(err,results){
+                        resolve(results)
+                    })
+                })
+            })
+
+            Promise.all(allPromises)
+                .then((allBanksInfo) => {
+                    let emptyFiltered = _.filter(allBanksInfo,eachBankArr => {
+                        return !_.isEmpty(eachBankArr)
+                    }) 
+                    resolve(emptyFiltered)
+                }) 
+        })
+    }
+
+    getAllBankModels() : Array<any> {
+        let allBankModels = _.map(popularBanks,(eachBank) => {
+            let fetchedModel =  getModelForBankName(eachBank)
+            return getModelForBankName(eachBank)
+        }) 
+        allBankModels.push(getModelForBankName("otherBankModels"))
+        return allBankModels
+    }
+
+    //TODO : Bloody Bloody inefficient.. just keep a list of all known cities in a table or file and return it... 
+    // Just doing this coz i am bloody lazy now... 12-June-2019
+
+    getAllKnownCities(searchInput : string){
+        return new Promise((resolve,reject) => {
+        
+            var finalRegEx = this.getRegExForQueryString(searchInput)
+
+            let allBankModels = this.getAllBankModels()
+
+            let allPromises = _.map(allBankModels,(model) => {
+                return new Promise((resolve,reject) => {
+                    if (model==null){
+                        reject(Error("Got a dabba model"))
+                    }
+                    model.find({city:{'$regex':finalRegEx}}, {city : 1, state : 1, _id : 0},function(err,results){
+                        resolve(results)
+                    })
+                })
+            })
+
+            Promise.all(allPromises)
+                .then((allCities) => {
+                    let allCitiesFlat = _.flattenDeep(allCities) 
+                    let uniqCities = _.uniqBy(allCitiesFlat,"city") 
+                    resolve(uniqCities)
+                }) 
+        })
+    }
+
+    getAllBanksForIFSC(searchInput : string){
+        return new Promise((resolve,reject) => {
+        
+            var finalRegEx = this.getRegExForQueryString(searchInput)
+
+            let allBankModels = this.getAllBankModels()
+
+            let allPromises = _.map(allBankModels,(model) => {
+                return new Promise((resolve,reject) => {
+                    if (model==null){
+                        reject(Error("Got a dabba model"))
+                    }
+                    model.find({ifsc:{'$regex':finalRegEx}},function(err,results){
+                        resolve(results)
+                    })
+                })
+            })
+
+            Promise.all(allPromises)
+                .then((allBanksMatchingIFSC) => {
+                    resolve(allBanksMatchingIFSC)
+                }) 
+        })
+    }
+
 }

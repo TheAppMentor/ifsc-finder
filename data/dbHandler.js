@@ -56,7 +56,8 @@ function loadConfigFile() {
 }
 // TODO Dont do this.. you have the popular banks tagged in the Meta Data.. fetch it from that.. Hard coding this will make all kind of shitty dependencies.
 var popularBanks = ["ALLAHABAD BANK", "ANDHRA BANK", "AXIS BANK LTD", "BANK OF BARODA (BOB)", "BANK OF INDIA (BOI)", "CANARA BANK", "CENTRAL BANK OF INDIA", "CORPORATION BANK", "HDFC BANK LTD", "ICICI BANK LTD", "IDBI LTD", "INDIAN BANK", "INDIAN OVERSEAS BANK (IOB)", "ORIENTAL BANK OF COMMERCE (OBC)", "PUNJAB NATIONAL BANK (PNB)", "STATE BANK OF INDIA (SBI)", "SYNDICATE BANK", "UCO BANK", "UNION BANK OF INDIA", "YES BANK LTD",];
-function getModelForBankName(bankName) {
+var getModelForBankName = function (bankName) {
+    console.log("IN FUNC... " + bankName);
     switch (bankName) {
         case "ALLAHABAD BANK": {
             return allahabadBankModel;
@@ -135,6 +136,7 @@ function getModelForBankName(bankName) {
             break;
         }
         case "YES BANK LTD": {
+            console.log("Returning .. YES BANK : " + yesBankModel);
             return yesBankModel;
             break;
         }
@@ -142,7 +144,7 @@ function getModelForBankName(bankName) {
             return otherBanksModel;
             break;
     }
-}
+};
 var MONGODB_URI = "mongodb://localhost/localtest";
 if (process.env.IS_HEROKU == "true") {
     MONGODB_URI = process.env.MONGODB_URI;
@@ -601,6 +603,87 @@ var BankDB = /** @class */ (function () {
                 //district : { $regex : new RegExp(districtName, "i") },
             }, function (err, results) {
                 resolve(results);
+            });
+        });
+    };
+    // GET details without bank name.. by city etc... this is diff coz we need to search across collections.
+    // TODO : I am sure there is a better way to do this... 
+    //
+    BankDB.prototype.getAllBanksForCity = function (cityName) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            var finalCityName = cityName.toUpperCase();
+            var allBankModels = _this.getAllBankModels();
+            var allPromises = _.map(allBankModels, function (model) {
+                return new Promise(function (resolve, reject) {
+                    if (model == null) {
+                        reject(Error("Got a dabba model"));
+                    }
+                    model.find({ city: finalCityName }, function (err, results) {
+                        resolve(results);
+                    });
+                });
+            });
+            Promise.all(allPromises)
+                .then(function (allBanksInfo) {
+                var emptyFiltered = _.filter(allBanksInfo, function (eachBankArr) {
+                    return !_.isEmpty(eachBankArr);
+                });
+                resolve(emptyFiltered);
+            });
+        });
+    };
+    BankDB.prototype.getAllBankModels = function () {
+        var allBankModels = _.map(popularBanks, function (eachBank) {
+            var fetchedModel = getModelForBankName(eachBank);
+            return getModelForBankName(eachBank);
+        });
+        allBankModels.push(getModelForBankName("otherBankModels"));
+        return allBankModels;
+    };
+    //TODO : Bloody Bloody inefficient.. just keep a list of all known cities in a table or file and return it... 
+    // Just doing this coz i am bloody lazy now... 12-June-2019
+    BankDB.prototype.getAllKnownCities = function (searchInput) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            var finalRegEx = _this.getRegExForQueryString(searchInput);
+            var allBankModels = _this.getAllBankModels();
+            var allPromises = _.map(allBankModels, function (model) {
+                return new Promise(function (resolve, reject) {
+                    if (model == null) {
+                        reject(Error("Got a dabba model"));
+                    }
+                    model.find({ city: { '$regex': finalRegEx } }, { city: 1, state: 1, _id: 0 }, function (err, results) {
+                        resolve(results);
+                    });
+                });
+            });
+            Promise.all(allPromises)
+                .then(function (allCities) {
+                var allCitiesFlat = _.flattenDeep(allCities);
+                var uniqCities = _.uniqBy(allCitiesFlat, "city");
+                resolve(uniqCities);
+            });
+        });
+    };
+    BankDB.prototype.getAllBanksForIFSC = function (searchInput) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            var finalRegEx = _this.getRegExForQueryString(searchInput);
+            var allBankModels = _this.getAllBankModels();
+            var allPromises = _.map(allBankModels, function (model) {
+                return new Promise(function (resolve, reject) {
+                    if (model == null) {
+                        reject(Error("Got a dabba model"));
+                    }
+                    model.find({ ifsc: { '$regex': finalRegEx } }, function (err, results) {
+                        resolve(results);
+                    });
+                });
+            });
+            Promise.all(allPromises)
+                .then(function (allBanksMatchingIFSC) {
+                resolve(allBanksMatchingIFSC);
             });
         });
     };

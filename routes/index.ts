@@ -22,6 +22,7 @@ var totalNumberOfBankBranchesInDB = "1.5 L"
 var totalNumberOfBanksInDB 
 var allBankNamesArr = [] 
 var popularBankNamesArr = [] 
+var allKnowCitiesArr = [] 
 
 var allSetReadyToLaunch : Boolean = false
 var bankMetaData = []
@@ -60,25 +61,40 @@ bankColl.loadDataBasesWithDataFromFile()
         })
         return Promise.resolve(true)
     })
-    
+    .then((success : boolean) : Promise<boolean> => {
+        bankColl.getAllKnownCities("")
+            .then((allCities) => {
+                allKnowCitiesArr = allCities 
+                return Promise.resolve(true)
+            })
+        return Promise.resolve(true)
+    })
+
     .then((preProcessingComplete : boolean) => {
         if (preProcessingComplete == true) {
             allSetReadyToLaunch = true
         }
     })
+    .catch((err) => {
+        console.log("Error! : index.ts :  => " + err)
+    })
+
+function createUserData(req) {
+    req.session.userData = {};
+    req.session.userData = { sessID: uuidv1() };
+}
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
     //TODO : Check the allSetReadyToLaunch variable, if we are not yet ready. Show a an appropriate page. 
-    if ( req.session.userData === undefined) {
-        req.session.userData = {} 
-        req.session.userData = {sessID : uuidv1()} 
+    if (req.session.userData === undefined) {
+        createUserData(req) 
     }
+
+    // Check Device . If Mobile, redirect to the mobile friendly Site
+    let pageToRender = "index" 
     
-    console.log("Session :" +  req.session.userData.sessID +  " : Request Received | Route : / | query : " + JSON.stringify(req.query))
-    
-    res.render('index', { 
-    });
+    res.render(pageToRender, { });
 });
 
 
@@ -94,6 +110,10 @@ router.get('/getBanks/', function(req, res, next) {
     
     let query = req.query
 
+    if (req.session.userData === undefined) {
+        createUserData(req) 
+    }
+    
     console.log("Session :" + req.session.userData.sessID +  " : Request Received | Route : /getBanks | query : " + JSON.stringify(query))
 
     let matchedBanks = _.filter(allBankNamesArr, (eachValue) => {
@@ -164,7 +184,11 @@ router.get('/getLocationList/', function(req, res, next) {
 
     let bankName = req.query.bankName 
     let searchInput = req.query.searchInput.toUpperCase()
-    
+
+    if (req.session.userData === undefined) {
+        createUserData(req) 
+    }
+
     console.log("Session :" +  req.session.userData.sessID +  " : Request Received | Route : /getLocationList | query : " + JSON.stringify(req.query))
     
     if (isValidateSearchInput(searchInput) == false){
@@ -564,6 +588,94 @@ router.get('/loadBranchDetailsEveryThing', function(req, res, next) {
         res.render('index', { title: matchedBranches.toString() });
     })
 });
+
+
+
+router.get('/getAllBanksByLocation/', function(req, res, next) {
+
+    let query = req.query
+
+    let searchInput = req.query.searchInput.toUpperCase()
+
+    if (req.session.userData === undefined) {
+        createUserData(req) 
+    }
+
+    console.log("Session :" + req.session.userData.sessID +  " : Request Received | Route : /getAllBanksByLocation | query : " + JSON.stringify(query))
+
+    var resp = {}
+    resp['results'] = [] 
+
+    bankColl.getAllBanksForCity(searchInput)
+        .then((allBankBranches : [any]) => {
+           let allBanksArr = _.flattenDeep(allBankBranches) 
+
+            let sortedResults = _.sortBy(allBanksArr, (eachResult ) => {return eachResult.length})
+            
+            resp['results'] = _.reverse(sortedResults) 
+            res.json(resp)
+        })
+        .catch((err) => {
+            console.log("Error! : index.ts :  => " + err)
+        }) 
+})
+
+//TODO : The city object has both city and state names. Instead of passing the statenames with each object. you can have a hash table of statename to code and pass that along... and do the mapping on the client.. 
+router.get('/getAllKnownCities/', function(req, res, next) {
+
+    let query = req.query
+
+    let searchInput = req.query.searchInput.toUpperCase()
+
+    if (req.session.userData === undefined) {
+        createUserData(req) 
+    }
+
+    console.log("Session :" + req.session.userData.sessID +  " : Request Received | Route : /getAllKnownCities/ | query : " + JSON.stringify(query))
+
+    var resp = {}
+    resp['results'] = [] 
+
+    if (searchInput == ""){
+        resp['results'] = allKnowCitiesArr 
+    } else {
+        resp['results'] = _.filter(allKnowCitiesArr, (eachCityObj) => {
+            return (eachCityObj.city.includes(searchInput) || eachCityObj.state.includes(searchInput))
+        })
+    }
+    res.json(resp)
+})
+
+// We need to this be able to provide a link using IFSC Code.
+router.get('/getBankByIFSC/', function(req, res, next) {
+
+    let query = req.query
+
+    let searchInput = req.query.searchInput.toUpperCase()
+
+    if (req.session.userData === undefined) {
+        createUserData(req) 
+    }
+
+    console.log("Session :" + req.session.userData.sessID +  " : Request Received | Route : /getAllBanksByLocation | query : " + JSON.stringify(query))
+
+    var resp = {}
+    resp['results'] = [] 
+
+    bankColl.getAllBanksForIFSC(searchInput)
+        .then((allBankBranches : [any]) => {
+           let allBanksArr = _.flattenDeep(allBankBranches) 
+
+            let sortedResults = _.sortBy(allBanksArr, (eachResult ) => {return eachResult.length})
+            
+            resp['results'] = _.reverse(sortedResults) 
+            res.json(resp)
+        })
+        .catch((err) => {
+            console.log("Error! : index.ts :  => " + err)
+        }) 
+})
+
 
 router.post('/DF', function(req, res, next) {
     //const agent = new WebhookClient({ req, res });
