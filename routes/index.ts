@@ -212,10 +212,9 @@ router.get('/getLocationList/', function(req, res, next) {
 
                 var cityText = eachCityRec['city']
 
-                cityText = cityText.replace(searchInput,formattedSearchInput) 
-
+                //cityText = cityText.replace(searchInput,formattedSearchInput) 
                 var stateText = eachCityRec['state']
-                stateText = stateText.replace(searchInput,formattedSearchInput) 
+                //stateText = stateText.replace(searchInput,formattedSearchInput) 
 
                 tempBranchRec ['city'] = cityText  
                 tempBranchRec ['state'] = stateText  
@@ -246,8 +245,12 @@ router.get('/getBranchList/', function(req, res, next) {
     let bankName = req.query.bankName
     let locationName = req.query.locationName.replace(/<(.|\n)*?>/g, '');
     let searchInput = req.query.searchInput.toUpperCase()
-    
-    console.log("Session :" +  "Request Received | Route : /getBranchList| query : " + JSON.stringify(req.query))
+
+    if (req.session.userData === undefined) {
+        createUserData(req) 
+    }
+
+    console.log("Session :" + req.session.userData.sessID +  "Request Received | Route : /getBranchList| query : " + JSON.stringify(req.query))
     if (isValidateSearchInput(searchInput) == false){
            console.log("Session :" +  "We Have an ERROR  " + searchInput)     
             var errResp = {}
@@ -268,10 +271,10 @@ router.get('/getBranchList/', function(req, res, next) {
                 let tempBranchRec = {}
 
                 var branchText = eachBranchRec['branch']
-               
-               branchText = branchText.replace(searchInput,formattedSearchInput) 
                 var addrtext = eachBranchRec['address']
-                addrtext = addrtext.replace(searchInput,formattedSearchInput) 
+               
+                //branchText = branchText.replace(searchInput,formattedSearchInput) 
+                //addrtext = addrtext.replace(searchInput,formattedSearchInput) 
 
                 tempBranchRec ['branch'] = branchText 
                 tempBranchRec ['address'] = addrtext  
@@ -503,6 +506,30 @@ router.get('/getBranches/', function(req, res, next) {
 
 })
 
+
+
+router.get('/getBranchDetailsJSON/', function(req, res, next) {
+    let bankName = req.query.bankName 
+    let cityName = req.query.cityName
+    let branchName = req.query.branchName
+    
+    bankColl.getBranchesDetailsForBankInCityWithBranchName(bankName,cityName,branchName).then((branchNameArr: Array<BankBranchDetail>) => {
+        var fetchedBranch = _.first(branchNameArr)
+
+        console.log("Fetched Branch is : " + JSON.stringify(fetchedBranch))
+
+        res.json({bankName : fetchedBranch.name,
+            ifscCode : fetchedBranch.ifsc,
+            micr : fetchedBranch.micr, 
+            address : fetchedBranch.address,
+            city : fetchedBranch.city,
+            state : fetchedBranch.state,
+            pincode : fetchedBranch.pincode,
+            branchName : fetchedBranch.branch})
+    })
+})
+
+
 router.get('/getBranchDetails/', function(req, res, next) {
     let bankName = req.query.bankName 
     let cityName = req.query.cityName
@@ -657,7 +684,7 @@ router.get('/getBankByIFSC/', function(req, res, next) {
         createUserData(req) 
     }
 
-    console.log("Session :" + req.session.userData.sessID +  " : Request Received | Route : /getAllBanksByLocation | query : " + JSON.stringify(query))
+    console.log("Session :" + req.session.userData.sessID +  " : Request Received | Route : /getBankByIFSC | query : " + JSON.stringify(query))
 
     var resp = {}
     resp['results'] = [] 
@@ -677,90 +704,4 @@ router.get('/getBankByIFSC/', function(req, res, next) {
 })
 
 
-router.post('/DF', function(req, res, next) {
-    //const agent = new WebhookClient({ req, res });
-    const agent = new WebhookClient({request: req, response: res});
-
-    console.log("Holy Cow.. DialogFlow said something.. ")
-    console.log("Request is Headers : " + JSON.stringify(req.headers))
-    console.log("Request is body : " + JSON.stringify(req.body))
-    let respParser = new DialogFlowRespParser()
-
-    respParser.determineMatchedIntent(JSON.stringify(req.body))
-        .then((fulfillText : string) => {
-            agent.add(fulfillText)
-            //res.json(fulfillText)
-            //res.render('index', { title: fulfillText});
-        })
-});
-
-router.get('/simply', function(req, res, next) {
-
-    let respParser = new DialogFlowRespParser()
-
-
-    let sampleJSON1 = {
-        "responseId": "63847c5d-72de-4073-8cbd-80a1081fe603",
-        "queryResult": {
-            "queryText": "icici",
-            "parameters": {
-                "bankName": "icici",
-                "geo-country1": "",
-                "geo-country": "",
-                "geo-city": []
-            },
-            "allRequiredParamsPresent": true,
-            "fulfillmentText": "Found your Bank Prashanth !!!",
-            "fulfillmentMessages": [
-                {
-                    "text": {
-                        "text": [
-                            "Found your Bank Prashanth !!!"
-                        ]
-                    }
-                }
-            ],
-            "outputContexts": [
-                {
-                    "name": "projects/ifsc-finder-a3f6d/agent/sessions/4b813ab6-7c80-117d-4e2f-118f51fcf2e8/contexts/getbankname-followup",
-                    "lifespanCount": 2,
-                    "parameters": {
-                        "geo-country1.original": "",
-                        "geo-country": "",
-                        "bankName": "icici",
-                        "geo-country1": "",
-                        "geo-city.original": "",
-                        "geo-city": [],
-                        "geo-country.original": "",
-                        "bankName.original": "icici"
-                    }
-                }
-            ],
-            "intent": {
-                "name": "projects/ifsc-finder-a3f6d/agent/intents/6754d62c-ba0b-410f-89fb-8e70359f079b",
-                "displayName": "getBankName"
-            },
-            "intentDetectionConfidence": 1,
-            "diagnosticInfo": {
-                "webhook_latency_ms": 580
-            },
-            "languageCode": "en"
-        },
-        "webhookStatus": {
-            "code": 3,
-            "message": "Webhook call failed. Error: Failed to parse webhook JSON response: Cannot find field: outputContexts.parameters.bankName in message google.cloud.dialogflow.v2beta1.WebhookResponse."
-        }
-    }
-
-
-    respParser.determineMatchedIntent(JSON.stringify(sampleJSON1))
-        .then((fulfillText : string) => {
-            console.log("Got a Simply Request.... ")
-            console.log(fulfillText)
-            res.json(fulfillText); 
-            res.render('index', { title: fulfillText});
-        })
-});
-
 module.exports = router;
-//getAllBranchesForBankNameInStateDistrictCity(bankName : string, stateName : string, cityName : string, districtName : string = null) : Promise<Array<BankBranchDetail>> {
