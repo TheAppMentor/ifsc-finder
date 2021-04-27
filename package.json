@@ -40,7 +40,7 @@
         "papaparse": "^4.6.1",
         "parse-json": "^4.0.0",
         "react-device-detect": "^1.6.2",
-        "redis": "^2.8.0",
+        "redis": "^3.1.1",
         "semantic-ui": "^2.4.0",
         "session-file-store": "^1.2.0",
         "symbol-tree": "^3.2.2",
