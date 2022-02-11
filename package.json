@@ -21,7 +21,7 @@
         "decompress": "^4.2.0",
         "dialogflow-fulfillment": "^0.5.0",
         "express": "~4.16.0",
-        "express-handlebars": "^3.0.0",
+        "express-handlebars": "^5.3.1",
         "express-session": "^1.16.1",
         "fs-extra": "^7.0.0",
         "fs-extra-promise": "^1.0.1",
